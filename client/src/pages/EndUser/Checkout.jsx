@@ -1,17 +1,17 @@
 
-import React, { useState, useEffect } from 'react';
+// export default CheckoutPage;
+import React,{ useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import NavLayout from '../../components/auth/NavLayout';
 import axiosInstance from '../../utils/axiosInstance';
-import { getCart } from '../../utils/cartApi';
+import { getCart, removeFromCart } from '../../utils/cartApi';
 import { BASE_URL } from '../../utils/apiPath';
 
 const CheckoutPage = () => {
   const [cart, setCart] = useState({ items: [], totalAmount: 0 });
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
   const userRole = localStorage.getItem('role') || 'enduser';
 
   const [shippingInfo, setShippingInfo] = useState({
@@ -33,20 +33,22 @@ const CheckoutPage = () => {
         setLoading(false);
       }
     };
-const fetchShippingInfo = async () => {
-    try {
-      const { data } = await axiosInstance.get(`${BASE_URL}/shipment/me`);
-      if (data && data.shippingInfo) {
-        setShippingInfo(data.shippingInfo);
+
+    const fetchShippingInfo = async () => {
+      try {
+        const { data } = await axiosInstance.get(`${BASE_URL}/shipment/me`);
+        if (data && data.shippingInfo) {
+          setShippingInfo(data.shippingInfo);
+        }
+      } catch {
+        console.log('No saved shipment info found.');
       }
-    } catch {
-      console.log('No saved shipment info found.');
+    };
+
+    const localData = localStorage.getItem('shippingInfo');
+    if (localData) {
+      setShippingInfo(JSON.parse(localData));
     }
-  };
-   const localData = localStorage.getItem('shippingInfo');
-  if (localData) {
-    setShippingInfo(JSON.parse(localData));
-  }
 
     fetchCart();
     fetchShippingInfo();
@@ -56,84 +58,189 @@ const fetchShippingInfo = async () => {
     setShippingInfo({ ...shippingInfo, [e.target.name]: e.target.value });
   };
 
-  const handlePlaceOrder = async () => {
-    const requiredFields = ['fullName', 'phone', 'address', 'city', 'state', 'pincode'];
-    for (let field of requiredFields) {
-      if (!shippingInfo[field]) return toast.error('Please fill all address details!');
-    }
-
-    if (!/^[1-9][0-9]{5}$/.test(shippingInfo.pincode)) {
-      return toast.error('Enter a valid 6-digit pincode!');
-    }
-
-    if (['reseller', 'distributor'].includes(userRole)) {
-      const { businessName, gstNumber, deliveryMethod } = shippingInfo;
-      if (!businessName || !gstNumber || !deliveryMethod) {
-        return toast.error('Please fill all business and delivery details!');
-      }
-      if (deliveryMethod === 'courier' && !shippingInfo.courierOption) {
-        return toast.error('Please select a courier option.');
-      }
-      if ((deliveryMethod === 'bus' || deliveryMethod === 'transport') && (!shippingInfo.busName || !shippingInfo.busNumber)) {
-        return toast.error('Please enter bus/transport details.');
-      }
-    } else {
-      shippingInfo.deliveryMethod = 'courier'; 
-    }
-
+  const handleRemoveItem = async (productId) => {
     try {
-      toast.loading('Saving shipment info...');
-      await axiosInstance.post(`${BASE_URL}/shipment/create`, { ...shippingInfo, userRole });
-      localStorage.setItem('shippingInfo', JSON.stringify(shippingInfo));
-      toast.dismiss();
-      toast.success('Shipment info saved!');
-
-      toast.loading('Creating order...');
-      const { data } =await axiosInstance.post(`${BASE_URL}/orders`, {
-        shippingInfo, cartItems: cart.items, userRole,
-      });
-
-      const { orderId, razorpayOrderId, amount, currency, keyId } = data;
-
-      const options = {
-        key: keyId, 
-        amount: amount.toString(), 
-        currency,
-        name: 'Hubnet', 
-        description: 'Order Payment', 
-        order_id: razorpayOrderId,
-        handler: async function (response) {
-          try {
-            await axiosInstance.post(`${BASE_URL}/payment/verify`, {
-              orderId, 
-              paymentId: response.razorpay_payment_id,
-              razorpayOrderId: response.razorpay_order_id,
-              signature: response.razorpay_signature,
-            });
-            toast.dismiss();
-            toast.success('Payment successful!');
-            navigate('/orders');
-          } catch {
-            toast.dismiss();
-            toast.error('Payment verification failed!');
-          }
-        },
-        prefill: { 
-          name: shippingInfo.fullName,  // Fixed: use fullName instead of name
-          email: '', 
-          contact: shippingInfo.phone 
-        },
-        theme: { color: '#22d3ee' },
-      };
-
-      const razorpay = new window.Razorpay(options);
-      razorpay.open();
+      await removeFromCart(productId);
+      toast.success('Item removed from cart');
+      const updatedCart = await getCart();
+      setCart(updatedCart);
     } catch (error) {
-      toast.dismiss();
-      toast.error('Failed to place order');
-      console.error('Order Error:', error); // Add error logging
+      toast.error('Failed to remove item');
+      console.error('Remove item error:', error);
     }
   };
+
+  // const handlePlaceOrder = async () => {
+  //   const requiredFields = ['fullName', 'phone', 'address', 'city', 'state', 'pincode'];
+  //   for (let field of requiredFields) {
+  //     if (!shippingInfo[field]) return toast.error('Please fill all address details!');
+  //   }
+
+  //   if (!/^[1-9][0-9]{5}$/.test(shippingInfo.pincode)) {
+  //     return toast.error('Enter a valid 6-digit pincode!');
+  //   }
+
+  //   if (['reseller', 'distributor'].includes(userRole)) {
+  //     const { businessName, gstNumber, deliveryMethod } = shippingInfo;
+  //     if (!businessName || !gstNumber || !deliveryMethod) {
+  //       return toast.error('Please fill all business and delivery details!');
+  //     }
+  //     if (deliveryMethod === 'courier' && !shippingInfo.courierOption) {
+  //       return toast.error('Please select a courier option.');
+  //     }
+  //     if ((deliveryMethod === 'bus' || deliveryMethod === 'transport') && (!shippingInfo.busName || !shippingInfo.busNumber)) {
+  //       return toast.error('Please enter bus/transport details.');
+  //     }
+  //   } else {
+  //     shippingInfo.deliveryMethod = 'courier';
+  //   }
+
+  //   try {
+  //     toast.loading('Saving shipment info...');
+  //     await axiosInstance.post(`${BASE_URL}/shipment/create`, { ...shippingInfo, userRole });
+  //     localStorage.setItem('shippingInfo', JSON.stringify(shippingInfo));
+  //     toast.dismiss();
+  //     toast.success('Shipment info saved!');
+
+  //     toast.loading('Creating order...');
+  //     const { data } = await axiosInstance.post(`${BASE_URL}/orders`, {
+  //       shippingInfo,
+  //     });
+
+  //     const { orderId, razorpayOrderId, amount, currency, keyId } = data;
+
+  //     const options = {
+  //       key: keyId,
+  //       amount: amount.toString(),
+  //       currency,
+  //       name: 'Hubnet',
+  //       description: 'Order Payment',
+  //       order_id: razorpayOrderId,
+  //       handler: async function (response) {
+  //         try {
+  //           await axiosInstance.post(`${BASE_URL}/payment/verify`, {
+  //             orderId,
+  //             paymentId: response.razorpay_payment_id,
+  //             razorpayOrderId: response.razorpay_order_id,
+  //             signature: response.razorpay_signature,
+  //           });
+  //           toast.dismiss();
+  //           toast.success('Payment successful!');
+  //           navigate('/orders');
+  //         } catch {
+  //           toast.dismiss();
+  //           toast.error('Payment verification failed!');
+  //         }
+  //       },
+  //       prefill: {
+  //         name: shippingInfo.fullName,
+  //         email: '',
+  //         contact: shippingInfo.phone,
+  //       },
+  //       theme: { color: '#22d3ee' },
+  //     };
+
+  //     const razorpay = new window.Razorpay(options);
+  //     razorpay.open();
+  //   } catch (error) {
+  //     toast.dismiss();
+  //     toast.error('Failed to place order');
+  //     console.error('Order Error:', error);
+  //   }
+  // };
+
+
+  const handlePlaceOrder = async () => {
+  const requiredFields = ['fullName', 'phone', 'address', 'city', 'state', 'pincode'];
+  for (let field of requiredFields) {
+    if (!shippingInfo[field]) return toast.error('Please fill all address details!');
+  }
+
+  if (!/^[1-9][0-9]{5}$/.test(shippingInfo.pincode)) {
+    return toast.error('Enter a valid 6-digit pincode!');
+  }
+
+  if (['reseller', 'distributor'].includes(userRole)) {
+    const { businessName, gstNumber, deliveryMethod } = shippingInfo;
+    if (!businessName || !gstNumber || !deliveryMethod) {
+      return toast.error('Please fill all business and delivery details!');
+    }
+    if (deliveryMethod === 'courier' && !shippingInfo.courierOption) {
+      return toast.error('Please select a courier option.');
+    }
+    if ((deliveryMethod === 'bus' || deliveryMethod === 'transport') &&
+        (!shippingInfo.busName || !shippingInfo.busNumber)) {
+      return toast.error('Please enter bus/transport details.');
+    }
+  } else {
+    shippingInfo.deliveryMethod = 'courier';
+  }
+
+  try {
+    toast.loading('Saving shipment info...');
+    await axiosInstance.post(`${BASE_URL}/shipment/create`, { ...shippingInfo });
+    localStorage.setItem('shippingInfo', JSON.stringify(shippingInfo));
+    toast.dismiss();
+    toast.success('Shipment info saved!');
+
+    toast.loading('Creating order...');
+
+    // ✅ Correct: only send shippingInfo
+    const { data } = await axiosInstance.post(`${BASE_URL}/orders`, {
+      shippingInfo
+    });
+
+    const { orderId, razorpayOrderId, amount, currency, keyId } = data || {};
+
+    if (!orderId || !razorpayOrderId || !amount || !currency || !keyId) {
+      toast.dismiss();
+      toast.error('Payment initialization failed: Missing payment/order details.');
+      return;
+    }
+
+    const options = {
+      key: keyId,
+      amount: amount.toString(),
+      currency,
+      name: 'Hubnet',
+      description: 'Order Payment',
+      order_id: razorpayOrderId,
+      handler: async function (response) {
+        try {
+          await axiosInstance.post(`${BASE_URL}/payment/verify`, {
+            orderId,
+            paymentId: response.razorpay_payment_id,
+            razorpayOrderId: response.razorpay_order_id,
+            signature: response.razorpay_signature,
+          });
+          toast.dismiss();
+          toast.success('Payment successful!');
+          navigate('/orders');
+        } catch {
+          toast.dismiss();
+          toast.error('Payment verification failed!');
+        }
+      },
+      prefill: {
+        name: shippingInfo.fullName,
+        email: '',
+        contact: shippingInfo.phone
+      },
+      theme: { color: '#22d3ee' },
+    };
+
+    const razorpay = new window.Razorpay(options);
+    razorpay.open();
+  } catch (error) {
+    toast.dismiss();
+    if (error.response?.data?.message) {
+      toast.error(error.response.data.message);  // 🧠 Show exact error
+    } else {
+      toast.error('Failed to place order');
+    }
+    console.error('Order Error:', error);
+  }
+};
 
   return (
     <NavLayout>
@@ -155,52 +262,14 @@ const fetchShippingInfo = async () => {
             <div className="bg-gradient-to-br from-[#1a1a1d] to-[#101014] p-6 rounded-lg shadow-xl">
               <h2 className="text-2xl font-bold mb-4 text-cyan-300">Shipping Info</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Fixed field names */}
-                <input 
-                  name="fullName" 
-                  value={shippingInfo.fullName} 
-                  onChange={handleChange} 
-                  placeholder="Full Name" 
-                  className="input" 
-                />
-                <input 
-                  name="phone" 
-                  value={shippingInfo.phone} 
-                  onChange={handleChange} 
-                  placeholder="Phone Number" 
-                  className="input" 
-                />
-                <input 
-                  name="address" 
-                  value={shippingInfo.address} 
-                  onChange={handleChange} 
-                  placeholder="Address" 
-                  className="input col-span-full" 
-                />
-                <input 
-                  name="city" 
-                  value={shippingInfo.city} 
-                  onChange={handleChange} 
-                  placeholder="City" 
-                  className="input" 
-                />
-                <input 
-                  name="state" 
-                  value={shippingInfo.state} 
-                  onChange={handleChange} 
-                  placeholder="State" 
-                  className="input" 
-                />
-                <input 
-                  name="pincode" 
-                  value={shippingInfo.pincode} 
-                  onChange={handleChange} 
-                  placeholder="Pincode" 
-                  className="input" 
-                />
+                <input name="fullName" value={shippingInfo.fullName} onChange={handleChange} placeholder="Full Name" className="input" />
+                <input name="phone" value={shippingInfo.phone} onChange={handleChange} placeholder="Phone Number" className="input" />
+                <input name="address" value={shippingInfo.address} onChange={handleChange} placeholder="Address" className="input col-span-full" />
+                <input name="city" value={shippingInfo.city} onChange={handleChange} placeholder="City" className="input" />
+                <input name="state" value={shippingInfo.state} onChange={handleChange} placeholder="State" className="input" />
+                <input name="pincode" value={shippingInfo.pincode} onChange={handleChange} placeholder="Pincode" className="input" />
               </div>
 
-              {/* Business & Delivery */}
               {['reseller', 'distributor'].includes(userRole) && (
                 <div className="mt-6 space-y-4">
                   <h3 className="text-lg font-semibold text-cyan-200">Business & Delivery</h3>
@@ -243,23 +312,37 @@ const fetchShippingInfo = async () => {
             </div>
 
             {/* Order Summary */}
-            <div className="bg-[#151518] p-6 rounded-lg shadow-xl flex flex-col justify-between">
-              <h2 className="text-xl font-bold text-cyan-300 mb-4">Order Summary</h2>
-              <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
-                {cart.items.map(item => (
-                  <div key={item._id} className="flex justify-between bg-[#23232a] rounded px-3 py-2">
-                    <span className="truncate max-w-[140px]">{item.product?.name} <span className="text-xs text-gray-400">x {item.quantity}</span></span>
-                    <span className="font-semibold text-cyan-400">₹ {item.price * item.quantity}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="border-t border-gray-700 my-4"></div>
-              <div className="flex justify-between text-lg font-semibold">
-                <span>Total</span>
-                <span className="text-cyan-400">₹ {cart.totalAmount}</span>
-              </div>
-              <button onClick={handlePlaceOrder} className="mt-6 bg-cyan-600 hover:bg-cyan-500 text-white py-3 rounded-lg text-lg font-semibold transition">Place Order & Pay</button>
-            </div>
+         <div className="bg-[#151518] p-6 rounded-lg shadow-xl flex flex-col justify-between">
+  <h2 className="text-xl font-bold text-cyan-300 mb-4">Order Summary</h2>
+  <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
+    {cart.items.map(item => (
+      <div key={item._id} className="flex justify-between bg-[#23232a] rounded px-3 py-2 items-center">
+        <div className="flex flex-col max-w-[140px]">
+          <span className="truncate">{item.product?.name || 'Unknown Product'}</span>
+          <span className="text-xs text-gray-400">x {item.quantity || 1}</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="font-semibold text-cyan-400">
+            ₹ {(item.price && item.quantity) ? (item.price * item.quantity).toFixed(2) : '0.00'}
+          </span>
+          <button
+            onClick={() => handleRemoveItem(item._id)}
+            className="text-red-400 hover:text-red-600 text-lg font-bold"
+            title="Remove item"
+          >
+            ✖
+          </button>
+        </div>
+      </div>
+    ))}
+  </div>
+  <div className="border-t border-gray-700 my-4"></div>
+  <div className="flex justify-between text-lg font-semibold">
+    <span>Total</span>
+    <span className="text-cyan-400">₹ {cart.totalAmount ? cart.totalAmount.toFixed(2) : '0.00'}</span>
+  </div>
+  <button onClick={handlePlaceOrder} className="mt-6 bg-cyan-600 hover:bg-cyan-500 text-white py-3 rounded-lg text-lg font-semibold transition">Place Order & Pay</button>
+</div>
           </div>
         )}
       </div>

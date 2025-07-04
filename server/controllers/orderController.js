@@ -7,13 +7,17 @@ import orderNotification from '../models/orderNotification.js'
 import Razorpay from 'razorpay';
 import { getDynamicPrice } from './productController.js';
 
+
 export const createOrder = async (req, res) => {
   try {
-    const { shippingInfo } = req.body;
     const userId = req.user._id;
-    const userRole = req.user.role;
+    const userRole = req.user.role?.toLowerCase() || 'enduser';
 
-    const cart = await Cart.findOne({ user: userId }).populate('items.product');
+    // ✅ Get the user's cart with populated product info
+    const cart = await Cart.findOne({ user: userId }).populate({
+      path: 'items.product',
+      select: 'name prices stock quantityBasedPrices'
+    });
 
     if (!cart || cart.items.length === 0) {
       return res.status(400).json({ message: 'Cart is empty!' });
@@ -26,89 +30,74 @@ export const createOrder = async (req, res) => {
       const product = item.product;
       const quantity = item.quantity;
 
-      if (!product || !product.prices || !product.prices[userRole]) {
-        return res.status(400).json({ message: `Invalid pricing for ${product?.name}` });
+      // ✅ Validate product and pricing
+      if (!product || !product.prices) {
+        console.warn(`Skipping item ${item.product?._id}: No product or pricing info`);
+        continue; // skip to next item
       }
 
-      // Check stock
+      let basePrice = product.prices[userRole];
+      if (basePrice == null) {
+        basePrice = product.prices.enduser;
+      }
+
+      if (basePrice == null) {
+        console.warn(`Skipping item ${product._id}: No valid base price found`);
+        continue;
+      }
+
       if (product.stock < quantity) {
         return res.status(400).json({ message: `${product.name} is out of stock.` });
       }
 
-      const basePrice = product.prices[userRole];
-      const unitPrice = getDynamicPrice(quantity, product.quantityBasedPrices, basePrice);
-      const itemTotal = unitPrice * quantity;
+      // ✅ Apply quantity based pricing
+      let finalPrice = basePrice;
+      if (product.quantityBasedPrices?.length > 0) {
+        const slab = product.quantityBasedPrices.find(
+          s => quantity >= s.minQty && (!s.maxQty || quantity <= s.maxQty)
+        );
+        if (slab) finalPrice = slab.price;
+      }
 
+      const itemTotal = finalPrice * quantity;
       totalAmount += itemTotal;
 
-      // Add order item
       orderItems.push({
         product: product._id,
         quantity,
-        price: unitPrice,
-        total: itemTotal,
-        appliedSlab: product.quantityBasedPrices?.find(slab =>
-          quantity >= slab.minQty && (!slab.maxQty || quantity <= slab.maxQty)
-        ) || null
+        price: finalPrice,
+          total: finalPrice * quantity 
       });
     }
 
-    // Round to 2 decimals
-    totalAmount = Math.round(totalAmount * 100) / 100;
-
-    if (totalAmount <= 0) {
-      return res.status(400).json({ message: 'Invalid total amount' });
+    if (orderItems.length === 0) {
+      return res.status(400).json({ message: 'No valid items to place order.' });
     }
 
-    // Save order in DB
     const order = new Order({
       user: userId,
       items: orderItems,
-      shippingInfo,
-      totalAmount,
+      totalAmount: Math.round(totalAmount * 100) / 100,
       paymentStatus: 'pending',
       orderStatus: 'placed'
     });
 
     await order.save();
 
-    // Razorpay Integration
-    const razorpay = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID,
-      key_secret: process.env.RAZORPAY_KEY_SECRET
-    });
-
-    const razorpayOrder = await razorpay.orders.create({
-      amount: Math.round(totalAmount * 100), 
-      currency: 'INR',
-      receipt: order._id.toString(),
-      notes: {
-        user: userId.toString(),
-        order: order._id.toString()
-      }
-    });
-
-
-    order.razorpayOrderId = razorpayOrder.id;
-    await order.save();
-
-    res.status(201).json({
-      message: "Order created",
+    return res.status(201).json({
+      message: 'Order placed successfully.',
       orderId: order._id,
-      razorpayOrderId: razorpayOrder.id,
-      amount: razorpayOrder.amount,
-      currency: razorpayOrder.currency,
-      keyId: process.env.RAZORPAY_KEY_ID
+      totalAmount: order.totalAmount
     });
 
   } catch (err) {
-    console.error("Create order error:", err);
-    res.status(500).json({ message: 'Failed to create order', error: err.message });
+    console.error('❌ Error in createOrder:', err);
+    return res.status(500).json({ message: 'Internal server error', error: err.message });
   }
 };
 
 
-// Verify Payment
+
 export const verifyPayment = async (req, res) => {
   const { orderId, paymentId, razorpayOrderId, signature } = req.body;
 

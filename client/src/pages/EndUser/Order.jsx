@@ -123,7 +123,7 @@ const handleCancelOrder = async (orderId) => {
                   </div>
                 )}
 
-                {order.orderStatus !== 'cancelled' &&
+                {/* {order.orderStatus !== 'cancelled' &&
                   order.orderStatus !== 'delivered' &&
                   order.paymentStatus !== 'paid' && (
                     <button
@@ -133,7 +133,17 @@ const handleCancelOrder = async (orderId) => {
                       <XCircle className="w-4 h-4" />
                       Cancel Order
                     </button>
+                  )} */}
+                  {!['cancelled', 'delivered', 'shipped'].includes(order.orderStatus) && (
+                    <button
+                      onClick={() => handleCancelOrder(order._id)}
+                      className="mt-4 flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition"
+                    >
+                      <XCircle className="w-4 h-4" />
+                      Cancel Order
+                    </button>
                   )}
+
               </div>
             ))}
           </div>

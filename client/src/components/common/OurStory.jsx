@@ -44,7 +44,7 @@ proudly support a network of over 2500 active Reseller and Govt Instuitions and 
             <img
               alt="Dataline office and infrastructure"
               className="w-full h-100 object-cover "
-              src="/public/team.jpg"
+              src="./team.jpg"
             />
           </div>
         </div>
