@@ -46,6 +46,7 @@ import Choose from './components/common/Choose';
 import BrandSection from './components/common/BrandSection';
 import Imagesection from './components/common/Imagesection';
 import TopCategoriesSection from './components/common/TopCategoriesSection';
+import PaymentPage from './pages/EndUser/PaymentPage';
 
 function App() {
   return (
@@ -72,6 +73,7 @@ function App() {
        <Route path='/choose' element={<Choose/>}/>
       <Route path='/brand-section' element={<BrandSection/>}/>
       <Route path='/topcategories-section' element={<TopCategoriesSection/>} />
+      <Route path='/payment' element={<PaymentPage/>}/>
         {/* Authenticated Customer Roles */}
           <Route element={<ProtectedRoute allowedRoles={['reseller', 'distributor', 'enduser']} />}>
             <Route path="/dashboard" element={<CustomerDashboard />} />

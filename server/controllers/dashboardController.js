@@ -25,29 +25,69 @@ export const getDashboardStats = async (req, res) => {
   }
 };
 
+// export const getEndUserDashboard = async (req, res) => {
+//   try {
+//     const endUsers = await User.find({ role: 'enduser' }).select('_id');
+
+//     const endUserIds = endUsers.map(user => user._id);
+
+//     const totalOrders = await Order.countDocuments({ user: { $in: endUserIds } });
+//     const recentOrders = await Order.find({ user: { $in: endUserIds } })
+//       .sort({ createdAt: -1 })
+//       .limit(5)
+//       .populate('user', 'name email');
+
+//     const formattedRecent = recentOrders.map(order => ({
+//       ...order._doc,
+//       customerName: order.user?.name,
+//       customerEmail: order.user?.email,
+//     }));
+
+//     res.status(200).json({
+//       totalOrders,
+//       totalUsers: endUsers.length,
+//       recentOrders: formattedRecent,
+//     });
+//   } catch (err) {
+//     console.error("Enduser Dashboard Stats Error:", err);
+//     res.status(500).json({ message: "Failed to fetch dashboard data." });
+//   }
+// };
+
+
+//  Reseller Dashboard
+
+
 export const getEndUserDashboard = async (req, res) => {
   try {
     const endUsers = await User.find({ role: 'enduser' }).select('_id');
-
     const endUserIds = endUsers.map(user => user._id);
 
     const totalOrders = await Order.countDocuments({ user: { $in: endUserIds } });
+
+    //  Fetch all orders from end users sorted by newest first
     const recentOrders = await Order.find({ user: { $in: endUserIds } })
       .sort({ createdAt: -1 })
-      .limit(5)
-      .populate('user', 'name email');
+      .populate('user', 'name email')
+      .populate('items.product', 'name');
 
-    const formattedRecent = recentOrders.map(order => ({
-      ...order._doc,
-      customerName: order.user?.name,
-      customerEmail: order.user?.email,
-    }));
+    //  Fetch manual bank transfer orders (still pending)
+    const manualOrders = await Order.find({
+      user: { $in: endUserIds },
+      paymentMethod: 'bank_transfer',
+      paymentStatus: 'pending'
+    })
+      .sort({ createdAt: -1 })
+      .populate('user', 'name email')
+      .populate('items.product', 'name');
 
     res.status(200).json({
       totalOrders,
       totalUsers: endUsers.length,
-      recentOrders: formattedRecent,
+      recentOrders,
+      manualOrders
     });
+
   } catch (err) {
     console.error("Enduser Dashboard Stats Error:", err);
     res.status(500).json({ message: "Failed to fetch dashboard data." });
@@ -55,7 +95,7 @@ export const getEndUserDashboard = async (req, res) => {
 };
 
 
-//  Reseller Dashboard
+
 export const getResellerDashboard = async (req, res) => {
  try {
     const reseller = await User.find({ role: 'reseller' }).select('_id');
@@ -182,5 +222,59 @@ if (order.orderStatus === 'Cancelled') {
       message: 'Server error while updating payment status',
       error: error.message 
     });
+  }
+};
+
+// export const updateManualOrderStatus = async (req, res) => {
+//   try {
+//     const { orderId } = req.params;
+//     const { status } = req.body; // 'paid' or 'rejected'
+
+//     if (!['paid', 'rejected'].includes(status)) {
+//       return res.status(400).json({ message: 'Invalid payment status.' });
+//     }
+
+//     const order = await Order.findById(orderId);
+//     if (!order) return res.status(404).json({ message: 'Order not found' });
+
+//     order.paymentStatus = status;
+//     if (status === 'paid') order.orderStatus = 'confirmed';
+//     await order.save();
+
+//     res.json({ message: `Order ${status === 'paid' ? 'approved' : 'rejected'} successfully.` });
+//   } catch (err) {
+//     console.error('❌ Error in updateManualOrderStatus:', err);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// };
+
+export const updateManualOrderStatus = async (req, res) => {
+  try {
+    console.log('🟡 Body:', req.body);
+    console.log('🟡 Params:', req.params);
+
+    const { orderId } = req.params;
+    const { status } = req.body;
+
+    if (!['paid', 'rejected'].includes(status)) {
+      console.warn('❌ Invalid status:', status);
+      return res.status(400).json({ message: 'Invalid payment status.' });
+    }
+
+    const order = await Order.findById(orderId);
+    if (!order) {
+      console.warn('❌ Order not found for ID:', orderId);
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    order.paymentStatus = status;
+    if (status === 'paid') order.orderStatus = 'confirmed';
+    await order.save();
+
+    console.log('✅ Payment updated for:', orderId);
+    res.json({ message: `Order ${status === 'paid' ? 'approved' : 'rejected'} successfully.` });
+  } catch (err) {
+    console.error('❌ Error in updateManualOrderStatus:', err);
+    res.status(500).json({ message: 'Server error', error: err.message });
   }
 };

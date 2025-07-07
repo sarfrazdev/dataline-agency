@@ -6,7 +6,7 @@ import {
   getDistributorDashboard,
   getEndUserDashboard,
   updateOrderStatus,
-  updatePaymentStatus
+  updatePaymentStatus,updateManualOrderStatus
 } from '../controllers/dashboardController.js';
 
 const router = express.Router();
@@ -57,5 +57,11 @@ router.put(
   updatePaymentStatus
 );
 
+router.put(
+  '/orders/:orderId/manual-payment',
+  protect,
+  authorizeRoles('superadmin', 'reseller-admin', 'distributor-admin', 'enduser-admin'),
+  updateManualOrderStatus
+);
 
 export default router;

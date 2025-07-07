@@ -7,10 +7,12 @@ import {
   cancelOrder,
 
   uploadBill,
-  deleteBill
+  deleteBill,
+  createManualOrder
 } from '../controllers/orderController.js';
 
 import { uploadPdf } from '../middleware/uploadPdf.js';
+import { uploadProof } from '../middleware/uploadProof.js';
 
 const router = express.Router();
 
@@ -22,6 +24,6 @@ router.put('/cancel/:id', protect, cancelOrder);
 // Upload PDF bill
 router.put('/bill/:id', protect, uploadPdf.single('billPdf'), uploadBill);
 router.delete('/bill/:id', protect, deleteBill);
-
+router.post('/manual', protect, uploadProof.single('proof'), createManualOrder);
 
 export default router;

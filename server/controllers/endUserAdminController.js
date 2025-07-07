@@ -4,31 +4,7 @@ import Notification from '../models/Notification.js';
 import shipment from '../models/shipment.js';
 
 // End user view their own orders
-// export const getEndUserOrders = async (req, res) => {
-//   try {
-//    const orders = await Order.find()
-//   .populate({
-//     path: 'user',
-//     select: 'name email role',
-//     match: { role: 'enduser' }
-//   });
 
-// const filteredOrders = orders.filter(order => order.user !== null);
-
-// res.status(200).json({
-//   success: true,
-//   orders: filteredOrders.map(order => ({
-//     ...order._doc,
-//     customerName: order.user.name,
-//     customerEmail: order.user.email
-//   }))
-// });
-
-//   } catch (error) {
-//     console.error('End User Orders Fetch Error:', error);
-//     res.status(500).json({ message: 'Server error' });
-//   }
-// };
 export const getEndUserOrders = async (req, res) => {
   try {
     const orders = await Order.find()

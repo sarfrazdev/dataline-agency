@@ -52,7 +52,7 @@ const ImageSections = () => {
                 />
 
                 {/* Bottom Glow Border */}
-                <div className="absolute bottom-0 left-0 h-[4px] w-full bg-gradient-to-r from-cyan-400 to-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute bottom-0 left-0 h-[7px] w-full bg-gradient-to-r from-cyan-400 to-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
             ))}
           </div>

@@ -135,13 +135,27 @@ const Wishlist = () => {
                         >
                           <Trash2 className="w-4 h-4 text-white" />
                         </button>
-                        <button
+                        {/* <button
                           onClick={() => handleAddToCart(product._id)}
                           className="bg-blue-600 hover:bg-blue-700 p-2 rounded-full transition"
                           title="Add to Cart"
                         >
                           <ShoppingCart className="w-4 h-4 text-white" />
-                        </button>
+                        </button> */}
+
+                        <button
+                        onClick={() => handleAddToCart(product._id)}
+                        disabled={product.stock === 0}
+                        className={`p-2 rounded-full transition ${
+                          product.stock === 0
+                            ? 'bg-gray-600 cursor-not-allowed'
+                            : 'bg-blue-600 hover:bg-blue-700'
+                        }`}
+                        title={product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+                      >
+                        <ShoppingCart className="w-4 h-4 text-white" />
+                      </button>
+
                       </div>
                     </div>
                   </div>

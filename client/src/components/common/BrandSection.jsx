@@ -2,28 +2,22 @@ import { useNavigate } from 'react-router-dom';
 import React from 'react';
 
 const brands = [
-  { name: 'HP', logo: '/public/hp.png' },
-  { name: 'Canon', logo: '/public/canon.png' },
-  { name: 'Dell', logo: '/public/dell.png' },
-   { name: 'Brother', logo: '/public/brother.png' },
-    { name: 'Consistent', logo: '/public/consistent.png' },
-   
-   { name: 'HikVision', logo: '/public/hikvision.png' },
-    { name: 'Nova', logo: '/public/nova.png' },
-      { name: 'Segate', logo: '/public/segate.png' },
-           { name: 'Asus', logo: '/public/asus.png' },
-  
-  
-  { name: 'Lenovo', logo: '/public/lenovo.png' },
-  { name: 'Acer', logo: '/public/acer.png' },
-  { name: 'Epson', logo: '/public/epson.png' },
- 
-  { name: 'TP-Link', logo: '/public/tplink.png' },
-  { name: 'Logitech', logo: '/public/logitech.png' },
- 
-  { name: 'Zebronics', logo: '/public/zebronics.png' },
-  { name: 'Cp plus', logo: '/public/cpplus.png' },
- 
+  { name: 'HP',         logo: '/public/hp.png' },
+  { name: 'Canon',      logo: '/public/canon.png' },
+  { name: 'Dell',       logo: '/public/dell.png' },
+  { name: 'Brother',    logo: '/public/brother.png' },
+  { name: 'Consistent', logo: '/public/consistent.png' },
+  { name: 'HikVision',  logo: '/public/hikvision.png' },
+  { name: 'Nova',       logo: '/public/nova.png' },
+  { name: 'Segate',     logo: '/public/segate.png' },
+  { name: 'Asus',       logo: '/public/asus.png' },
+  { name: 'Lenovo',     logo: '/public/lenovo.png' },
+  { name: 'Acer',       logo: '/public/acer.png' },
+  { name: 'Epson',      logo: '/public/epson.png' },
+  { name: 'TP-Link',    logo: '/public/tplink.png' },
+  { name: 'Logitech',   logo: '/public/logitech.png' },
+  { name: 'Zebronics',  logo: '/public/zebronics.png' },
+  { name: 'Cp plus',    logo: '/public/cpplus.png' },
 ];
 
 const BrandSection = () => {

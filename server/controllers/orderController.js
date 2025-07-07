@@ -279,3 +279,92 @@ export const createOrderNotification = async (req, order) => {
   }
 };
 
+
+
+
+export const createManualOrder = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const userRole = req.user.role?.toLowerCase() || 'enduser';
+
+    // 🔐 Get uploaded file
+    const file = req.file;
+    if (!file) return res.status(400).json({ message: 'Payment proof is required.' });
+
+    // 📦 Get shippingInfo (stringified JSON)
+    const { shippingInfo } = JSON.parse(req.body.data || '{}');
+    if (!shippingInfo) return res.status(400).json({ message: 'Missing shipping info' });
+
+    // 🛒 Get user's cart
+    const cart = await Cart.findOne({ user: userId }).populate({
+      path: 'items.product',
+      select: 'name prices stock quantityBasedPrices'
+    });
+
+    if (!cart || cart.items.length === 0) {
+      return res.status(400).json({ message: 'Cart is empty!' });
+    }
+
+    let totalAmount = 0;
+    const orderItems = [];
+
+    for (const item of cart.items) {
+      const product = item.product;
+      const quantity = item.quantity;
+
+      if (!product || !product.prices) {
+        console.warn(`Skipping item ${item.product?._id}: No product or pricing info`);
+        continue;
+      }
+
+      let basePrice = product.prices[userRole] ?? product.prices.enduser;
+      if (basePrice == null) {
+        console.warn(`Skipping item ${product._id}: No valid price found`);
+        continue;
+      }
+
+      if (product.stock < quantity) {
+        return res.status(400).json({ message: `${product.name} is out of stock.` });
+      }
+
+      const finalPrice = getDynamicPrice(quantity, product.quantityBasedPrices, basePrice);
+      const itemTotal = finalPrice * quantity;
+      totalAmount += itemTotal;
+
+      orderItems.push({
+        product: product._id,
+        quantity,
+        price: finalPrice,
+        total: itemTotal
+      });
+
+      // Stock update (optional now or later)
+      product.stock -= quantity;
+      await product.save();
+    }
+
+    if (orderItems.length === 0) {
+      return res.status(400).json({ message: 'No valid items in order.' });
+    }
+
+    const order = new Order({
+      user: userId,
+      items: orderItems,
+      shippingInfo,
+      totalAmount: Math.round(totalAmount * 100) / 100,
+      paymentMethod: 'bank_transfer',
+      paymentStatus: 'pending',
+      paymentProof: `/uploads/paymentProofs/${file.filename}`,
+      orderStatus: 'placed'
+    });
+
+    await order.save();
+    await Cart.findOneAndDelete({ user: userId }); 
+
+    res.status(201).json({ message: 'Manual order placed.', orderId: order._id });
+
+  } catch (err) {
+    console.error(' Error in createManualOrder:', err);
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
