@@ -8,14 +8,17 @@ const TopCategoriesSection = () => {
 
   const categories = [
     { name: 'Laptop', logo: '/laptop.jpg' },
+    {name:"Desktop" ,logo:"/pc1.png"},
     { name: 'Printer', logo: '/printer.png' },
+      { name: 'Scanner', logo: '/scanner.png' },
+       { name: 'Cartidge', logo: '/cartidge.jpg' },
     { name: 'Biometrics', logo: '/biometrics.jpg' },
-    { name: 'Cartidge', logo: '/cartidge.jpg' },
+    { name: 'Ink Bottle', logo: '/ink.jpg' },
     { name: 'Keyboard', logo: '/keyboard.jpg' },
     { name: 'Mouse', logo: '/mouse.jpg' },
     { name: 'Pendrive', logo: '/pendrive.jpg' },
     { name: 'Hard-Disk', logo: '/harddisk.jpg' },
-    { name: 'Tablet', logo: '/tab.jpg' },
+    { name: 'Tablets', logo: '/tab.jpg' },
   ];
 
   const handleClick = (categoryName) => {

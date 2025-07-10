@@ -8,6 +8,7 @@ import {
   updateOrderStatus,
   updatePaymentStatus,updateManualOrderStatus
 } from '../controllers/dashboardController.js';
+import { uploadProof } from '../middleware/uploadProof.js';
 
 const router = express.Router();
 

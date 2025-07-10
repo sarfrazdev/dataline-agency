@@ -8,7 +8,11 @@ export const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find()
       .populate('user', 'name email')
-      .populate('items.product');
+     .populate({
+        path: 'items.product',
+        select: 'name modelNo brand category' 
+      });
+
 
     res.status(200).json({ orders });
   } catch (err) {

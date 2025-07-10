@@ -39,31 +39,7 @@ export const getMyShipment = async (req, res) => {
     }
 };
 
-// export const createShipment = async (req, res) => {
-//   try {
-//     if (!req.user || !req.user._id) {
-//       return res.status(401).json({ error: "Authentication required" });
-//     }
 
-//     // ✅ Prevent duplicate _id if accidentally sent from frontend
-//     const { _id, ...shipmentData } = req.body;
-
-//     const shipment = new Shipment({
-//       ...shipmentData,
-//       user: req.user._id,
-//       userRole: req.body.userRole || 'enduser',
-//     });
-
-//     console.log('Headers:', req.headers);
-//     console.log('User:', req.user);
-
-//     await shipment.save();
-//     res.status(201).json({ message: 'Shipment details saved', shipment });
-//   } catch (error) {
-//     console.error('Shipment Error:', error);
-//     res.status(500).json({ error: error.message });
-//   }
-// };
 
 
 export const createShipment = async (req, res) => {
@@ -82,8 +58,8 @@ export const createShipment = async (req, res) => {
       userRole: req.body.userRole || 'enduser',
     });
 
-    console.log('📦 Shipment creation by:', req.user.email);
-    console.log('📦 Data:', shipmentData);
+    // console.log('📦 Shipment creation by:', req.user.email);
+    // console.log('📦 Data:', shipmentData);
 
     await shipment.save();
 

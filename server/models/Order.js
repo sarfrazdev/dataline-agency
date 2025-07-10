@@ -100,7 +100,8 @@ const orderSchema = new mongoose.Schema({
   orderStatus: {
     type: String,
     // enum: ['placed', 'shipped', 'delivered', 'cancelled'],
-     enum: ['placed', 'shipped', 'delivered', 'cancelled', 'confirmed'],
+    //  enum: ['placed', 'shipped', 'delivered', 'cancelled', 'confirmed'],
+     enum: ['placed', 'Processing', 'Shipped', 'Delivered', 'Cancelled'], 
     default: 'placed'
   },
   cancellationReason: { type: String },

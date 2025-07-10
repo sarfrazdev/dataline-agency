@@ -81,8 +81,15 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product'
     }],
-    resetToken: String,
-    resetTokenExpiry: Date,
+resetOtp: {
+  type: String,
+  default: null,
+},
+resetOtpExpireAt: {
+  type: Date,
+  default: null,
+},
+
     createdAt: {
         type: Date,
         default: Date.now,

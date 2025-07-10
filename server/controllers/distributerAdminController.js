@@ -5,30 +5,36 @@ import Notification from '../models/Notification.js';
 
 //  Distributor's own orders
 export const getDistributorOrders = async (req, res) => {
-try {
-   const orders = await Order.find()
-  .populate({
-    path: 'user',
-    select: 'name email role',
-    match: { role: { $in: ['distributor', 'distributor-admin'] } }
+  try {
+    const orders = await Order.find()
+      .populate({
+        path: 'user',
+        select: 'name email role',
+        match: { role: 'distributor' }
+      })
+      .populate({
+        path: 'items.product',
+        select: 'name modelNo brand category' 
+      });
+
+  
+  const filteredOrders = orders.filter(order => order.user !== null);
+  
+  res.status(200).json({
+    success: true,
+    orders: filteredOrders.map(order => ({
+      ...order._doc,
+      customerName: order.user.name,
+      customerEmail: order.user.email
+    }))
   });
-
-const filteredOrders = orders.filter(order => order.user !== null);
-
-res.status(200).json({
-  success: true,
-  orders: filteredOrders.map(order => ({
-    ...order._doc,
-    customerName: order.user.name,
-    customerEmail: order.user.email
-  }))
-});
-
-  } catch (err) {
-    console.error("Distributor orders error:", err);
-    res.status(500).json({ message: "Failed to fetch distributor orders." });
+  
+    }catch (err) {
+    console.error("Reseller orders error:", err);
+    res.status(500).json({ message: "Failed to fetch orders." });
   }
 };
+
 
 //  Distributor's own products
 export const getDistributorProducts = async (req, res) => {

@@ -6,12 +6,17 @@ import Notification from '../models/Notification.js';
 //  Reseller's own orders
 export const getResellerOrders = async (req, res) => {
   try {
-     const orders = await Order.find()
-    .populate({
-      path: 'user',
-      select: 'name email role',
-      match: { role: 'reseller' }
-    });
+    const orders = await Order.find()
+      .populate({
+        path: 'user',
+        select: 'name email role',
+        match: { role: 'reseller' }
+      })
+      .populate({
+        path: 'items.product',
+        select: 'name modelNo brand category' 
+      });
+
   
   const filteredOrders = orders.filter(order => order.user !== null);
   

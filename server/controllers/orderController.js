@@ -354,7 +354,7 @@ export const createManualOrder = async (req, res) => {
       totalAmount: Math.round(totalAmount * 100) / 100,
       paymentMethod: 'bank_transfer',
       paymentStatus: 'pending',
-      paymentProof: `/uploads/paymentProofs/${file.filename}`,
+      paymentProof: `${process.env.BASE_URL || 'http://localhost:8000'}/uploads/paymentProofs/${file.filename}`,
       orderStatus: 'placed'
     });
 

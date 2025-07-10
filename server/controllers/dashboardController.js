@@ -2,6 +2,8 @@ import Order from '../models/Order.js';
 import User from '../models/User.js';
 import Product from '../models/Product.js';
 
+import fs from 'fs';
+import path from 'path';
 
 //  Super Admin Dashboard
 export const getDashboardStats = async (req, res) => {
@@ -163,14 +165,14 @@ export const updateOrderStatus = async (req, res) => {
     const { orderId } = req.params;
     const { status } = req.body;
 
-    const validStatuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+    const validStatuses = ['placed', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ message: 'Invalid status value' });
     }
 
     const order = await Order.findByIdAndUpdate(
       orderId,
-      { status },
+      { orderStatus: status },
       { new: true }
     );
 
@@ -203,7 +205,7 @@ export const updatePaymentStatus = async (req, res) => {
     const order = await Order.findByIdAndUpdate(
       orderId,
       { paymentStatus },
-      { new: true, runValidators: true } //  Ensure validators run
+      { new: true, runValidators: true } 
     );
 
     if (!order) {
@@ -248,33 +250,138 @@ if (order.orderStatus === 'Cancelled') {
 //   }
 // };
 
+// export const updateManualOrderStatus = async (req, res) => {
+//   try {
+//     console.log(' Body:', req.body);
+//     console.log(' Params:', req.params);
+
+//     const { orderId } = req.params;
+//     const { status } = req.body;
+
+//     if (!['paid', 'rejected'].includes(status)) {
+//       console.warn('❌ Invalid status:', status);
+//       return res.status(400).json({ message: 'Invalid payment status.' });
+//     }
+
+//     const order = await Order.findById(orderId);
+//     if (!order) {
+//       console.warn('❌ Order not found for ID:', orderId);
+//       return res.status(404).json({ message: 'Order not found' });
+//     }
+
+//     order.paymentStatus = status;
+//     if (status === 'paid') order.orderStatus = 'confirmed';
+//     await order.save();
+
+//     console.log('✅ Payment updated for:', orderId);
+//     res.json({ message: `Order ${status === 'paid' ? 'approved' : 'rejected'} successfully.` });
+//   } catch (err) {
+//     console.error('❌ Error in updateManualOrderStatus:', err);
+//     res.status(500).json({ message: 'Server error', error: err.message });
+//   }
+// };
+// export const updateManualOrderStatus= async (req, res) => {
+//   try {
+//     const userId = req.user._id;
+//     const userRole = req.user.role;
+
+//     const cart = await cart.findOne({ user: userId }).populate('items.product');
+//     if (!cart || cart.items.length === 0) {
+//       return res.status(400).json({ message: 'Cart is empty' });
+//     }
+
+//     const { shippingInfo } = JSON.parse(req.body.data);
+
+//     const items = cart.items.map(item => ({
+//       product: item.product._id,
+//       quantity: item.quantity,
+//       price: item.price,
+//     }));
+
+//     const totalAmount = cart.items.reduce(
+//       (acc, item) => acc + item.price * item.quantity,
+//       0
+//     );
+
+//     const newOrder = new Order({
+//       user: userId,
+//       items,
+//       shippingInfo,
+//       totalAmount,
+//       orderStatus: 'pending',
+//       paymentStatus: 'pending',
+//       paymentMethod: 'bank_transfer',
+//     });
+
+//     // Attach payment proof if uploaded
+//     if (req.file) {
+//         console.log(' Uploaded file:', req.file);
+//       newOrder.paymentProof = `/uploads/paymentproofs/${req.file.filename}`; 
+//     }
+
+//     await newOrder.save();
+//     await cart.findByIdAndDelete(cart._id);
+
+//     //  const proofUrl = newOrder.paymentProof
+//     //   ? `${req.protocol}://${req.get('host')}${newOrder.paymentProof}`
+//     //   : null;
+//        const imageUrls = (productObj.images || []).map(img =>
+//         img.startsWith('http')
+//           ? img
+//           : `${req.protocol}://${req.get('host')}/uploads/paymentsProofs/${img.replace(/^.*[\\/]/, '')}`
+//       );
+//       return { ...productObj, images: imageUrls };
+
+//      res.status(201).json({
+//       message: 'Manual order placed successfully',
+//       order: {
+//         ...newOrder.toObject(),
+//         paymentProof: proofUrl,
+//       }
+//     });
+//   } catch (err) {
+//     console.error('Manual order error:', err);
+//     res.status(500).json({ message: 'Manual order failed', error: err.message });
+//   }
+// };
+
+// ✅ Final version for updateManualOrderStatus
 export const updateManualOrderStatus = async (req, res) => {
   try {
-    console.log('🟡 Body:', req.body);
-    console.log('🟡 Params:', req.params);
-
     const { orderId } = req.params;
     const { status } = req.body;
 
+    // Validate status
     if (!['paid', 'rejected'].includes(status)) {
-      console.warn('❌ Invalid status:', status);
       return res.status(400).json({ message: 'Invalid payment status.' });
     }
 
     const order = await Order.findById(orderId);
     if (!order) {
-      console.warn('❌ Order not found for ID:', orderId);
       return res.status(404).json({ message: 'Order not found' });
     }
 
+    // ✅ Update payment status
     order.paymentStatus = status;
-    if (status === 'paid') order.orderStatus = 'confirmed';
+    if (status === 'paid') {
+      order.orderStatus = 'confirmed';
+    }
+
+    // ✅ If file uploaded, update paymentProof
+    if (req.file) {
+      const filePath = `/uploads/paymentProofs/${req.file.filename}`;
+      const fullUrl = `${req.protocol}://${req.get('host')}${filePath}`;
+      order.paymentProof = fullUrl;
+    }
+
     await order.save();
 
-    console.log('✅ Payment updated for:', orderId);
-    res.json({ message: `Order ${status === 'paid' ? 'approved' : 'rejected'} successfully.` });
+    res.status(200).json({
+      message: `Payment ${status === 'paid' ? 'approved' : 'rejected'} successfully.`,
+      paymentProof: order.paymentProof || null
+    });
   } catch (err) {
-    console.error('❌ Error in updateManualOrderStatus:', err);
+    console.error('Error in updateManualOrderStatus:', err);
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
