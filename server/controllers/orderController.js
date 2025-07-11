@@ -82,6 +82,14 @@ export const createOrder = async (req, res) => {
       orderStatus: 'placed'
     });
 
+    for (const item of orderItems) {
+      const product = await product.findById(item.product);
+      if (product) {
+        product.stock -= item.quantity;
+        await product.save();
+      }
+    }
+
     await order.save();
 
     return res.status(201).json({

@@ -10,16 +10,16 @@ import axios from 'axios';
 import NavLayout from '../../components/auth/NavLayout'; 
 
 const fallbackBrands = [
-  'HP', 'Dell', 'Lenovo', 'ASUS', 'Canon', 'Brother', 'Epson', 'TVSE', 'Samsung',
-  'LG', 'TCL', 'Mantra', 'Morpho', 'Startek', 'Prodot', 'Ricoh', 'Xerox', 'Pantum',
-  'Logitech', 'Seagate', 'Toshiba', 'WD', 'SanDisk', 'Antivirus', 'Accounting Software',
-  'Printer Adjustment Software', 'CP Plus', 'Hikvision', 'Sony', 'Nikon', 'Zebronics',
-  'TP-Link', 'D-Link'
+  'hp', 'dell', 'lenovo', 'asus', 'canon', 'brother', 'epson', 'tvse', 'samsung',
+  'lg', 'tcl', 'mantra', 'morpho', 'startek', 'prodot', 'ricoh', 'xerox', 'pantum',
+  'logitech', 'seagate', 'toshiba', 'wd', 'sandisk', 'antivirus', 'accounting software',
+  'printer adjustment software', 'cp plus', 'hikvision', 'sony', 'nikon', 'zebronics',
+  'tp-link', 'd-link'
 ];
 
 const fallbackCategories = [
   'Laptop', 'Desktop', 'Printer', 'TV & Monitor', 'Biometrics', 'Cartridge', 'Ink Bottle',
-  'Keyboard and Mouse', 'Internal / External HDD', 'Pen Drive', 'Software', 'CCTV Camera',
+  'Keyboard','Mouse', 'Internal / External HDD', 'Pen Drive', 'Software', 'CCTV Camera',
   'Router', 'DVR/NVR', 'POE Switch', 'Tablets', 'Refurbished', 'Accessories', 'Networking',
   'Surveillance', 'Scanner'
 ];

@@ -1,26 +1,5 @@
 import Shipment from "../models/shipment.js";
 
-// export const createShipment = async (req, res) => {
-//     try {
-//         if (!req.user || !req.user._id) {
-//             return res.status(401).json({ error: "Authentication required" });
-//         }
-
-//         const shipment = new Shipment({
-//             ...req.body,
-//             user: req.user._id, // Ensure this is set
-//             userRole: req.body.userRole || 'enduser'
-//         });
-//         console.log('Headers:', req.headers); // Check if Authorization header exists
-//         console.log('User:', req.user); // Check if user is populated
-    
-//         await shipment.save();
-//         res.status(201).json({ message: 'Shipment details saved', shipment });
-//     } catch (error) {
-//         console.error('Shipment Error:', error);
-//         res.status(500).json({ error: error.message });
-//     }
-// };
 export const getMyShipment = async (req, res) => {
     try {
         if (!req.user || !req.user._id) {
@@ -42,30 +21,74 @@ export const getMyShipment = async (req, res) => {
 
 
 
+// export const createShipment = async (req, res) => {
+//   try {
+//     if (!req.user || !req.user._id) {
+//       return res.status(401).json({ error: "Authentication required" });
+//     }
+
+//     // Remove _id if sent from frontend accidentally
+//     const { _id, ...shipmentData } = req.body;
+
+//     // Create new shipment document
+//     const shipment = new Shipment({
+//       ...shipmentData,
+//       user: req.user._id,
+//       userRole: req.body.userRole || 'enduser',
+//     });
+
+//     // console.log('📦 Shipment creation by:', req.user.email);
+//     // console.log('📦 Data:', shipmentData);
+
+//     await shipment.save();
+
+//     res.status(201).json({ message: 'Shipment details saved', shipment });
+//   } catch (error) {
+//     console.error('❌ Shipment Error:', error);
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
+
 export const createShipment = async (req, res) => {
   try {
     if (!req.user || !req.user._id) {
       return res.status(401).json({ error: "Authentication required" });
     }
 
-    // Remove _id if sent from frontend accidentally
+    // Remove _id if sent accidentally
     const { _id, ...shipmentData } = req.body;
 
-    // Create new shipment document
-    const shipment = new Shipment({
+    // Check if shipment already exists for the user
+    const existingShipment = await Shipment.findOne({ user: req.user._id });
+
+    if (existingShipment) {
+      // Update the existing one
+      existingShipment.set(shipmentData);
+      await existingShipment.save();
+
+      return res.status(200).json({
+        message: 'Shipment info updated successfully',
+        shipment: existingShipment,
+      });
+    }
+
+    // Create new shipment
+    const newShipment = new Shipment({
       ...shipmentData,
       user: req.user._id,
       userRole: req.body.userRole || 'enduser',
     });
 
-    // console.log('📦 Shipment creation by:', req.user.email);
-    // console.log('📦 Data:', shipmentData);
+    await newShipment.save();
 
-    await shipment.save();
+    return res.status(201).json({
+      message: 'Shipment created successfully',
+      shipment: newShipment,
+    });
 
-    res.status(201).json({ message: 'Shipment details saved', shipment });
   } catch (error) {
-    console.error('❌ Shipment Error:', error);
+    console.error('❌ Shipment Save Error:', error);
     res.status(500).json({ error: error.message });
   }
 };

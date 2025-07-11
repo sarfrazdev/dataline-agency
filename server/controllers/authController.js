@@ -217,51 +217,93 @@ export const getCurrentUser = async (req, res) => {
 
 //  Forgot Password
 
+// export const forgotPassword = async (req, res) => {
+//   const { email } = req.body;
+
+//   if (!email) {
+//     return res.status(400).json({ success: false, message: "Email is required" });
+//   }
+
+//   try {
+//     const user = await User.findOne({ email });
+
+//     if (!user) {
+//       return res.status(404).json({ success: false, message: "User not found" });
+//     }
+
+//     // ✅ Generate OTP
+//     const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+//     // ✅ Save OTP to DB
+//     user.resetOtp = otp;
+//     user.resetOtpExpireAt = Date.now() + 15 * 60 * 1000; // 15 min
+//     await user.save();
+
+//     // ✅ Send OTP via email
+//     const mailOptions = {
+//       from: process.env.SENDER_EMAIL,
+//       to: user.email,
+//       subject: "Password Reset OTP",
+//       text: `Your OTP is ${otp}. It will expire in 15 minutes.`,
+//     };
+
+//     await transporter.sendMail(mailOptions);
+
+//     return res.status(200).json({
+//       success: true,
+//       message: "OTP sent to your email",
+//     });
+
+//   } catch (error) {
+//     console.error("Forgot Password Error:", error);
+//     return res.status(500).json({
+//       success: false,
+//       message: "Something went wrong",
+//       error: error.message,
+//     });
+//   }
+// };
+
+
 export const forgotPassword = async (req, res) => {
-  const { email } = req.body;
-
-  if (!email) {
-    return res.status(400).json({ success: false, message: "Email is required" });
-  }
-
-  try {
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(404).json({ success: false, message: "User not found" });
+    const { email } = req.body;
+    if (!email) {
+        return res.json({ success: false, message: "Email is required" });
     }
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.json({ success: false, message: "User not found" });
+        }
+  
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        user.resetOtp = otp;
+        user.resetOtpExpireAt = Date.now() + 15 * 60 * 1000; 
+        await user.save();
+      
+        const mailOption = {
+            from: process.env.SENDER_EMAIL, 
+            to: user.email,
+            subject: "Password Reset OTP",
+            text: `Your OTP is ${otp}. It expires in 15 minutes.`
+        };
 
-    // ✅ Generate OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        console.log("Sending email with options:", mailOption);
+        console.log("SMTP Config:", {
+            host: "smtp-relay.brevo.com",
+            port: 587,
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASSWORD ? "[REDACTED]" : "undefined"
+        });
 
-    // ✅ Save OTP to DB
-    user.resetOtp = otp;
-    user.resetOtpExpireAt = Date.now() + 15 * 60 * 1000; // 15 min
-    await user.save();
+        await transporter.sendMail(mailOption);
+      
 
-    // ✅ Send OTP via email
-    const mailOptions = {
-      from: process.env.SENDER_EMAIL,
-      to: user.email,
-      subject: "Password Reset OTP",
-      text: `Your OTP is ${otp}. It will expire in 15 minutes.`,
-    };
-
-    await transporter.sendMail(mailOptions);
-
-    return res.status(200).json({
-      success: true,
-      message: "OTP sent to your email",
-    });
-
-  } catch (error) {
-    console.error("Forgot Password Error:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-      error: error.message,
-    });
-  }
+        return res.json({ success: true, message: "Reset password OTP sent to your email" });
+    } catch (error) {
+        console.error("Error in sendResetOtp:", error);
+        return res.json({ success: false, message: "Failed to send OTP", error: error.message });
+    }
 };
 export const resetPassword = async (req, res) => {
   const { email, otp, newPassword } = req.body;
