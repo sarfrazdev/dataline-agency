@@ -131,7 +131,7 @@ const ContactUsForm = () => {
 
             <div className="rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 h-80 md:h-96">
               <img
-                src="./public/contac.jpg"
+                src="./contac.jpg"
                 alt="Map showing TechEase office location"
                 className="w-full h-full object-cover"
               />

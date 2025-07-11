@@ -4,28 +4,28 @@ const categories = [
   {
     title: 'Surveillance',
     cards: [
-      { img: '/public/cam1.png' },
-      { img: '/public/cam2.png' },
-      { img: '/public/cam3.png' },
-      { img: '/public/cam4.png' },
+      { img: '/cam1.png' },
+      { img: '/cam2.png' },
+      { img: '/cam3.png' },
+      { img: '/cam4.png' },
     ],
   },
   {
     title: 'Wi-Fi',
     cards: [
-      { img: '/public/wifi1.png' },
-      { img: '/public/wifi2.png' },
-      { img: '/public/wifi3.png' },
-      { img: '/public/wifi4.png' },
+      { img: '/wifi1.png' },
+      { img: '/wifi2.png' },
+      { img: '/wifi3.png' },
+      { img: '/wifi4.png' },
     ],
   },
   {
     title: 'Desktop & PC',
     cards: [
-      { img: '/public/pc1.png' },
-      { img: '/public/pc2.png' },
-      { img: '/public/pc3.png' },
-      { img: '/public/pc4.png' },
+      { img: '/pc1.png' },
+      { img: '/pc2.png' },
+      { img: '/pc3.png' },
+      { img: '/pc4.png' },
     ],
   },
 ];
