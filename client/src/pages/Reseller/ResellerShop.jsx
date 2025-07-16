@@ -106,8 +106,9 @@ const ResellerShop = () => {
   };
 
   const filteredProducts = products
-    // .filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
-    .filter((p) => p?.name?.toLowerCase().includes(searchQuery.toLowerCase()))
+    
+    // .filter((p) => p?.name?.toLowerCase().includes(searchQuery.toLowerCase()))
+    filter((p) => p?.name && p.name.toLowerCase().includes(searchQuery.toLowerCase()))
 
     .sort((a, b) => {
       const aPrice = a.prices?.[role] || 0;

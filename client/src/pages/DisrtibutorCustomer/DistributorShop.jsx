@@ -104,8 +104,8 @@ const DistributorShop = () => {
   };
 
   const filteredProducts = products
-   .filter((p) => p?.name?.toLowerCase().includes(searchQuery.toLowerCase()))
-
+    // .filter((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    filter((p) => p?.name && p.name.toLowerCase().includes(searchQuery.toLowerCase()))
     .filter((p) => !selectedBrand || p.brand === selectedBrand)
     .filter((p) => !selectedCategory || p.category === selectedCategory)
     .sort((a, b) => {
