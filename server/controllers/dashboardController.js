@@ -1,6 +1,7 @@
 import Order from '../models/Order.js';
 import User from '../models/User.js';
 import Product from '../models/Product.js';
+ import ContactComplaint from '../models/ContactComplaint.js';
 
 import fs from 'fs';
 import path from 'path';
@@ -14,12 +15,13 @@ export const getDashboardStats = async (req, res) => {
       { $group: { _id: null, total: { $sum: '$totalAmount' } } }
     ]);
     const totalProducts = await Product.countDocuments();
-
+        const complaintOrEnquiry = await ContactComplaint.countDocuments(); 
     res.status(200).json({
       totalUsers,
       totalOrders,
       totalRevenue: totalRevenue[0]?.total || 0,
-      totalProducts
+      totalProducts,
+        complaintOrEnquiry,
     });
   } catch (err) {
     console.error("Super Admin Dashboard Error:", err);
@@ -27,37 +29,6 @@ export const getDashboardStats = async (req, res) => {
   }
 };
 
-// export const getEndUserDashboard = async (req, res) => {
-//   try {
-//     const endUsers = await User.find({ role: 'enduser' }).select('_id');
-
-//     const endUserIds = endUsers.map(user => user._id);
-
-//     const totalOrders = await Order.countDocuments({ user: { $in: endUserIds } });
-//     const recentOrders = await Order.find({ user: { $in: endUserIds } })
-//       .sort({ createdAt: -1 })
-//       .limit(5)
-//       .populate('user', 'name email');
-
-//     const formattedRecent = recentOrders.map(order => ({
-//       ...order._doc,
-//       customerName: order.user?.name,
-//       customerEmail: order.user?.email,
-//     }));
-
-//     res.status(200).json({
-//       totalOrders,
-//       totalUsers: endUsers.length,
-//       recentOrders: formattedRecent,
-//     });
-//   } catch (err) {
-//     console.error("Enduser Dashboard Stats Error:", err);
-//     res.status(500).json({ message: "Failed to fetch dashboard data." });
-//   }
-// };
-
-
-//  Reseller Dashboard
 
 
 export const getEndUserDashboard = async (req, res) => {

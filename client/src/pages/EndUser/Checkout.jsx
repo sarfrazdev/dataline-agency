@@ -127,21 +127,21 @@ const CheckoutPage = () => {
            <div className="bg-gradient-to-br from-[#1a1a1d] to-[#101014] p-6 rounded-lg shadow-xl">
               <h2 className="text-2xl font-bold mb-4 text-cyan-300">Shipping Info</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input name="fullName" value={shippingInfo.fullName} onChange={handleChange} placeholder="Full Name" className="input" />
-                <input name="phone" value={shippingInfo.phone} onChange={handleChange} placeholder="Phone Number" className="input" />
-                <input name="address" value={shippingInfo.address} onChange={handleChange} placeholder="Address" className="input col-span-full" />
-                <input name="city" value={shippingInfo.city} onChange={handleChange} placeholder="City" className="input" />
-                <input name="state" value={shippingInfo.state} onChange={handleChange} placeholder="State" className="input" />
-                <input name="pincode" value={shippingInfo.pincode} onChange={handleChange} placeholder="Pincode" className="input" />
+                <input name="fullName" value={shippingInfo.fullName} onChange={handleChange} placeholder="Full Name" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
+                <input name="phone" value={shippingInfo.phone} onChange={handleChange} placeholder="Phone Number" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
+                <input name="address" value={shippingInfo.address} onChange={handleChange} placeholder="Address" className="input col-span-full h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
+                <input name="city" value={shippingInfo.city} onChange={handleChange} placeholder="City" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
+                <input name="state" value={shippingInfo.state} onChange={handleChange} placeholder="State" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
+                <input name="pincode" value={shippingInfo.pincode} onChange={handleChange} placeholder="Pincode" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
               </div>
 
              {['reseller', 'distributor'].includes(userRole) && (
                 <div className="mt-6 space-y-4">
                   <h3 className="text-lg font-semibold text-cyan-200">Business & Delivery</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input name="businessName" value={shippingInfo.businessName} onChange={handleChange} placeholder="Business Name" className="input" />
-                    <input name="panNumber" value={shippingInfo.panNumber} onChange={handleChange} placeholder="PAN Number" className="input" />
-                    <input name="companyAddress" value={shippingInfo.companyAddress} onChange={handleChange} placeholder="Company Address" className="input" />
+                    <input name="businessName" value={shippingInfo.businessName} onChange={handleChange} placeholder="Business Name" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
+                    <input name="panNumber" value={shippingInfo.panNumber} onChange={handleChange} placeholder="PAN Number" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
+                    <input name="companyAddress" value={shippingInfo.companyAddress} onChange={handleChange} placeholder="Company Address" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
                   </div>
                   <div className="flex gap-4">
                     {['courier', 'bus', 'transport'].map((method) => (
@@ -166,9 +166,9 @@ const CheckoutPage = () => {
                   )}
                   {(shippingInfo.deliveryMethod === 'bus' || shippingInfo.deliveryMethod === 'transport') && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <input name="busName" value={shippingInfo.busName} onChange={handleChange} placeholder="Bus/Transport Name" className="input" />
-                      <input name="busNumber" value={shippingInfo.busNumber} onChange={handleChange} placeholder="Bus Number" className="input" />
-                      <input name="contactNumber" value={shippingInfo.contactNumber} onChange={handleChange} placeholder="Transport Contact" className="input" />
+                      <input name="busName" value={shippingInfo.busName} onChange={handleChange} placeholder="Bus/Transport Name" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
+                      <input name="busNumber" value={shippingInfo.busNumber} onChange={handleChange} placeholder="Bus Number" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
+                      <input name="contactNumber" value={shippingInfo.contactNumber} onChange={handleChange} placeholder="Transport Contact" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
                     </div>
                   )}
                 </div>

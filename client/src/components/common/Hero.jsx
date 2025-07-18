@@ -11,7 +11,7 @@ const Hero = () => {
     
       <div className="relative z-50 text-center max-w-full px-4">
         <h1 className="text-xl  md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent animate-gradient  drop-shadow-lg font-serif uppercase">
-           Distribution House of IT Peripheral , SURVEILLANCE & NETWORKING 
+           Distribution House of IT Peripherals , SURVEILLANCE $ NETWORKING products
         </h1>
       
         <Link to="/shop">

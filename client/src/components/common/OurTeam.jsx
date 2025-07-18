@@ -5,7 +5,7 @@ const teamMembers = [
   {
     name: 'PRADEEP KUMAR AGRAWAL',
     title: 'Director',
-    experience: '30+ Years Experience',
+    experience: '35+ Years Experience',
   },
   {
     name: 'YASH AGRAWAL',

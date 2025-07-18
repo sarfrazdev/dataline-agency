@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bell } from 'lucide-react';
-import { toast } from 'react-hot-toast';
-import axiosInstance from '../../utils/axiosInstance';
+
 import NavLayout from '../../components/auth/NavLayout';
 
 const CustomerDashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [notifications, setNotifications] = useState([]);
+
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user'));
@@ -17,22 +16,8 @@ const CustomerDashboard = () => {
       return;
     }
     setUser(storedUser);
-    fetchNotifications(storedUser.role);
+
   }, []);
-
-  const fetchNotifications = async (role) => {
-    try {
-      let endpoint = '/notifications';
-      // if (role === 'reseller') endpoint = '/reseller/notifications';
-      // if (role === 'distributor') endpoint = '/distributor/notifications';
-
-      const { data } = await axiosInstance.get(endpoint);
-      setNotifications(data.notifications || []);
-    } catch (error) {
-      console.error('Notification fetch error:', error);
-      toast.error('Failed to fetch notifications');
-    }
-  };
 
   const role = user?.role || 'customer';
   const name = user?.name || 'Customer';
@@ -52,11 +37,7 @@ const CustomerDashboard = () => {
             onClick={() => navigate('/notifications')}
           >
             <Bell className="w-6 h-6 text-teal-400 animate-pulse" />
-            {notifications.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 font-semibold">
-                {notifications.length}
-              </span>
-            )}
+          
           </div>
         </div>
 

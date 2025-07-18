@@ -3,7 +3,8 @@ import {
   getAllOrders,
   getAllUsers,
   getAnalyticsSummary,
-  sendNotification
+  sendNotification,
+  getAllComplaints
 } from '../controllers/SuperAdminController.js';
 
 import { protect, authorizeRoles } from '../middleware/auth.js';
@@ -16,5 +17,7 @@ router.get('/orders', getAllOrders);
 router.get('/users', getAllUsers);
 router.get('/analytics', getAnalyticsSummary);
 router.get('/notifications', sendNotification);
+router.get('/contact-complaints', getAllComplaints); 
+
 
 export default router;

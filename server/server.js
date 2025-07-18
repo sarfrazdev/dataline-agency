@@ -23,6 +23,7 @@ import cartRoutes from './routes/cartRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import wishlistRoutes from './routes/wishlistRoutes.js';
 import shipmentRoutes from  './routes/shipmentRoutes.js'
+import contactRoutes from './routes/contactRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,6 +46,7 @@ const app = express();
 
 app.use(cors({
   origin: ["http://localhost:5173", "http://localhost:5174"],
+   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
@@ -68,7 +70,7 @@ app.use('/api/pricing', pricingRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/shipment', shipmentRoutes);
-
+app.use('/api', contactRoutes);
 
 app.get('/',(req,res)=>{
   res.send('api is working')

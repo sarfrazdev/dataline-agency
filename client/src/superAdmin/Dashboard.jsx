@@ -28,11 +28,11 @@ const DASHBOARD_CARDS = [
     onClick: null,
   },
   {
-    label: 'Low Stock Items',
-    key: 'lowStockCount',
+    label: 'Complaint or Enquiry',
+    key: 'complaintOrEnquiry',
     bg: 'bg-red-500 hover:bg-red-400 cursor-pointer',
     prefix: '',
-    onClick: (navigate) => navigate('/superadmin/low-stock'),
+    onClick: (navigate) => navigate('/superadmin/complaints'),
   },
 ];
 
@@ -71,7 +71,7 @@ const Dashboard = () => {
         totalOrders: data.totalOrders || 0,
         totalRevenue: data.totalRevenue || 0,
         totalUsers: data.totalUsers || 0,
-        lowStockCount: data.lowStockCount || 0,
+        complaintOrEnquiry: data.complaintOrEnquiry || 0,
       });
     } catch (err) {
       toast.error('Failed to load dashboard data');

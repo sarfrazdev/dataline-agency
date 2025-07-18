@@ -36,7 +36,7 @@ import RegisterPage from './components/auth/RegisterPage';
 import Dashboard from './superAdmin/Dashboard';
 import Products from './superAdmin/Products';
 import ManageOrders from './superAdmin/ManageOrders';
-import LowStockProducts from './superAdmin/LowStockProducts';
+import ManageComplaints from './superAdmin/ManageComplaints';
 import ManageNotifications from './superAdmin/ManageNotifications';
 import OurTeam from './components/common/OurTeam';
 import  Notification  from "./components/common/Notification"
@@ -112,7 +112,7 @@ function App() {
           <Route path="/superadmin/dashboard" element={<Dashboard />} />
           <Route path="/superadmin/products" element={<Products />} />
           <Route path="/superadmin/orders" element={<ManageOrders />} />
-          <Route path="/superadmin/low-stock" element={<LowStockProducts />} />
+          <Route path="/superadmin/complaints" element={<ManageComplaints />} />
           <Route path="/superadmin/notifications" element={<ManageNotifications />} />
         </Route>
             <Route path='/our-team' element={<OurTeam/>}/>

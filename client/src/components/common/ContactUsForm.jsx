@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Send, Mail, Phone, MapPin } from 'lucide-react';
+import { BASE_URL } from '../../utils/apiPath';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 const ContactUsForm = () => {
   const [formData, setFormData] = useState({
@@ -8,36 +11,45 @@ const ContactUsForm = () => {
     subject: '',
     message: ''
   });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      alert('Message sent!');
+    try {
+      const response = await axios.post(`${BASE_URL}/contact`, formData);
+      toast.success(response.data.message || 'Message sent successfully!');
       setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message || 'Something went wrong. Please try again.'
+      );
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (
     <section className="relative bg-gradient-to-br from-cyan-50 via-white to-cyan-50 py-16 sm:py-24 rounded-t-3xl shadow-inner overflow-hidden">
-
+      {/* Decorative blobs */}
       <div className="absolute -top-10 -left-10 w-72 h-72 bg-cyan-200 opacity-20 rounded-full blur-3xl"></div>
       <div className="absolute -bottom-10 -right-10 w-72 h-72 bg-teal-200 opacity-20 rounded-full blur-3xl"></div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid md:grid-cols-2 gap-12 items-start">
 
+          {/* Contact Form */}
           <div className="bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100">
             <h2 className="text-3xl font-extrabold text-gray-800 mb-6 border-l-4 border-teal-500 pl-3">
               Send Us a Message
             </h2>
+
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label htmlFor="name" className="block text-gray-700 font-medium mb-1">Full Name</label>
@@ -52,6 +64,7 @@ const ContactUsForm = () => {
                   className="w-full px-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 transition shadow-sm"
                 />
               </div>
+
               <div>
                 <label htmlFor="email" className="block text-gray-700 font-medium mb-1">Email Address</label>
                 <input
@@ -65,6 +78,7 @@ const ContactUsForm = () => {
                   className="w-full px-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 transition shadow-sm"
                 />
               </div>
+
               <div>
                 <label htmlFor="subject" className="block text-gray-700 font-medium mb-1">Subject</label>
                 <input
@@ -78,6 +92,7 @@ const ContactUsForm = () => {
                   className="w-full px-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 transition shadow-sm"
                 />
               </div>
+
               <div>
                 <label htmlFor="message" className="block text-gray-700 font-medium mb-1">Message</label>
                 <textarea
@@ -91,6 +106,7 @@ const ContactUsForm = () => {
                   className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 transition shadow-sm resize-none"
                 ></textarea>
               </div>
+
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -114,17 +130,15 @@ const ContactUsForm = () => {
               <div className="space-y-3 text-gray-700">
                 <p className="flex items-start">
                   <MapPin className="w-5 h-5 mr-3 mt-1 text-teal-500 flex-shrink-0" />
-                             
-                      01 Ground Floor, Balajee Residency, J P Das Lane, New Dak Bunglow Road, Patna, 
-                      Bihar – 800001; OPP Prema Honda services Centre 
+                  01 Ground Floor, Balajee Residency, J P Das Lane, New Dak Bunglow Road, Patna, Bihar – 800001; OPP Prema Honda services Centre 
                 </p>
                 <p className="flex items-center">
                   <Mail className="w-5 h-5 mr-3 text-teal-500" />
-             agencies.dataline@gmail.com
+                  agencies.dataline@gmail.com
                 </p>
                 <p className="flex items-center">
                   <Phone className="w-5 h-5 mr-3 text-teal-500" />
-                 Phone/WhatsApp: +91-9334064100
+                  Phone/WhatsApp: +91-9334064100
                 </p>
               </div>
             </div>

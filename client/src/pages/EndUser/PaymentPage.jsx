@@ -95,15 +95,15 @@ const PaymentPage = () => {
         {/* ✅ Razorpay + Manual for Enduser */}
         {userRole === 'enduser' && (
           <>
-            <button
+            {/* <button
               onClick={handleRazorpayPayment}
               className="bg-cyan-600 hover:bg-cyan-500 text-white px-6 py-3 rounded-lg mb-6"
             >
               Pay with Razorpay
-            </button>
+            </button> */}
 
             <div className="border border-gray-600 p-4 rounded">
-              <h2 className="text-lg font-semibold text-cyan-300 mb-2">Bank Transfer Option (Alternative)</h2>
+              <h2 className="text-lg font-semibold text-cyan-300 mb-2">Bank Transfer Option </h2>
               <ul className="text-sm mb-4 space-y-1">
                 <li><strong>A/C Holder:</strong> Dataline Agencies</li>
                 <li><strong>Bank:</strong> ICICI BANK</li>

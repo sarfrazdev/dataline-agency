@@ -3,6 +3,8 @@ import User from '../models/User.js';
 import Product from '../models/Product.js';
 import Notification from '../models/Notification.js';
 
+import ContactComplaint from '../models/ContactComplaint.js';
+
 //  Get all orders (Super admin)
 export const getAllOrders = async (req, res) => {
   try {
@@ -68,5 +70,15 @@ export const sendNotification = async (req, res) => {
   } catch (err) {
     console.error("Error fetching distributor notifications:", err);
     res.status(500).json({ message: "Failed to fetch notifications." });
+  }
+};
+
+export const getAllComplaints = async (req, res) => {
+  try {
+    const complaints = await ContactComplaint.find().sort({ createdAt: -1 });
+    res.status(200).json(complaints);
+  } catch (error) {
+    console.error('Error fetching complaints:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 };
