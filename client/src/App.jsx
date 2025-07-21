@@ -49,6 +49,7 @@ import TopCategoriesSection from './components/common/TopCategoriesSection';
 import PaymentPage from './pages/EndUser/PaymentPage';
 import ForgotPasswordPage from './components/auth/ForgotPassword';
 import ResetPasswordPage from './components/auth/ResetPassword';
+import VerifyOtpPage from './components/auth/VerifyOtpPage';
 
 function App() {
   return (
@@ -78,6 +79,7 @@ function App() {
       <Route path='/payment' element={<PaymentPage/>}/>
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
+      <Route path="/verify-otp" element={<VerifyOtpPage />} />
 
         {/* Authenticated Customer Roles */}
           <Route element={<ProtectedRoute allowedRoles={['reseller', 'distributor', 'enduser']} />}>

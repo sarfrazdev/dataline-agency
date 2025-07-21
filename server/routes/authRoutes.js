@@ -8,7 +8,7 @@ import {
   registerDistributor,
   loginAdmin,
   getCurrentUser,
-  forgotPassword,resetPassword
+  forgotPassword,resetPassword,verifyOtp
   
  
 } from "../controllers/authController.js";
@@ -20,6 +20,7 @@ router.post('/login', loginUser);
 router.get('/me', protect, getCurrentUser);
 router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', resetPassword);
+router.post('/verify-otp', verifyOtp);
 // router.post('/find-id', findId);
 
 //  Role-Based Registration

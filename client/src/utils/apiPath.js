@@ -1,5 +1,7 @@
 
-export const BASE_URL = 'http://localhost:8000/api';
+// export const BASE_URL = 'http://localhost:8000/api';
+export const BASE_URL = 'https://api.dataline.co.in/api';
+
 
 export const API_PATH = {
   // 🔐 Auth

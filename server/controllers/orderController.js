@@ -6,14 +6,15 @@ import path from 'path';
 import orderNotification from '../models/orderNotification.js'
 import Razorpay from 'razorpay';
 import { getDynamicPrice } from './productController.js';
-
+import { sendAdminOrderEmail } from '../utils/sendAdminOrderEmail.js';
+import User from '../models/User.js';
 
 export const createOrder = async (req, res) => {
   try {
     const userId = req.user._id;
     const userRole = req.user.role?.toLowerCase() || 'enduser';
 
-    // ✅ Get the user's cart with populated product info
+    // Get the user's cart with populated product info
     const cart = await Cart.findOne({ user: userId }).populate({
       path: 'items.product',
       select: 'name prices stock quantityBasedPrices'
@@ -30,7 +31,7 @@ export const createOrder = async (req, res) => {
       const product = item.product;
       const quantity = item.quantity;
 
-      // ✅ Validate product and pricing
+      // Validate product and pricing
       if (!product || !product.prices) {
         console.warn(`Skipping item ${item.product?._id}: No product or pricing info`);
         continue; // skip to next item
@@ -50,7 +51,7 @@ export const createOrder = async (req, res) => {
         return res.status(400).json({ message: `${product.name} is out of stock.` });
       }
 
-      // ✅ Apply quantity based pricing
+      // Apply quantity based pricing
       let finalPrice = basePrice;
       if (product.quantityBasedPrices?.length > 0) {
         const slab = product.quantityBasedPrices.find(
@@ -91,6 +92,15 @@ export const createOrder = async (req, res) => {
     }
 
     await order.save();
+
+    const user = await User.findById(userId).lean();
+      const detailedItems = cart.items.map(item => ({
+        name: item.product.name,
+        quantity: item.quantity,
+        price: item.price,
+        total: item.price * item.quantity
+      }));
+      await sendAdminOrderEmail(user, order, detailedItems);
 
     return res.status(201).json({
       message: 'Order placed successfully.',
@@ -362,12 +372,20 @@ export const createManualOrder = async (req, res) => {
       totalAmount: Math.round(totalAmount * 100) / 100,
       paymentMethod: 'bank_transfer',
       paymentStatus: 'pending',
-      paymentProof: `${process.env.BASE_URL || 'http://localhost:8000'}/uploads/paymentProofs/${file.filename}`,
+      paymentProof: `${process.env.BASE_URL}/uploads/paymentProofs/${file.filename}`,
       orderStatus: 'placed'
     });
 
     await order.save();
     await Cart.findOneAndDelete({ user: userId }); 
+    const user = await User.findById(userId).lean();
+      const detailedItems = cart.items.map(item => ({
+        name: item.product.name,
+        quantity: item.quantity,
+        price: item.price,
+        total: item.price * item.quantity
+      }));
+      await sendAdminOrderEmail(user, order, detailedItems);
 
     res.status(201).json({ message: 'Manual order placed.', orderId: order._id });
 

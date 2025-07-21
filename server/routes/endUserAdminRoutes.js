@@ -22,5 +22,5 @@ router.get('/notifications', getEndUserNotifications);
 //  Update own profile
 router.put('/profile', updateEndUserProfile);
 
-router.get('/notifications', getEndUserNotifications);
+
 export default router;
