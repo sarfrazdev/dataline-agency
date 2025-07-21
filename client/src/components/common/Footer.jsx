@@ -42,7 +42,7 @@ const Footer = () => {
                 01 Ground Floor, Balajee Residency, J P Das Lane, New Dak Bunglow Road, Patna, 
                 Bihar – 800001; OPP Prema Honda services Centre 
             </p>
-            <p className="text-sm text-gray-400 mb-1">Email: agencies.dataline@gmail.com</p>
+            <p className="text-sm text-gray-400 mb-1">Email: info@dataline.co.in</p>
             <p className="text-sm text-gray-400">Phone/WhatsApp: +91-9334064100</p>
           </div>
 
