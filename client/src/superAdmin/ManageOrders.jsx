@@ -390,12 +390,12 @@ const updateManualPayment = async (orderId, status) => {
           </div>
         )}
         <ReactModal
-  isOpen={!!zoomImage}
-  onRequestClose={() => setZoomImage(null)}
-  contentLabel="Zoomed Image"
-  className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70"
-  overlayClassName="fixed inset-0 z-40 bg-black bg-opacity-70"
-  ariaHideApp={false}
+          isOpen={!!zoomImage}
+          onRequestClose={() => setZoomImage(null)}
+          contentLabel="Zoomed Image"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70"
+          overlayClassName="fixed inset-0 z-40 bg-black bg-opacity-70"
+          ariaHideApp={false}
 >
   <div className="relative max-w-4xl max-h-[90vh] overflow-auto bg-white p-4 rounded-lg shadow-xl">
     <button

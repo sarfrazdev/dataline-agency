@@ -66,7 +66,7 @@ const PaymentPage = () => {
     try {
       toast.loading('Submitting manual order...');
       const formData = new FormData();
-      formData.append('proof', proofFile);
+      formData.append('paymentProof', proofFile);
       formData.append('data', JSON.stringify({ shippingInfo }));
 
       await axiosInstance.post(`${BASE_URL}/orders/manual`, formData, {
@@ -92,7 +92,7 @@ const PaymentPage = () => {
       <div className="max-w-xl mx-auto mt-12 bg-[#151518] p-6 rounded-lg shadow-lg text-white">
         <h1 className="text-2xl font-bold text-cyan-400 mb-4">Complete Payment</h1>
 
-        {/* ✅ Razorpay + Manual for Enduser */}
+        {/*  Razorpay + Manual for Enduser */}
         {userRole === 'enduser' && (
           <>
             {/* <button
@@ -128,7 +128,7 @@ const PaymentPage = () => {
           </>
         )}
 
-        {/* ✅ Only Bank Transfer for Reseller/Distributor */}
+        {/*  Only Bank Transfer for Reseller/Distributor */}
         {['reseller', 'distributor'].includes(userRole) && (
           <div>
             <h2 className="text-lg font-semibold text-cyan-300 mb-2">Bank Details</h2>

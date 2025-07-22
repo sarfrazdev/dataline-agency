@@ -372,25 +372,34 @@ export const createManualOrder = async (req, res) => {
       totalAmount: Math.round(totalAmount * 100) / 100,
       paymentMethod: 'bank_transfer',
       paymentStatus: 'pending',
-      paymentProof: `${process.env.BASE_URL}/uploads/paymentProofs/${file.filename}`,
+      paymentProof: `${req.protocol}://${req.get('host')}/uploads/paymentProofs/${file.filename}`,
       orderStatus: 'placed'
     });
 
     await order.save();
     await Cart.findOneAndDelete({ user: userId }); 
     const user = await User.findById(userId).lean();
-      const detailedItems = cart.items.map(item => ({
-        name: item.product.name,
-        quantity: item.quantity,
-        price: item.price,
-        total: item.price * item.quantity
-      }));
-      await sendAdminOrderEmail(user, order, detailedItems);
+    const detailedItems = cart.items.map(item => ({
+      name: item.product.name,
+      quantity: item.quantity,
+      price: item.price,
+      total: item.price * item.quantity
+    }));
+    await sendAdminOrderEmail(user, order, detailedItems);
 
-    res.status(201).json({ message: 'Manual order placed.', orderId: order._id });
-
-  } catch (err) {
+    res.status(201).json({ 
+      message: 'Manual order placed.', 
+      orderId: order._id,
+      paymentProof: order.paymentProof 
+    });
+    console.log('Received file:', req.file); 
+    console.log('File details:', {
+      originalname: req.file.originalname,
+      filename: req.file.filename,
+      path: req.file.path
+    });
+    } catch (err) {
     console.error(' Error in createManualOrder:', err);
     res.status(500).json({ message: 'Server error', error: err.message });
-  }
-};
+    }
+  };

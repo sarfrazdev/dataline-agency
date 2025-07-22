@@ -24,6 +24,6 @@ router.put('/cancel/:id', protect, cancelOrder);
 // Upload PDF bill
 router.put('/bill/:id', protect, uploadPdf.single('billPdf'), uploadBill);
 router.delete('/bill/:id', protect, deleteBill);
-router.post('/manual', protect, uploadProof.single('proof'), createManualOrder);
+router.post('/manual', protect, uploadProof.single('paymentProof'), createManualOrder);
 
 export default router;
