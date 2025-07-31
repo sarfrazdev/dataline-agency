@@ -9,17 +9,17 @@ const Header = () => {
   const navigate = useNavigate();
 
   // Handle search submission
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate({
-        pathname: '/shop',
-        search: `?query=${encodeURIComponent(searchQuery.trim())}`,
-      });
-      setShowSearch(false);
-      setSearchQuery('');
-    }
-  };
+  // const handleSearchSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (searchQuery.trim()) {
+  //     navigate({
+  //       pathname: '/shop',
+  //       search: `?query=${encodeURIComponent(searchQuery.trim())}`,
+  //     });
+  //     setShowSearch(false);
+  //     setSearchQuery('');
+  //   }
+  // };
 
   return (
     <header className="w-full  top-0 left-0 bg-white/90 backdrop-blur z-50 shadow-sm transition-all">
@@ -34,7 +34,7 @@ const Header = () => {
         </Link>
 
         {/* Desktop search bar */}
-   <form onSubmit={handleSearchSubmit} className="hidden md:block flex-1 mx-6">
+   {/* <form onSubmit={handleSearchSubmit} className="hidden md:block flex-1 mx-6">
   <div className="relative max-w-md mx-auto">
     <input
       type="search"
@@ -45,7 +45,7 @@ const Header = () => {
     />
     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
   </div>
-</form>
+</form> */}
 
 
         {/* Icons and login (desktop) */}
@@ -65,9 +65,9 @@ const Header = () => {
 
         {/* Mobile icons */}
         <div className="md:hidden flex items-center gap-4">
-          <button onClick={() => setShowSearch(!showSearch)}>
+          {/* <button onClick={() => setShowSearch(!showSearch)}>
             <Search className="text-gray-600 hover:text-teal-500 transition-colors" size={20} />
-          </button>
+          </button> */}
           <button onClick={() => setShowLogin(!showLogin)}>
             <User className="text-gray-600 hover:text-teal-500 transition-colors" size={20} />
           </button>
@@ -81,7 +81,7 @@ const Header = () => {
       </div>
 
       {/* Mobile search bar */}
-      {showSearch && (
+      {/* {showSearch && (
         <form onSubmit={handleSearchSubmit} className="md:hidden px-4 pb-3">
           <div className="relative">
             <input
@@ -94,7 +94,7 @@ const Header = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
           </div>
         </form>
-      )}
+      )} */}
 
       {/* Mobile login dropdown */}
       {showLogin && (

@@ -8,7 +8,10 @@ import {
   getAllProducts,
   getProductById,
   updateProduct,
-  deleteProduct,uploadExcelProducts,getBrandsByCategory,getCategoriesByBrand
+  deleteProduct,uploadExcelProducts,
+  getBrandsByCategory,
+  getCategoriesByBrand,
+
 } from '../controllers/productController.js';
 import multer from 'multer';
 import fs from 'fs';
@@ -88,6 +91,8 @@ router.post('/upload-excel',
 
 router.get('/brands', getBrandsByCategory);
 router.get('/categories', getCategoriesByBrand);
+
+
 
 
 export default router;

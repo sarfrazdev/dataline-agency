@@ -48,123 +48,6 @@ export const createProduct = async (req, res) => {
   }
 };
 
-// export const getAllProducts = async (req, res) => {
-//   try {
-//     const { brand, category } = req.query;
-
-//     const filter = {};
-
-//     // if (brand && brand !== 'undefined' && brand.trim() !== '') {
-//     //   filter.brand = { $regex: new RegExp(`^${brand}$`, 'i') };
-//     // }
-
-//     // if (category && category !== 'undefined' && category.trim() !== '') {
-//     //   filter.category = { $regex: new RegExp(`^${category}$`, 'i') };
-//     // }
-//      if (brand) {
-//       filter.brand = { $regex: new RegExp(`^${brand}$`, 'i') };
-//     }
-
-//     if (category) {
-//       filter.category = { $regex: new RegExp(`^${category}$`, 'i') }; 
-//     }
-
-//     const products = await Product.find(filter);
-
-//     const productsWithUrls = products.map(product => {
-//       const productObj = product.toObject();
-//       const imageUrls = (productObj.images || []).map(img =>
-//         img.startsWith('http')
-//           ? img
-//           : `${req.protocol}://${req.get('host')}/uploads/products/${img.replace(/^.*[\\/]/, '')}`
-//       );
-//       return { ...productObj, images: imageUrls };
-//     });
-
-//     res.status(200).json(productsWithUrls);
-//   } catch (err) {
-//     console.error("Get all products error:", err);
-//     res.status(500).json({ message: "Failed to fetch products" });
-//   }
-// };
-
-// export const getAllProducts = async (req, res) => {
-//   try {
-//     console.log('Incoming query parameters:', req.query);
-    
-//     const { brand, category, icategory } = req.query;
-//     const filter = {};
-    
-//     // Debug: Log raw parameters
-//     console.log(`Raw parameters - brand: "${brand}", category: "${category}", icategory: "${icategory}"`);
-
-//     // Handle brand filter
-//     if (brand) {
-//       const cleanedBrand = brand.trim();
-//       console.log(`Processing brand filter: "${cleanedBrand}"`);
-//       filter.brand = { $regex: new RegExp(`^${cleanedBrand}$`, 'i') };
-//     }
-
-//     // Handle category/icategory
-//     const actualCategory = category || icategory;
-//     if (actualCategory) {
-//       const cleanedCategory = actualCategory.trim();
-//       console.log(`Processing category filter: "${cleanedCategory}"`);
-//       filter.category = { $regex: new RegExp(`^${cleanedCategory}$`, 'i') };
-//     }
-
-//     console.log('Final filter object:', JSON.stringify(filter, null, 2));
-
-//     // Execute query with timing
-//     console.time('ProductQueryTime');
-//     const products = await Product.find(filter);
-//     console.timeEnd('ProductQueryTime');
-
-//     console.log(`Found ${products.length} products matching filters`);
-
-//     // Process results
-//     if (products.length === 0) {
-//       console.warn('No products found with current filters');
-//       // Verify if products exist without filters
-//       const totalProducts = await Product.countDocuments({});
-//       console.log(`Total products in database: ${totalProducts}`);
-//     }
-
-//     const productsWithUrls = products.map(product => {
-//       const productObj = product.toObject();
-//       return {
-//         ...productObj,
-//         images: (productObj.images || []).map(img => 
-//           img.startsWith('http') 
-//             ? img 
-//             : `${req.protocol}://${req.get('host')}/uploads/products/${img.replace(/^.*[\\/]/, '')}`
-//         )
-//       };
-//     });
-
-//     res.status(200).json(productsWithUrls);
-//   } catch (err) {
-//     console.error('Full error details:', {
-//       message: err.message,
-//       stack: err.stack,
-//       query: req.query,
-//       timestamp: new Date().toISOString()
-//     });
-    
-//     res.status(500).json({ 
-//       message: "Failed to fetch products",
-//       debug: {
-//         suggestion: "Check server logs for detailed error information",
-//         receivedQuery: req.query,
-//         commonIssues: [
-//           "Verify brand/category values exist in database",
-//           "Check MongoDB connection",
-//           "Validate product schema matches query structure"
-//         ]
-//       }
-//     });
-//   }
-// };
 export const getProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -403,7 +286,7 @@ export const getBrandsByCategory = async (req, res) => {
     res.status(500).json({ message: 'Internal server error', error: err.message });
   }
 };
-//  GET /api/products/categories?brand=HP
+
 export const getCategoriesByBrand = async (req, res) => {
   try {
     const { brand } = req.query;
@@ -421,3 +304,6 @@ export const getCategoriesByBrand = async (req, res) => {
     res.status(500).json({ message: 'Internal server error', error: err.message });
   }
 };
+
+
+

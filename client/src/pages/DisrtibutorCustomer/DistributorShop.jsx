@@ -8,16 +8,15 @@ import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const fallbackBrands = [
-  'HP', 'Dell', 'Lenovo', 'ASUS', 'Canon', 'Brother', 'Epson', 'TVSE', 'Samsung',
+   'Prodot', 'HP', 'Dell', 'Lenovo', 'ASUS', 'Canon', 'Brother', 'Epson', 'TVSE', 'Samsung',
   'LG', 'TCL', 'Mantra', 'Morpho', 'Startek', 'Prodot', 'Ricoh', 'Xerox', 'Pantum',
   'Logitech', 'Seagate', 'Toshiba', 'WD', 'SanDisk', 'Antivirus', 'Accounting Software',
   'Printer Adjustment Software', 'CP Plus', 'Hikvision', 'Sony', 'Nikon', 'Zebronics',
-  'TP-Link', 'D-Link', 'Consistent', 'HikVision'
+  'TP-Link', 'D-Link'
 ];
-
 const fallbackCategories = [
   'Laptop', 'Desktop', 'Printer', 'TV & Monitor', 'Biometrics', 'Cartridge', 'Ink Bottle',
-  'Keyboard and Mouse', 'Internal / External HDD', 'Pen Drive', 'Software', 'CCTV Camera',
+  'Keyboard', 'Mouse', 'Internal / External HDD', 'Pen Drive', 'Software', 'CCTV Camera',
   'Router', 'DVR/NVR', 'POE Switch', 'Tablets', 'Refurbished', 'Accessories',
   'Networking', 'Surveillance', 'Scanner'
 ];
@@ -104,10 +103,18 @@ const DistributorShop = () => {
   };
 
   const filteredProducts = products
-    // .filter((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
-    filter((p) => p?.name && p.name.toLowerCase().includes(searchQuery.toLowerCase()))
-    .filter((p) => !selectedBrand || p.brand === selectedBrand)
-    .filter((p) => !selectedCategory || p.category === selectedCategory)
+
+   .filter((p) => {
+  const q = searchQuery.toLowerCase();
+  return (
+    p?.name?.toLowerCase().includes(q) ||
+    p?.brand?.toLowerCase().includes(q) ||
+    p?.category?.toLowerCase().includes(q) ||
+    p?.modelNo?.toLowerCase().includes(q)
+  );
+})
+
+ 
     .sort((a, b) => {
       const aPrice = a.prices?.[role] || 0;
       const bPrice = b.prices?.[role] || 0;
@@ -187,7 +194,7 @@ const DistributorShop = () => {
           </div>
 
           {/* Product Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {displayedProducts.map(product => (
               <div key={product._id} className="bg-gray-900 text-white rounded shadow p-4">
                 <div className="relative">
@@ -221,7 +228,57 @@ const DistributorShop = () => {
                 </div>
               </div>
             ))}
+          </div> */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {displayedProducts.map(product => (
+                    
+                      <div
+                        key={product._id}
+                        className="bg-gray-900 text-white rounded-2xl shadow-lg p-4 transition-transform transform hover:scale-[1.02] hover:shadow-2xl"
+                      >
+            <div className="relative">
+              <img
+                src={product.images?.[0] || "/fallback.jpg"}
+                alt={product.name}
+                className="w-full h-48 object-cover rounded-xl mb-4 cursor-pointer"
+                onClick={() => navigate(`/product/${product._id}`)}
+              />
+              {product.stock === 0 && (
+                <span className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded">
+                  Out of Stock
+                </span>
+              )}
+            </div>
+          
+            <div className="space-y-1">
+              <h2 className="text-lg font-semibold text-white">{product.name}</h2>
+              <p className="text-sm text-gray-400">Brand: <span className="text-gray-200">{product.brand || 'N/A'}</span></p>
+              <p className="text-sm text-gray-400">Model: <span className="text-gray-200">{product. modelNo || 'N/A'}</span></p>
+            </div>
+          
+            <div className="flex justify-between items-center mt-4">
+              <span className="font-bold text-blue-400 text-lg">₹{product.prices?.[role] || 'N/A'}</span>
+              <div className="flex space-x-2">
+                <button onClick={() => handleAddToWishlist(product._id)} className="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition">
+                  <Heart className={`w-4 h-4 ${wishlist.includes(product._id) ? 'fill-red-500 text-red-500' : 'text-red-400'}`} />
+                </button>
+                <button
+                  onClick={() => handleAddToCart(product._id)}
+                  disabled={product.stock === 0}
+                  className={`p-2 rounded-full ${
+                    product.stock === 0
+                      ? 'bg-gray-500 cursor-not-allowed'
+                      : 'bg-blue-600 hover:bg-blue-700 text-white'
+                  } transition`}
+                >
+                  <ShoppingCart className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
           </div>
+          
+                    ))}
+                  </div>
 
           {/* Pagination */}
           <div className="flex justify-center items-center space-x-2 mt-8">

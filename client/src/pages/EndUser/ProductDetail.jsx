@@ -267,12 +267,20 @@ const ProductDetail = () => {
     fetchProduct();
   }, [id]);
 
+  // const getBasePrice = () => {
+  //   if (!product || !user) return 0;
+  //   if (user.role === 'reseller') return product.prices?.reseller || 0;
+  //   if (user.role === 'distributor') return product.prices?.distributor || 0;
+  //   return product.prices?.enduser || 0;
+  // };
   const getBasePrice = () => {
-    if (!product || !user) return 0;
-    if (user.role === 'reseller') return product.prices?.reseller || 0;
-    if (user.role === 'distributor') return product.prices?.distributor || 0;
-    return product.prices?.enduser || 0;
-  };
+  if (!product) return 0;
+  if (!user || user.role === 'enduser') return product.prices?.enduser || 0;
+  if (user.role === 'reseller') return product.prices?.reseller || 0;
+  if (user.role === 'distributor') return product.prices?.distributor || 0;
+  return product.prices?.enduser || 0;
+};
+
 
   const autoSelectSlab = (productData, quantity) => {
     const slabs = productData.quantityBasedPrices || [];
