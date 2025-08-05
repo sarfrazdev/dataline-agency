@@ -9,7 +9,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 const fallbackBrands = [
    'Prodot', 'HP', 'Dell', 'Lenovo', 'ASUS', 'Canon', 'Brother', 'Epson', 'TVSE', 'Samsung',
-  'LG', 'TCL', 'Mantra', 'Morpho', 'Startek', 'Prodot', 'Ricoh', 'Xerox', 'Pantum',
+  'LG', 'TCL', 'Mantra', 'Morpho', 'Startek', 'Ricoh', 'Xerox', 'Pantum',
   'Logitech', 'Seagate', 'Toshiba', 'WD', 'SanDisk', 'Antivirus', 'Accounting Software',
   'Printer Adjustment Software', 'CP Plus', 'Hikvision', 'Sony', 'Nikon', 'Zebronics',
   'TP-Link', 'D-Link'

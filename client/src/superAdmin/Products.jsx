@@ -152,7 +152,7 @@ const handleExcelUpload = async (e) => {
     );
 
     toast.success("Excel uploaded successfully");
-    fetchProducts(); // refresh the list
+    fetchProducts(); 
   } catch (err) {
     console.error("Excel upload error:", err);
     toast.error(err?.response?.data?.message || "Failed to upload Excel");
@@ -212,7 +212,18 @@ const handleExcelUpload = async (e) => {
           <input placeholder="Price (End User)" type="number" value={formData.prices.enduser} onChange={(e) => setFormData({ ...formData, prices: { ...formData.prices, enduser: e.target.value } })} className="border p-2 rounded" required />
           <input placeholder="Price (Reseller)" type="number" value={formData.prices.reseller} onChange={(e) => setFormData({ ...formData, prices: { ...formData.prices, reseller: e.target.value } })} className="border p-2 rounded" required />
           <input placeholder="Price (Distributor)" type="number" value={formData.prices.distributor} onChange={(e) => setFormData({ ...formData, prices: { ...formData.prices, distributor: e.target.value } })} className="border p-2 rounded" required />
-          <input placeholder="Description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} className="border p-2 rounded col-span-full" required />
+          {/* <input placeholder="Description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} className="border p-2 rounded col-span-full" required /> */}
+          <textarea
+            placeholder="Description"
+            value={formData.description}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
+            className="border p-2 rounded col-span-full"
+            rows={4}
+            required
+          />
+
 
           <div className="col-span-full">
             <label className="block mb-2 font-semibold">Upload Images (Max 3)</label>
@@ -252,7 +263,7 @@ const handleExcelUpload = async (e) => {
           <button type="submit" className="bg-blue-600 text-white rounded p-2 col-span-full">{isEditMode ? 'Update Product' : 'Add Product'}</button>
         </form>
 
-        <input value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }} placeholder="Search products..." className="p-2 w-full mb-4 rounded border text-black" />
+        <input value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }} placeholder="Search products..." className="p-2 w-full mb-4 rounded border-2 border-white text-white" />
 
         {loading ? <p className="text-gray-400">Loading...</p> : (
           <div className="overflow-x-auto bg-white text-black p-4 rounded shadow">
@@ -296,7 +307,7 @@ const handleExcelUpload = async (e) => {
                         <button onClick={() => handleEdit(product)} className="text-blue-500 hover:text-blue-700"><Pencil size={16} /></button>
                         <button onClick={() => deleteProduct(product._id)} className="text-red-500 hover:text-red-700"><Trash2 size={16} /></button>
                       </td>
-                      <td className="p-2">{product.description}</td>
+                      <td className="p-2 whitespace-pre-wrap">{product.description}</td>
                     </tr>
                   );
                 })}

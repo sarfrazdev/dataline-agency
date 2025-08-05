@@ -10,7 +10,7 @@ const brands = [
   { name: 'Consistent', logo: '/consistent.png' },
   { name: 'HikVision', logo: './brand/hikvision.jpg' },
   { name: 'Nova', logo: '/nova.png' },
-  { name: 'Segate', logo: './brand/segate.jpg' },
+  { name: 'Seagate', logo: './brand/segate.jpg' },
   { name: 'Asus', logo: '/asus.png' },
   { name: 'Lenovo', logo: '/lenovo.png' },
   { name: 'Acer', logo: '/acer.png' },

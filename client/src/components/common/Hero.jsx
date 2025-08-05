@@ -26,9 +26,9 @@ const Hero = () => {
         className="relative z-20 w-full px-4 md:px-10 max-w-5xl text-center"
       >
         <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 md:p-12 border border-white/20 shadow-2xl animate-fade-in-up">
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold uppercase bg-gradient-to-r from-pink-400 via-red-500 to-yellow-400 bg-clip-text text-transparent animate-gradient font-serif drop-shadow-lg mb-4">
+          <h1 className="text-3xl sm:text-2xl md:text-6xl font-extrabold uppercase bg-gradient-to-r from-pink-400 via-red-500 to-yellow-400 bg-clip-text text-transparent animate-gradient font-serif drop-shadow-lg mb-4 ">
             Distribution House of IT Peripherals,
-            <br className="hidden sm:block" />
+            <br />
             Surveillance & Networking Products
           </h1>
 

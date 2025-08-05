@@ -8,7 +8,7 @@ import axios from 'axios';
 
 const fallbackBrands = [
    'Prodot', 'HP', 'Dell', 'Lenovo', 'ASUS', 'Canon', 'Brother', 'Epson', 'TVSE', 'Samsung',
-  'LG', 'TCL', 'Mantra', 'Morpho', 'Startek', 'Prodot', 'Ricoh', 'Xerox', 'Pantum',
+  'LG', 'TCL', 'Mantra', 'Morpho', 'Startek','Ricoh', 'Xerox', 'Pantum',
   'Logitech', 'Seagate', 'Toshiba', 'WD', 'SanDisk', 'Antivirus', 'Accounting Software',
   'Printer Adjustment Software', 'CP Plus', 'Hikvision', 'Sony', 'Nikon', 'Zebronics',
   'TP-Link', 'D-Link'
@@ -207,6 +207,7 @@ const ShopPage = () => {
   <div className="relative">
     <img
       src={product.images?.[0] || "/fallback.jpg"}
+     
       alt={product.name}
       className="w-full h-48 object-cover rounded-xl mb-4 cursor-pointer"
       onClick={() => navigate(`/product/${product._id}`)}
