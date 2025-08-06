@@ -18,9 +18,9 @@ const fallbackBrands = [
 ];
 
 const fallbackCategories = [
-  'Laptop', 'Desktop', 'Printer', 'TV & Monitor', 'Biometrics', 'Cartridge', 'Ink Bottle',
-  'Keyboard','Mouse', 'Internal / External HDD', 'Pen Drive', 'Software', 'CCTV Camera',
-  'Router', 'DVR/NVR', 'POE Switch', 'Tablets', 'Refurbished', 'Accessories', 'Networking',
+  'Laptop', 'Desktop', 'Printer', 'TV', 'Monitor', 'Biometrics', 'Cartridge', 'Ink Bottle',
+  'Keyboard', 'Mouse', 'Internal HDD', 'External HDD', 'Pen Drive', 'Software', 'CCTV Camera',
+  'Router', 'DVR','NVR', 'POE Switch', 'Tablets', 'Refurbished', 'Accessories', 'Networking',
   'Surveillance', 'Scanner'
 ];
 

@@ -15,11 +15,12 @@ const TopCategoriesSection = () => {
     { name: 'Keyboard', logo: '/keyboard.jpg' },
     { name: 'Mouse', logo: '/mouse.jpg' },
     { name: 'Pendrive', logo: '/pendrive.jpg' },
-    { name: 'Internal / External HDD', logo: '/harddisk.jpg' },
+    { name: 'External HDD', logo: '/harddisk.jpg' },
     { name: 'Tablets', logo: '/tab.jpg' },
     {name : 'Dvr', logo: '/dvr.jpeg' },
     { name: 'Router', logo: '/router.jpg' },
     { name: 'POE Switch', logo: '/poeSWitch.jpg' },
+      { name: 'Internal HDD', logo: '/harddisk.jpg' },
 
   ];
 

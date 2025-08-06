@@ -8,18 +8,7 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
-  // Handle search submission
-  // const handleSearchSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (searchQuery.trim()) {
-  //     navigate({
-  //       pathname: '/shop',
-  //       search: `?query=${encodeURIComponent(searchQuery.trim())}`,
-  //     });
-  //     setShowSearch(false);
-  //     setSearchQuery('');
-  //   }
-  // };
+ 
 
   return (
     <header className="w-full  top-0 left-0 bg-white/90 backdrop-blur z-50 shadow-sm transition-all">
@@ -33,19 +22,7 @@ const Header = () => {
           />
         </Link>
 
-        {/* Desktop search bar */}
-   {/* <form onSubmit={handleSearchSubmit} className="hidden md:block flex-1 mx-6">
-  <div className="relative max-w-md mx-auto">
-    <input
-      type="search"
-      placeholder="Search products..."
-      value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
-      className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:border-teal-400 transition-all"
-    />
-    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-  </div>
-</form> */}
+     
 
 
         {/* Icons and login (desktop) */}

@@ -1,9 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Laptop } from 'lucide-react';
+// import { Laptop } from 'lucide-react';
 import { FaXTwitter } from "react-icons/fa6";
 import { FaFacebook } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
+
 // import { FaLinkedin } from "react-icons/fa6";
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -15,7 +16,13 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <NavLink to="/" className="flex items-center space-x-2 mb-4">
-              <Laptop className="w-6 h-6 text-teal-400" />
+              <img
+                src="/logo.jpg"
+                alt="Dataline logo"
+                className="h-6 w-auto hover:scale-105 transition-transform"
+          />
+          
+       
               <span className="text-2xl font-extrabold tracking-tight text-white">Dataline </span>
             </NavLink>
             <p className="text-sm text-gray-400 leading-relaxed">
