@@ -80,15 +80,15 @@ const ContactUsForm = () => {
               </div>
 
               <div>
-                <label htmlFor="subject" className="block text-gray-700 font-medium mb-1">Subject</label>
+                <label htmlFor="subject" className="block text-gray-700 font-medium mb-1">mobile</label>
                 <input
-                  type="text"
+                  type="tel"
                   name="subject"
                   id="subject"
                   required
                   value={formData.subject}
                   onChange={handleChange}
-                  placeholder="Enquiry, Support, etc."
+                  placeholder="+91-XXXXXXXXXX"
                   className="w-full px-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 transition shadow-sm"
                 />
               </div>

@@ -38,3 +38,6 @@ body{
   opacity: 0;
   transition: opacity 200ms;
 }
+.main-content {
+  padding-top: 4rem; 
+}

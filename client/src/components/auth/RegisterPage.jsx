@@ -1,6 +1,3 @@
-
-
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -11,6 +8,19 @@ import { BASE_URL, API_PATH } from '../../utils/apiPath';
 //  Format validators
 const isValidPAN = (pan) => /^[A-Z]{5}[0-9]{4}[A-Z]$/.test(pan);
 const isValidGST = (gst) => /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(gst);
+const isValidMobile = (mobile) => {
+  const cleaned = mobile.replace(/\s+/g, "");
+
+
+  if (!/^\d{10}$/.test(cleaned)) return false;
+
+ 
+  if (/^(\d)\1{9}$/.test(cleaned)) return false;
+
+  if (!/^[6-9]\d{9}$/.test(cleaned)) return false;
+
+  return true;
+};
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -60,11 +70,16 @@ const RegisterPage = () => {
       mobile
     } = formData;
 
-    const payload = { name, email, password };
+    const payload = { name, email, password,  mobile };
 
     //  Common fields
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !mobile) {
       toast.error('Please fill all required fields.');
+      setIsLoading(false);
+      return;
+    }
+    if (!isValidMobile(mobile)) {
+      toast.error('Invalid Mobile Number format');
       setIsLoading(false);
       return;
     }
@@ -88,7 +103,7 @@ const RegisterPage = () => {
       payload.panNumber = panNumber;
       payload.officeAddress = officeAddress;
       payload.residenceAddress = residenceAddress;
-      payload.mobile = mobile;
+      // payload.mobile = mobile;
 
       //  Distributor specific GST validation
       if (role === 'distributor') {
@@ -163,6 +178,12 @@ const RegisterPage = () => {
               <input type="email" name="email" value={formData.email} onChange={handleChange} className="w-full border p-2 rounded" required />
             </div>
 
+              <div>
+                  <label className="block font-medium">Mobile</label>
+                  <input type="text" name="mobile" value={formData.mobile} onChange={handleChange} className="w-full border p-2 rounded" maxLength={10} required />
+              </div>
+            
+
             <div>
               <label className="block font-medium">Password</label>
               <div className="relative">
@@ -207,10 +228,7 @@ const RegisterPage = () => {
                   <input type="text" name="residenceAddress" value={formData.residenceAddress} onChange={handleChange} className="w-full border p-2 rounded" />
                 </div>
 
-                <div>
-                  <label className="block font-medium">Mobile</label>
-                  <input type="text" name="mobile" value={formData.mobile} onChange={handleChange} className="w-full border p-2 rounded" />
-                </div>
+              
               </>
             )}
 

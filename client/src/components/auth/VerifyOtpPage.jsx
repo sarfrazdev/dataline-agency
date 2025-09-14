@@ -9,7 +9,7 @@ const VerifyOtpPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // ✅ Get email from previous page
+  //  Get email from previous page
   const email = location.state?.email;
 
   const handleVerify = async (e) => {

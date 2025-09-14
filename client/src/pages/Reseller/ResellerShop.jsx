@@ -195,41 +195,7 @@ const ResellerShop = () => {
         </div>
 
         {/* Product Grid */}
-        {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {displayedProducts.map(product => (
-            <div key={product._id} className="bg-gray-900 text-white rounded shadow p-4">
-              <div className="relative">
-                <img
-                  src={product.images?.[0] || "/fallback.jpg"}
-                  alt={product.name}
-                  className="w-full h-48 object-cover rounded mb-4 cursor-pointer"
-                  onClick={() => navigate(`/product/${product._id}`)}
-                />
-                {product.stock === 0 && (
-                  <span className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded">
-                    Out of Stock
-                  </span>
-                )}
-              </div>
-              <h2 className="text-lg font-semibold">{product.name}</h2>
-              <div className="flex justify-between items-center mt-2">
-                <span className="font-bold text-blue-400">₹{product.prices?.[role] || 'N/A'}</span>
-                <div className="flex space-x-2">
-                  <button onClick={() => handleAddToWishlist(product._id)} className="p-2 rounded-full bg-gray-700">
-                    <Heart className={`w-4 h-4 ${wishlist.includes(product._id) ? 'fill-red-500 text-red-500' : 'text-red-400'}`} />
-                  </button>
-                  <button
-                    onClick={() => handleAddToCart(product._id)}
-                    disabled={product.stock === 0}
-                    className={`p-2 rounded-full ${product.stock === 0 ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
-                  >
-                    <ShoppingCart className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div> */}
+      
            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {displayedProducts.map(product => (
                   
@@ -237,11 +203,11 @@ const ResellerShop = () => {
                       key={product._id}
                       className="bg-gray-900 text-white rounded-2xl shadow-lg p-4 transition-transform transform hover:scale-[1.02] hover:shadow-2xl"
                     >
-          <div className="relative">
+          <div className="w-full h-64 flex items-center justify-center bg-white rounded-xl mb-4 cursor-pointer">
             <img
               src={product.images?.[0] || "/fallback.jpg"}
               alt={product.name}
-              className="w-full h-48 object-cover rounded-xl mb-4 cursor-pointer"
+              className="max-h-full max-w-full object-contain"
               onClick={() => navigate(`/product/${product._id}`)}
             />
             {product.stock === 0 && (

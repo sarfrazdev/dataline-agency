@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const [isSticky, setIsSticky] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -64,13 +66,27 @@ const Navbar = () => {
     setShowMenu(false);
     setShowDropdown(false);
   };
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 120) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [])
 
   return (
-    <nav className="relative w-full bg-[#1e1e1e]/90 backdrop-blur z-50 shadow-md transition-colors duration-300">
+    <nav className={`w-full bg-[#1e1e1e]/90 backdrop-blur z-50 shadow-md transition-all duration-300 ${isSticky ? 'fixed top-0 left-0' : 'relative'}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center h-16">
         
         {/* Desktop Menu (visible on lg and up) */}
-        <div className="hidden lg:flex gap-6 items-center">
+        <div className={`hidden lg:flex gap-6 items-center transition-all duration-300 ${isSticky ? 'py-2' : 'py-4'}`}>
           {navLinks.map((link) => (
             <Link
               key={link.to}
@@ -111,8 +127,7 @@ const Navbar = () => {
             </div>
           )}
         </div>
-
-        {/* Mobile Menu Button (visible on sm and md) */}
+]
         <div className="lg:hidden flex justify-start w-full">
           <button
             onClick={() => setShowMenu(!showMenu)}

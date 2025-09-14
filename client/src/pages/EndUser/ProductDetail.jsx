@@ -128,7 +128,7 @@ const ProductDetail = () => {
           {/* Product Images */}
           <div>
             <div
-              className="cursor-zoom-in border border-gray-700 bg-white rounded-xl overflow-hidden max-h-[500px] shadow-xl mb-4"
+              className="cursor-zoom-in border border-gray-700 bg-white rounded-xl overflow-hidden md:w-[90%] w-full h-80 shadow-xl mb-4"
               onClick={() => setIsZoomOpen(true)}
             >
               <img src={activeImage} alt="Product" className="w-full h-full object-contain" />

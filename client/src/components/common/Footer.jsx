@@ -15,22 +15,18 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div>
-            <NavLink to="/" className="flex items-center space-x-2 mb-4">
+            <NavLink to="/" className="flex items-center space-x-2 mb-4 ">
               <img
-                src="/logo.jpg"
+                src="/footerlogo.png"
                 alt="Dataline logo"
-                className="h-6 w-auto hover:scale-105 transition-transform"
-          />
-          
-       
-              <span className="text-2xl font-extrabold tracking-tight text-white">Dataline </span>
+                className="h-15 w-auto hover:scale-105 transition-transform ring-2 ring-white shadow-[0_0_20px_5px_rgba(255,255,255,0.5)] rounded-full "
+              />
             </NavLink>
+            <div className="text-2xl font-extrabold tracking-tight text-white mb-4">Dataline </div>
             <p className="text-sm text-gray-400 leading-relaxed">
               Your trusted partner for innovative and ergonomic IT accessories, empowering your digital lifestyle.
             </p>
           </div>
-
-          {/* Quick Links */}
           <div>
             <h3 className="text-lg font-semibold text-teal-400 mb-4">Quick Links</h3>
             <ul className="space-y-2 text-gray-300">

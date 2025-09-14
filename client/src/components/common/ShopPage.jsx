@@ -204,20 +204,21 @@ const ShopPage = () => {
               key={product._id}
               className="bg-gray-900 text-white rounded-2xl shadow-lg p-4 transition-transform transform hover:scale-[1.02] hover:shadow-2xl"
             >
-  <div className="relative">
-    <img
-      src={product.images?.[0] || "/fallback.jpg"}
-     
-      alt={product.name}
-      className="w-full h-48 object-cover rounded-xl mb-4 cursor-pointer"
-      onClick={() => navigate(`/product/${product._id}`)}
-    />
-    {product.stock === 0 && (
-      <span className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded">
-        Out of Stock
-      </span>
-    )}
-  </div>
+ 
+        <div className="w-full h-64 flex items-center justify-center bg-white rounded-xl mb-4 cursor-pointer"
+          onClick={() => navigate(`/product/${product._id}`)}>
+        <img
+          src={product.images?.[0] || "/fallback.jpg"}
+          alt={product.name}
+          className="max-h-full max-w-full object-contain"
+        />
+         {product.stock === 0 && (
+              <span className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded">
+                Out of Stock
+              </span>
+            )}
+      </div>
+
 
   <div className="space-y-1">
     <h2 className="text-lg font-semibold text-white">{product.name}</h2>

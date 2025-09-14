@@ -3,6 +3,7 @@ import TopBar from '../common/TopBar'
 import Header from '../common/Header'
 import Navbar from '../common/Navbar' 
 import Footer from '../common/Footer'
+import WhatsAppButton from '../common/WhatsApppButton'
 
 const NavLayout = ({children}) => {
     return (
@@ -11,6 +12,7 @@ const NavLayout = ({children}) => {
                 <Header/>
                 <Navbar/>
                 {children}
+                <WhatsAppButton/>
                 <Footer/>
         </div>
     )

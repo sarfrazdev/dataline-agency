@@ -11,21 +11,34 @@ const Header = () => {
  
 
   return (
-    <header className="w-full  top-0 left-0 bg-white/90 backdrop-blur z-50 shadow-sm transition-all">
+    <header className="w-full  top-0 left-0 bg-white/100 backdrop-blur z-50 shadow-sm transition-all">
       <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 h-20">
         {/* Logo */}
         <Link to="/">
           <img
             src="/logo.jpg"
             alt="Dataline logo"
-            className="h-12 w-auto hover:scale-105 transition-transform"
+            className="h-12 md:h-16 w-auto hover:scale-105 transition-transform"
           />
         </Link>
 
-     
+
+<div className="relative z-10 items-center space-y-2 hidden sm:hidden lg:block">
+  <h1
+    className=" md:text-3xl font-extrabold 
+               text-transparent bg-clip-text 
+               bg-gradient-to-r from-[#0f172a] via-[#1e293b] to-[#0f172a] 
+               tracking-widest"
+  >
+    WELCOME TO DATALINE
+  </h1>
+</div>
 
 
-        {/* Icons and login (desktop) */}
+
+      
+    
+          {/* Icons and login (desktop) */}
         <div className="hidden md:flex items-center gap-4">
           <Link to="/login">
             <button className="px-4 py-2 rounded-full text-sm font-medium text-white bg-teal-500 hover:bg-teal-600 transition-colors">

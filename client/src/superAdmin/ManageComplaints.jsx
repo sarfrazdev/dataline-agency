@@ -74,6 +74,10 @@ const fetchComplaints = async () => {
               <span className="font-medium text-gray-900">Email:</span>{' '}
               {complaint.email}
             </p>
+            <p className="text-gray-700">
+              <span className="font-medium text-gray-900">Mobile:</span>{' '}
+              {complaint.subject}
+            </p>
             <p className="text-gray-800 whitespace-pre-line mt-2">
               <span className="font-medium text-gray-900">Message:</span>{' '}
               {complaint.message}
