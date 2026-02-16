@@ -14,13 +14,34 @@ const fallbackBrands = [
   'Printer Adjustment Software', 'CP Plus', 'Hikvision', 'Sony', 'Nikon', 'Zebronics',
   'TP-Link', 'D-Link'
 ];
+fallbackBrands.push(
+  'Geonix', 'Consistent', 'Electroline', 'Frontech', 'Acer',
+  'Quick Heal', 'Ranz', 'Nova', 'AMD', 'BenQ',
+  'Digisol', 'ESSL', 'Excelam', 'Honeywell', 'Intel',
+  'Intex', 'Kingston', 'Lapcare', 'Lipi', 'Microtek',
+  'NP', 'Numeric', 'People Link', 'Tenda', 'Cyber Power',
+  'N Computing', 'Micron', 'Gigabyte', 'Microsoft',
+  'Secure Eye', 'EVM', 'Cyber X', 'Fingers'
+);
+
+
 const fallbackCategories = [
   'Laptop', 'Desktop', 'Printer', 'TV', 'Monitor', 'Biometrics', 'Cartridge', 'Ink Bottle',
   'Keyboard', 'Mouse', 'Internal HDD', 'External HDD', 'Pen Drive', 'Software', 'CCTV Camera',
   'Router', 'DVR','NVR', 'POE Switch', 'Tablets', 'Refurbished', 'Accessories', 'Networking',
   'Surveillance', 'Scanner'
 ];
-const itemsPerPage = 50;
+fallbackCategories.push(
+  'SSD', 'Motherboard', 'UPS', 'SMPS', 'Cabinet', 'Laminator', 'Projector',
+  'Toner Cartridge', 'Hub', 'Headphones', 'USB Hub', 'Ethernet Switch',
+  'Laser Toner Powder', 'Photo Paper', 'Keyboard & Mouse Combo',
+  'Web Camera', 'Barcode Scanner', 'Power Strip', 'CPU Fan', 'Mouse Pad',
+  'RJ45 Splitter', 'Cleaning Kit', 'SSD Casing', 'Online UPS',
+  'Cat 6 Cable', 'Rack', 'Media Converter', 'HDMI Extender',
+  'HDMI Splitter', 'Power Adapter', '3 +1 Cable'
+);
+
+const itemsPerPage = 51;
 
 const DistributorShop = () => {
   const [products, setProducts] = useState([]);
@@ -224,7 +245,7 @@ const DistributorShop = () => {
             <div className="flex justify-between items-center mt-4">
               <span className="font-bold text-blue-400 text-lg">₹{product.prices?.[role] || 'N/A'}</span>
               <div className="flex space-x-2">
-                <button onClick={() => handleAddToWishlist(product._id)} className="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition">
+                <button onClick={() => handleAddToWishlist(product._id)} className="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition cursor-pointer">
                   <Heart className={`w-4 h-4 ${wishlist.includes(product._id) ? 'fill-red-500 text-red-500' : 'text-red-400'}`} />
                 </button>
                 <button
@@ -236,7 +257,7 @@ const DistributorShop = () => {
                       : 'bg-blue-600 hover:bg-blue-700 text-white'
                   } transition`}
                 >
-                  <ShoppingCart className="w-4 h-4" />
+                  <ShoppingCart className="w-4 h-4 cursor-pointer"  />
                 </button>
               </div>
             </div>

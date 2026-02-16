@@ -108,7 +108,8 @@ const CartPage = () => {
                         <img
                           src={product.images?.[0] || '/placeholder.jpg'}
                           alt={product.name}
-                          className="h-32 w-32 object-cover rounded-md"
+                          className="h-32 w-32 object-cover rounded-md cursor-pointer"
+                            onClick={() => navigate(`/product/${product._id}`)}
                         />
                         <div>
                           <h2 className="text-lg font-semibold text-white">{product?.name}</h2>

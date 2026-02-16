@@ -7,21 +7,42 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 const fallbackBrands = [
-   'Prodot', 'HP', 'Dell', 'Lenovo', 'ASUS', 'Canon', 'Brother', 'Epson', 'TVSE', 'Samsung',
-  'LG', 'TCL', 'Mantra', 'Morpho', 'Startek','Ricoh', 'Xerox', 'Pantum',
+  'Prodot', 'HP', 'Dell', 'Lenovo', 'ASUS', 'Canon', 'Brother', 'Epson', 'TVSE', 'Samsung',
+  'LG', 'TCL', 'Mantra', 'Morpho', 'Startek', 'Ricoh', 'Xerox', 'Pantum',
   'Logitech', 'Seagate', 'Toshiba', 'WD', 'SanDisk', 'Antivirus', 'Accounting Software',
   'Printer Adjustment Software', 'CP Plus', 'Hikvision', 'Sony', 'Nikon', 'Zebronics',
   'TP-Link', 'D-Link'
 ];
 
+fallbackBrands.push(
+  'Geonix', 'Consistent', 'Electroline', 'Frontech', 'Acer',
+  'Quick Heal', 'Ranz', 'Nova', 'AMD', 'BenQ',
+  'Digisol', 'ESSL', 'Excelam', 'Honeywell', 'Intel',
+  'Intex', 'Kingston', 'Lapcare', 'Lipi', 'Microtek',
+  'NP', 'Numeric', 'People Link', 'Tenda', 'Cyber Power',
+  'N Computing', 'Micron', 'Gigabyte', 'Microsoft',
+  'Secure Eye', 'EVM', 'Cyber X', 'Fingers'
+);
+
+
 const fallbackCategories = [
   'Laptop', 'Desktop', 'Printer', 'TV', 'Monitor', 'Biometrics', 'Cartridge', 'Ink Bottle',
   'Keyboard', 'Mouse', 'Internal HDD', 'External HDD', 'Pen Drive', 'Software', 'CCTV Camera',
-  'Router', 'DVR','NVR', 'POE Switch', 'Tablets', 'Refurbished', 'Accessories', 'Networking',
+  'Router', 'DVR', 'NVR', 'POE Switch', 'Tablets', 'Refurbished', 'Accessories', 'Networking',
   'Surveillance', 'Scanner'
 ];
+fallbackCategories.push(
+  'SSD', 'Motherboard', 'UPS', 'SMPS', 'Cabinet', 'Laminator', 'Projector',
+  'Toner Cartridge', 'Hub', 'Headphones', 'USB Hub', 'Ethernet Switch',
+  'Laser Toner Powder', 'Photo Paper', 'Keyboard & Mouse Combo',
+  'Web Camera', 'Barcode Scanner', 'Power Strip', 'CPU Fan', 'Mouse Pad',
+  'RJ45 Splitter', 'Cleaning Kit', 'SSD Casing', 'Online UPS',
+  'Cat 6 Cable', 'Rack', 'Media Converter', 'HDMI Extender',
+  'HDMI Splitter', 'Power Adapter', '3 +1 Cable'
+);
 
-const itemsPerPage = 50;
+
+const itemsPerPage = 51;
 
 const ShopPage = () => {
   const [products, setProducts] = useState([]);
@@ -103,16 +124,16 @@ const ShopPage = () => {
   };
 
   const filteredProducts = products
-   
-   .filter((p) => {
-  const q = searchQuery.toLowerCase();
-  return (
-    p?.name?.toLowerCase().includes(q) ||
-    p?.brand?.toLowerCase().includes(q) ||
-    p?.category?.toLowerCase().includes(q) ||
-    p?.modelNo?.toLowerCase().includes(q)
-  );
-})
+
+    .filter((p) => {
+      const q = searchQuery.toLowerCase();
+      return (
+        p?.name?.toLowerCase().includes(q) ||
+        p?.brand?.toLowerCase().includes(q) ||
+        p?.category?.toLowerCase().includes(q) ||
+        p?.modelNo?.toLowerCase().includes(q)
+      );
+    })
 
 
     .sort((a, b) => {
@@ -197,7 +218,7 @@ const ShopPage = () => {
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {displayedProducts.map(product => (
           
             <div
@@ -248,7 +269,97 @@ const ShopPage = () => {
 </div>
 
           ))}
+        </div> */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {displayedProducts.map(product => (
+
+            <div
+              key={product._id}
+              className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 
+                 rounded-3xl p-[1px] hover:scale-[1.03] transition-all duration-300"
+            >
+
+              {/* Inner Card */}
+              <div className="bg-gray-950 rounded-3xl p-5 shadow-xl hover:shadow-blue-500/20 transition-all duration-300">
+
+                {/* Image Section */}
+                <div
+                  className="relative w-full h-64 flex items-center justify-center 
+                     bg-white rounded-2xl mb-4 overflow-hidden cursor-pointer group"
+                  onClick={() => navigate(`/product/${product._id}`)}
+                >
+                  <img
+                    src={product.images?.[0] || "/fallback.jpg"}
+                    alt={product.name}
+                    className="max-h-full max-w-full object-contain 
+                       transition-transform duration-500 group-hover:scale-110"
+                  />
+
+                  {product.stock === 0 && (
+                    <span className="absolute top-3 right-3 bg-red-600 text-white 
+                             text-xs font-semibold px-3 py-1 rounded-full shadow-lg">
+                      Out of Stock
+                    </span>
+                  )}
+                </div>
+
+                {/* Product Info */}
+                <div className="space-y-1">
+                  <h2 className="text-lg font-semibold text-white truncate">
+                    {product.name}
+                  </h2>
+                  <p className="text-sm text-gray-400">
+                    Brand: <span className="text-gray-200">{product.brand || 'N/A'}</span>
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    Model: <span className="text-gray-200">{product.modelNo || 'N/A'}</span>
+                  </p>
+                </div>
+
+                {/* Bottom Section */}
+                <div className="flex justify-between items-center mt-5">
+
+                  {/* Price */}
+                  <span className="font-bold text-2xl bg-gradient-to-r from-blue-400 to-cyan-400 
+                           bg-clip-text text-transparent">
+                    ₹{product.prices?.[role] || 'N/A'}
+                  </span>
+
+                  {/* Buttons */}
+                  <div className="flex space-x-3">
+
+                    <button
+                      onClick={() => handleAddToWishlist(product._id)}
+                      className="p-2 rounded-full backdrop-blur-md bg-white/10 
+                         hover:bg-red-900 transition duration-300 cursor-pointer"
+                    >
+                      <Heart
+                        className={`w-5 h-5 ${wishlist.includes(product._id)
+                            ? 'fill-red-500 text-red-500'
+                            : 'text-gray-300'
+                          }`}
+                      />
+                    </button>
+
+                    <button
+                      onClick={() => handleAddToCart(product._id)}
+                      disabled={product.stock === 0}
+                      className={`p-2 rounded-full transition duration-300  ${product.stock === 0
+                          ? 'bg-gray-600 cursor-not-allowed'
+                          : 'bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/30'
+                        }`}
+                    >
+                      <ShoppingCart className="w-5 h-5 text-white cursor-pointer" />
+                    </button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          ))}
         </div>
+
 
         {/* Pagination */}
         <div className="flex justify-center items-center space-x-2 mt-8">

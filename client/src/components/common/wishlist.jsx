@@ -5,6 +5,7 @@ import { API_PATH, BASE_URL } from '../../utils/apiPath';
 import { toast } from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import NavLayout from '../auth/NavLayout';
+import { useNavigate } from 'react-router-dom';
 
 const Wishlist = () => {
   const [wishlistItems, setWishlistItems] = useState([]);
@@ -86,6 +87,8 @@ const Wishlist = () => {
     fetchWishlist();
   }, []);
 
+    const navigate = useNavigate();
+
   return (
     <NavLayout>
       <div className="min-h-screen bg-[#1e1e1e] text-white px-4 py-8">
@@ -101,15 +104,12 @@ const Wishlist = () => {
                   key={product._id}
                   className="bg-[#2d2d2d] rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col"
                 >
-                  {/* <img
-                    src={product.image || '/placeholder.jpg'}
-                    alt={product.name}
-                    className="h-52 w-full object-cover"
-                  /> */}
+                
                   <img
                       src={product.images?.[0] || '/placeholder.jpg'}
                       alt={product.name}
-                      className="h-52 w-full object-cover"
+                      className="h-52 w-full object-cover cursor-pointer"
+                        onClick={() => navigate(`/product/${product._id}`)}
                     />
 
                   <div className="p-4 flex flex-col flex-grow">
@@ -135,14 +135,7 @@ const Wishlist = () => {
                         >
                           <Trash2 className="w-4 h-4 text-white" />
                         </button>
-                        {/* <button
-                          onClick={() => handleAddToCart(product._id)}
-                          className="bg-blue-600 hover:bg-blue-700 p-2 rounded-full transition"
-                          title="Add to Cart"
-                        >
-                          <ShoppingCart className="w-4 h-4 text-white" />
-                        </button> */}
-
+                       
                         <button
                         onClick={() => handleAddToCart(product._id)}
                         disabled={product.stock === 0}

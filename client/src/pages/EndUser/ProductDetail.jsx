@@ -1,32 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import axiosInstance from '../../utils/axiosInstance';
-import { API_PATH, BASE_URL } from '../../utils/apiPath';
-import { toast } from 'react-hot-toast';
-import { ShoppingCart, Heart, Share2 } from 'lucide-react';
-import NavLayout from '../../components/auth/NavLayout';
-
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axiosInstance from "../../utils/axiosInstance";
+import { API_PATH, BASE_URL } from "../../utils/apiPath";
+import { toast } from "react-hot-toast";
+import { ShoppingCart, Heart, Share2 } from "lucide-react";
+import NavLayout from "../../components/auth/NavLayout";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeImage, setActiveImage] = useState('');
+  const [activeImage, setActiveImage] = useState("");
   const [isZoomOpen, setIsZoomOpen] = useState(false);
-  const [selectedQty, setSelectedQty] = useState(1);
+  const [selectedQty, setSelectedQty] = useState("");
   const [activeSlabIndex, setActiveSlabIndex] = useState(null);
 
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const { data } = await axiosInstance.get(`${BASE_URL}${API_PATH.PRODUCTS.GET_ONE(id)}`);
+        const { data } = await axiosInstance.get(
+          `${BASE_URL}${API_PATH.PRODUCTS.GET_ONE(id)}`,
+        );
         setProduct(data);
-        setActiveImage(data.images?.[0] || '');
+        setActiveImage(data.images?.[0] || "");
         autoSelectSlab(data, 1);
       } catch (err) {
-        toast.error(err.response?.data?.message || 'Failed to load product');
+        toast.error(err.response?.data?.message || "Failed to load product");
       } finally {
         setLoading(false);
       }
@@ -35,56 +36,113 @@ const ProductDetail = () => {
     fetchProduct();
   }, [id]);
 
+  const handleQuantityChange = (value) => {
+    // Allow empty input (for backspace)
+    if (value === "") {
+      setSelectedQty("");
+      setActiveSlabIndex(null);
+      return;
+    }
 
-  const getBasePrice = () => {
-  if (!product) return 0;
-  if (!user || user.role === 'enduser') return product.prices?.enduser || 0;
-  if (user.role === 'reseller') return product.prices?.reseller || 0;
-  if (user.role === 'distributor') return product.prices?.distributor || 0;
-  return product.prices?.enduser || 0;
-};
+    // Allow only numbers
+    if (!/^\d+$/.test(value)) return;
 
+    let qty = Number(value);
 
-  const autoSelectSlab = (productData, quantity) => {
-    const slabs = productData.quantityBasedPrices || [];
-    const index = slabs.findIndex(slab => quantity >= slab.minQty && (!slab.maxQty || quantity <= slab.maxQty));
-    setActiveSlabIndex(index !== -1 ? index : null);
-  };
-
-  const handleQuantityChange = (qty) => {
-    if (!product) return;
-    if (qty < 1) qty = 1;
     if (qty > product.stock) {
-      toast.error('Cannot exceed available stock');
+      toast.error("Cannot exceed available stock");
       qty = product.stock;
     }
-    setSelectedQty(qty);
+
+    setSelectedQty(qty.toString());
     autoSelectSlab(product, qty);
   };
 
-  const handleAddToCart = async () => {
-    if (product.stock <= 0) return toast.error('Out of stock');
-    if (selectedQty > product.stock) return toast.error('Quantity exceeds available stock');
-
-    try {
-      const response = await axiosInstance.post(`${BASE_URL}${API_PATH.CART.ADD}`, {
-        productId: product._id,
-        quantity: selectedQty,
-      });
-      if (response.status === 200) toast.success('Added to cart');
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to add to cart');
-    }
+  const getBasePrice = () => {
+    if (!product) return 0;
+    if (!user || user.role === "enduser") return product.prices?.enduser || 0;
+    if (user.role === "reseller") return product.prices?.reseller || 0;
+    if (user.role === "distributor") return product.prices?.distributor || 0;
+    return product.prices?.enduser || 0;
   };
+
+  const autoSelectSlab = (productData, quantity) => {
+    const slabs = productData.quantityBasedPrices || [];
+    const index = slabs.findIndex(
+      (slab) =>
+        quantity >= slab.minQty && (!slab.maxQty || quantity <= slab.maxQty),
+    );
+    setActiveSlabIndex(index !== -1 ? index : null);
+  };
+
+  // const handleAddToCart = async () => {
+  //   if (product.stock <= 0) return toast.error("Out of stock");
+  //   if (selectedQty > product.stock)
+  //     return toast.error("Quantity exceeds available stock");
+
+  //    if (!selectedQty || Number(selectedQty) < 1) {
+  //   return toast.error("Please enter quantity");
+  // }
+
+  // if (Number(selectedQty) > product.stock) {
+  //   return toast.error("Quantity exceeds available stock");
+  // }
+  //   try {
+  //     const response = await axiosInstance.post(
+  //       `${BASE_URL}${API_PATH.CART.ADD}`,
+  //       {
+  //         productId: product._id,
+  //         quantity: selectedQty,
+  //       },
+  //     );
+  //     if (response.status === 200) toast.success("Added to cart");
+  //   } catch (err) {
+  //     toast.error(err.response?.data?.message || "Failed to add to cart");
+  //   }
+  // };
+
+
+  const handleAddToCart = async () => {
+  if (product.stock <= 0) {
+    return toast.error("Out of stock");
+  }
+
+  if (!selectedQty || Number(selectedQty) < 1) {
+    return toast.error("Please enter quantity");
+  }
+
+  if (Number(selectedQty) > product.stock) {
+    return toast.error("Quantity exceeds available stock");
+  }
+
+  try {
+    const response = await axiosInstance.post(
+      `${BASE_URL}${API_PATH.CART.ADD}`,
+      {
+        productId: product._id,
+        quantity: Number(selectedQty),
+      }
+    );
+
+    if (response.status === 200) {
+      toast.success("Added to cart");
+    }
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Failed to add to cart");
+  }
+};
 
   const handleAddToWishlist = async () => {
     try {
-      const response = await axiosInstance.post(`${BASE_URL}${API_PATH.WISHLIST.ADD}`, {
-        productId: product._id,
-      });
-      if (response.status === 200) toast.success('Added to wishlist');
+      const response = await axiosInstance.post(
+        `${BASE_URL}${API_PATH.WISHLIST.ADD}`,
+        {
+          productId: product._id,
+        },
+      );
+      if (response.status === 200) toast.success("Added to wishlist");
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to add to wishlist');
+      toast.error(err.response?.data?.message || "Failed to add to wishlist");
     }
   };
 
@@ -97,19 +155,19 @@ const ProductDetail = () => {
           url: window.location.href,
         });
       } catch {
-        toast.error('Sharing cancelled or failed');
+        toast.error("Sharing cancelled or failed");
       }
     } else {
       try {
-        const dummyElement = document.createElement('textarea');
+        const dummyElement = document.createElement("textarea");
         document.body.appendChild(dummyElement);
         dummyElement.value = window.location.href;
         dummyElement.select();
-        document.execCommand('copy');
+        document.execCommand("copy");
         document.body.removeChild(dummyElement);
-        toast.success('Link copied to clipboard');
+        toast.success("Link copied to clipboard");
       } catch {
-        toast.error('Failed to copy link');
+        toast.error("Failed to copy link");
       }
     }
   };
@@ -118,8 +176,12 @@ const ProductDetail = () => {
   const selectedSlab = product?.quantityBasedPrices?.[activeSlabIndex] || null;
   const finalPrice = selectedSlab?.price || basePrice;
 
-  if (loading) return <div className="text-center mt-10 text-white">Loading...</div>;
-  if (!product) return <div className="text-center mt-10 text-red-500">Product not found.</div>;
+  if (loading)
+    return <div className="text-center mt-10 text-white">Loading...</div>;
+  if (!product)
+    return (
+      <div className="text-center mt-10 text-red-500">Product not found.</div>
+    );
 
   return (
     <NavLayout>
@@ -131,7 +193,11 @@ const ProductDetail = () => {
               className="cursor-zoom-in border border-gray-700 bg-white rounded-xl overflow-hidden md:w-[90%] w-full h-80 shadow-xl mb-4"
               onClick={() => setIsZoomOpen(true)}
             >
-              <img src={activeImage} alt="Product" className="w-full h-full object-contain" />
+              <img
+                src={activeImage}
+                alt="Product"
+                className="w-full h-full object-contain"
+              />
             </div>
             <div className="flex gap-3">
               {product.images?.slice(0, 4).map((img, i) => (
@@ -141,7 +207,9 @@ const ProductDetail = () => {
                   alt={`Thumb-${i}`}
                   onClick={() => setActiveImage(img)}
                   className={`h-20 w-20 object-cover rounded-md cursor-pointer border-2 transition-all duration-300 shadow-md ${
-                    activeImage === img ? 'border-cyan-500 scale-110' : 'border-gray-600'
+                    activeImage === img
+                      ? "border-cyan-500 scale-110"
+                      : "border-gray-600"
                   }`}
                 />
               ))}
@@ -155,42 +223,59 @@ const ProductDetail = () => {
             {/* Product  Info */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-200">
               {product.modelNo && (
-                <div><span className="font-bold text-cyan-400">MODEL NO:</span> {product.modelNo}</div>
+                <div>
+                  <span className="font-bold text-cyan-400">MODEL NO:</span>{" "}
+                  {product.modelNo}
+                </div>
               )}
               {product.brand && (
-                <div><span className="font-bold text-cyan-400">BRAND:</span> {product.brand}</div>
+                <div>
+                  <span className="font-bold text-cyan-400">BRAND:</span>{" "}
+                  {product.brand}
+                </div>
               )}
               {product.category && (
-                <div><span className="font-bold text-cyan-400">CATEGORY:</span> {product.category}</div>
+                <div>
+                  <span className="font-bold text-cyan-400">CATEGORY:</span>{" "}
+                  {product.category}
+                </div>
               )}
             </div>
 
             {/* Stock + Price */}
             <div className="text-sm font-medium text-yellow-300">
-              {product.stock > 0 ? `IN STOCK: ${product.stock}` : <span className="text-red-500 font-semibold">OUT OF STOCK</span>}
+              {product.stock > 0 ? (
+                `IN STOCK: ${product.stock}`
+              ) : (
+                <span className="text-red-500 font-semibold">OUT OF STOCK</span>
+              )}
             </div>
 
             <div className="text-3xl font-extrabold">
-              Price: <span className="text-lime-400">₹{finalPrice.toLocaleString()}</span>
+              Price:{" "}
+              <span className="text-lime-400">
+                ₹{finalPrice.toLocaleString()}
+              </span>
             </div>
 
-            {/* Quantity */}
             <div className="flex items-center gap-3">
               <label className="font-semibold">Qty:</label>
               <input
-                type="number"
+                type="text"
+                inputMode="numeric"
                 value={selectedQty}
-                min={1}
-                max={product.stock}
-                onChange={(e) => handleQuantityChange(Number(e.target.value))}
-                className="w-20 text-white bg-gray-900 rounded px-3 py-1 border border-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                onChange={(e) => handleQuantityChange(e.target.value)}
+                className="w-24 sm:w-20 text-white bg-gray-900 rounded px-3 py-2 border border-gray-400 shadow-sm
+             focus:outline-none focus:ring-2 focus:ring-cyan-500 text-lg"
               />
             </div>
 
             {/* Discount Slabs */}
             {product.quantityBasedPrices?.length > 0 && (
               <div className="space-y-2">
-                <label className="font-semibold text-sm text-cyan-200">DISCOUNT SLABS:</label>
+                <label className="font-semibold text-sm text-cyan-200">
+                  DISCOUNT SLABS:
+                </label>
                 <div className="flex flex-wrap gap-2">
                   {product.quantityBasedPrices.map((slab, i) => (
                     <button
@@ -201,11 +286,11 @@ const ProductDetail = () => {
                       }}
                       className={`px-4 py-1 border rounded-full text-sm font-medium transition ${
                         activeSlabIndex === i
-                          ? 'bg-cyan-600 text-white shadow-lg'
-                          : 'bg-gray-800 text-gray-200 border-gray-600 hover:bg-cyan-700'
+                          ? "bg-cyan-600 text-white shadow-lg"
+                          : "bg-gray-800 text-gray-200 border-gray-600 hover:bg-cyan-700"
                       }`}
                     >
-                      {slab.minQty} - {slab.maxQty || '∞'} pcs @ ₹{slab.price}
+                      {slab.minQty} - {slab.maxQty || "∞"} pcs @ ₹{slab.price}
                     </button>
                   ))}
                 </div>
@@ -218,7 +303,9 @@ const ProductDetail = () => {
                 onClick={handleAddToCart}
                 disabled={product.stock <= 0}
                 className={`flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition ${
-                  product.stock <= 0 ? 'bg-gray-500 cursor-not-allowed' : 'bg-cyan-600 hover:bg-cyan-700'
+                  product.stock <= 0
+                    ? "bg-gray-500 cursor-not-allowed"
+                    : "bg-cyan-600 hover:bg-cyan-700"
                 } shadow-lg`}
               >
                 <ShoppingCart size={18} /> Add to Cart
@@ -237,11 +324,14 @@ const ProductDetail = () => {
               </button>
             </div>
 
-  
             {product.description && (
               <div className="pt-6 border-t border-gray-700 mt-6">
-                <h2 className="text-lg font-bold text-cyan-300 mb-2 ">PRODUCT DESCRIPTION</h2>
-                <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{product.description}</p>
+                <h2 className="text-lg font-bold text-cyan-300 mb-2 ">
+                  PRODUCT DESCRIPTION
+                </h2>
+                <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">
+                  {product.description}
+                </p>
               </div>
             )}
           </div>
@@ -254,7 +344,11 @@ const ProductDetail = () => {
           className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4"
           onClick={() => setIsZoomOpen(false)}
         >
-          <img src={activeImage} alt="Zoomed" className="max-w-4xl max-h-[90vh] object-contain rounded-lg shadow-xl" />
+          <img
+            src={activeImage}
+            alt="Zoomed"
+            className="max-w-4xl max-h-[90vh] object-contain rounded-lg shadow-xl"
+          />
         </div>
       )}
     </NavLayout>

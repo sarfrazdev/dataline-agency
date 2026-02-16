@@ -16,7 +16,7 @@ const Home = () => {
         <NavLayout>
              <Hero/>
              <ImageSection/>
-            <BrandSection/>
+             <BrandSection/>
             <TopCategoriesSection/>
             <Slider/>
             <Choose/>

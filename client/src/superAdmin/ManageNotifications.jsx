@@ -95,16 +95,16 @@ const handleDelete = async (id) => {
             className="w-full mb-4 p-3 rounded border border-gray-600 bg-[#1e1e1e] text-white"
           />
 
-          <select
+          {/* <select
             value={sentTo}
             onChange={(e) => setSentTo(e.target.value)}
             className="w-full mb-4 p-3 rounded border border-gray-600 bg-[#1e1e1e] text-white"
-          >
-            <option value="all">All Users</option>
+          > */}
+            {/* <option value="all">All Users</option>
             <option value="enduser">End Users</option>
             <option value="reseller">Resellers</option>
-            <option value="distributor">Distributors</option>
-          </select>
+            <option value="distributor">Distributors</option> */}
+          {/* </select> */}
 
           <button
             onClick={handleSend}

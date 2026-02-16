@@ -269,6 +269,151 @@ export const uploadExcelProducts = async (req, res) => {
   }
 };
 
+// export const uploadExcelProducts = async (req, res) => {
+//   try {
+//     if (!req.file) {
+//       return res.status(400).json({ message: 'No file uploaded' });
+//     }
+
+//     const workbook = XLSX.readFile(req.file.path);
+//     const allProducts = [];
+
+//     // 🔹 Read ALL sheets
+//     workbook.SheetNames.forEach(sheetName => {
+//       const sheet = workbook.Sheets[sheetName];
+//       const data = XLSX.utils.sheet_to_json(sheet, {
+//         defval: "",
+//         raw: false,
+//         header: 0,
+//       });
+//       allProducts.push(...data);
+//     });
+
+//     const insertedProducts = [];
+//     const skippedProducts = [];
+
+//     for (const item of allProducts) {
+//       try {
+//         // 🔹 Normalize all keys (trim + lowercase)
+//         const normalized = {};
+//         Object.keys(item).forEach(key => {
+//           normalized[key.trim().toLowerCase()] = item[key];
+//         });
+
+//         // 🔹 Mandatory field check
+//         if (!normalized.name) {
+//           throw new Error("Product name missing");
+//         }
+
+//         // 🔹 Price handling (never undefined)
+//         const enduserPrice = Number(
+//           normalized.enduserprice ||
+//           normalized['end user price'] ||
+//           0
+//         );
+
+//         const resellerPrice = Number(
+//           normalized.resellerprice ||
+//           normalized['reseller price'] ||
+//           0
+//         );
+
+//         const distributorPrice = Number(
+//           normalized.distributorprice ||
+//           normalized['distributor price'] ||
+//           0
+//         );
+
+//         if (!enduserPrice || !resellerPrice || !distributorPrice) {
+//           throw new Error("Invalid price values");
+//         }
+
+//         // 🔹 Stock safe
+//         const stock = Number(normalized.stock || 0);
+//         if (stock < 0) {
+//           throw new Error("Invalid stock");
+//         }
+
+//         // 🔹 Images safe parse
+//         const images = normalized.images
+//           ? String(normalized.images)
+//               .split(',')
+//               .map(i => i.trim())
+//               .filter(Boolean)
+//           : [];
+
+//         // 🔹 Quantity based price (ALL formats supported)
+//         let quantityBasedPrices = [];
+//         if (normalized.quantitybasedprices) {
+//           try {
+//             // JSON format
+//             quantityBasedPrices = JSON.parse(normalized.quantitybasedprices);
+//           } catch {
+//             // Text format → 1-10:450,11-50:430
+//             quantityBasedPrices = String(normalized.quantitybasedprices)
+//               .split(',')
+//               .map(p => {
+//                 const [qty, price] = p.split(':');
+//                 if (!qty || !price) return null;
+//                 const [minQty, maxQty] = qty.split('-').map(Number);
+//                 return {
+//                   minQty,
+//                   maxQty: maxQty || null,
+//                   price: Number(price),
+//                 };
+//               })
+//               .filter(Boolean);
+//           }
+//         }
+
+//         // 🔹 Create product
+//         const newProduct = new Product({
+//           name: normalized.name.trim(),
+//           description: normalized.description || '',
+//           brand: normalized.brand || '',
+//           category: normalized.category || '',
+//           modelNo: normalized.modelno || '',
+//           prices: {
+//             enduser: enduserPrice,
+//             reseller: resellerPrice,
+//             distributor: distributorPrice,
+//           },
+//           gst: Number(normalized.gst) || 0,
+//           stock,
+//           images,
+//           quantityBasedPrices,
+//         });
+
+//         await newProduct.save();
+//         insertedProducts.push(newProduct._id);
+
+//       } catch (productErr) {
+//         skippedProducts.push({
+//           name: item.name || "Unknown",
+//           brand: item.brand || "",
+//           modelNo: item.modelNo || "",
+//           reason: productErr.message,
+//         });
+//       }
+//     }
+
+//     res.status(201).json({
+//       message: 'Excel upload completed safely',
+//       insertedCount: insertedProducts.length,
+//       skippedCount: skippedProducts.length,
+//       skippedProducts,
+//     });
+
+//   } catch (err) {
+//     console.error("Excel Upload Error:", err);
+//     res.status(500).json({
+//       message: 'Failed to upload products from Excel',
+//       error: err.message,
+//     });
+//   }
+// };
+
+
 export const getBrandsByCategory = async (req, res) => {
   try {
     const { category } = req.query;

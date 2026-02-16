@@ -19,13 +19,17 @@ const productSchema = new mongoose.Schema({
 quantityBasedPrices: [
   {
     minQty: { type: Number, required: true },
-    maxQty: Number, // optional
+    maxQty: Number, 
     price: { type: Number, required: true }
   }
 ]
 }, { timestamps: true, 
    collation: { locale: 'en', strength: 2 }
 });
+productSchema.index(
+  { name: 1, brand: 1, modelNo: 1 },
+  { unique: true }
+);
 productSchema.index({ brand: 1 });
 productSchema.index({ category: 1 });
 
