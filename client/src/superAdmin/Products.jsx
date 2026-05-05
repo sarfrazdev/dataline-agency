@@ -244,7 +244,6 @@ useEffect(() => {
           <input placeholder="Price (End User)" type="number" value={formData.prices.enduser} onChange={(e) => setFormData({ ...formData, prices: { ...formData.prices, enduser: e.target.value } })} className="border p-2 rounded" required />
           <input placeholder="Price (Reseller)" type="number" value={formData.prices.reseller} onChange={(e) => setFormData({ ...formData, prices: { ...formData.prices, reseller: e.target.value } })} className="border p-2 rounded" required />
           <input placeholder="Price (Distributor)" type="number" value={formData.prices.distributor} onChange={(e) => setFormData({ ...formData, prices: { ...formData.prices, distributor: e.target.value } })} className="border p-2 rounded" required />
-          {/* <input placeholder="Description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} className="border p-2 rounded col-span-full" required /> */}
           <textarea
             placeholder="Description"
             value={formData.description}
