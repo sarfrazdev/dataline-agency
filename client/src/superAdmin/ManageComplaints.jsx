@@ -79,7 +79,7 @@ const fetchComplaints = async () => {
               {complaint.subject}
             </p>
             <p className="text-gray-800 whitespace-pre-line mt-2">
-              <span className="font-medium text-gray-900">Message:</span>{' '}
+              <span className="font-medium text-gray-900">Requiremennt:</span>{' '}
               {complaint.message}
             </p>
           </div>

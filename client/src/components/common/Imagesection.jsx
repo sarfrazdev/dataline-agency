@@ -1,60 +1,86 @@
-import React from 'react';
+import React from "react";
 
 const categories = [
   {
-    title: 'Surveillance',
+    title: "Surveillance",
     cards: [
-      { img: '/cam1.png' },
-      { img: '/cam2.png' },
-      { img: '/cam3.png' },
-      { img: '/cam4.png' },
+      { img: "/productSectionImg/cam1.jpeg" },
+      { img: "/productSectionImg/cam2.jpeg" },
+      { img: "/productSectionImg/cam3.jpeg" },
+      { img: "/productSectionImg/cam4.jpeg" },
     ],
   },
   {
-    title: 'Wi-Fi',
+    title: "Wi-Fi",
     cards: [
-      { img: '/wifi1.png' },
-      { img: '/wifi2.png' },
-      { img: '/wifi3.png' },
-      { img: '/wifi4.png' },
+      { img: "/productSectionImg/wifi1.jpeg" },
+      { img: "/productSectionImg/wifi2.jpeg" },
+      { img: "/productSectionImg/wifi3.jpeg" },
+      { img: "/productSectionImg/wifi4.jpeg" },
     ],
   },
   {
-    title: 'Desktop & PC',
+    title: "Desktop & PC",
     cards: [
-      { img: '/pc1.png' },
-      { img: '/pc2.png' },
-      { img: '/pc3.png' },
-      { img: '/pc4.png' },
+      { img: "/productSectionImg/desktop1.jpeg" },
+      { img: "/productSectionImg/desktop2.jpeg" },
+      { img: "/productSectionImg/desktop3.jpeg" },
+      { img: "/productSectionImg/desktop4.jpeg" },
     ],
   },
 ];
 
 const ImageSections = () => {
   return (
-    <div className="min-h-screen mt-16 py-10 px-4 md:px-16 text-white">
+    <div className="min-h-screen mt-16 py-12 px-4 md:px-16 ">
       {categories.map((category, idx) => (
         <section key={idx} className="mb-20">
-          <h2 className="text-3xl font-bold text-cyan-300 mb-8 text-center drop-shadow-lg">
+
+          {/* Section Title */}
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-10 text-center">
             {category.title}
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+
+          {/* Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+
             {category.cards.map((card, i) => (
               <div
                 key={i}
-                className="relative group bg-[#1f1f1f] overflow-hidden shadow-lg transition-all duration-300 
-                  hover:shadow-[0_0_20px_#22d3ee] hover:shadow-cyan-500/40"
+                className="group relative bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition duration-500"
               >
-                <img
-                  src={card.img}
-                  alt={card.name || category.title}
-                  className="w-full h-[250px] object-cover group-hover:scale-105 transition-transform duration-500"
-                />
+       
+                <div className="relative overflow-hidden">
+                  <img
+                    src={card.img}
+                    alt={category.title}
+                    className="w-full h-[240px] object-cover transition duration-700 group-hover:scale-110"
+                  />
 
-                {/* Bottom Glow Border */}
-                <div className="absolute bottom-0 left-0 h-[7px] w-full bg-gradient-to-r from-cyan-400 to-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  
+                  <div className="absolute inset-0 bg-gradient-to-tr from-white/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-500" />
+                </div>
+
+                <div className="absolute top-4 left-4 bg-white/70 backdrop-blur-lg px-4 py-1 text-xs font-semibold text-gray-800 rounded-full shadow">
+                  {category.title}
+                </div>
+
+                <div className="absolute bottom-0 left-0 w-full">
+                  <div className="bg-white/70 backdrop-blur-xl px-4 py-3 flex justify-between items-center">
+                    <span className="text-sm font-medium text-gray-800">
+                      {category.title}
+                    </span>
+
+                
+                    <span className="w-2 h-2 bg-blue-500 rounded-full group-hover:scale-150 transition" />
+                  </div>
+                </div>
+
+               
+                <div className="absolute inset-0 rounded-3xl border border-transparent group-hover:border-blue-200 transition duration-300" />
               </div>
             ))}
+
           </div>
         </section>
       ))}
@@ -62,4 +88,4 @@ const ImageSections = () => {
   );
 };
 
-export default ImageSections;
+export default ImageSections; 

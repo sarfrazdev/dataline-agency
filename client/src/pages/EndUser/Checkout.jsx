@@ -110,107 +110,183 @@ const CheckoutPage = () => {
   };
 
   return (
-    <NavLayout>
-      <div className="container mx-auto max-w-7xl p-6 text-white">
-        <h1 className="text-4xl font-extrabold mb-10 text-center text-cyan-400 drop-shadow-lg">🧾 Checkout</h1>
+ 
+  <NavLayout>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-cyan-50 px-4 py-10">
+      <div className="max-w-7xl mx-auto">
+
+        {/* Heading */}
+        <h1 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-teal-500 to-cyan-500 bg-clip-text text-transparent">
+          🧾 Checkout
+        </h1>
+
         {loading ? (
-          <div className="flex justify-center items-center h-40">
-            <span className="border-4 border-cyan-400 border-t-transparent rounded-full w-10 h-10 animate-spin"></span>
-            <span className="ml-4 text-cyan-300">Loading cart...</span>
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin h-12 w-12 border-2 border-teal-500 border-t-transparent rounded-full"></div>
+            <span className="ml-4 text-gray-500">Loading cart...</span>
           </div>
         ) : cart.items.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-40">
-            <p className="text-gray-400 text-lg">Your cart is empty.</p>
+          <div className="text-center py-20 text-gray-500 text-lg">
+            Your cart is empty.
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-           <div className="bg-gradient-to-br from-[#1a1a1d] to-[#101014] p-6 rounded-lg shadow-xl">
-              <h2 className="text-2xl font-bold mb-4 text-cyan-300">Shipping Info</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+            {/* LEFT: FORM */}
+            <div className="bg-white rounded-2xl shadow-lg p-8">
+              <h2 className="text-2xl font-semibold mb-6 text-gray-800 border-l-4 border-teal-500 pl-3">
+                Shipping Information
+              </h2>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input name="fullName" value={shippingInfo.fullName} onChange={handleChange} placeholder="Full Name" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
-                <input name="phone" value={shippingInfo.phone} onChange={handleChange} placeholder="Phone Number" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
-                <input name="address" value={shippingInfo.address} onChange={handleChange} placeholder="Address" className="input col-span-full h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
-                <input name="city" value={shippingInfo.city} onChange={handleChange} placeholder="City" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
-                <input name="state" value={shippingInfo.state} onChange={handleChange} placeholder="State" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
-                <input name="pincode" value={shippingInfo.pincode} onChange={handleChange} placeholder="Pincode" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
+                {[
+                  { name: "fullName", placeholder: "Full Name" },
+                  { name: "phone", placeholder: "Phone Number" },
+                  { name: "address", placeholder: "Address", full: true },
+                  { name: "city", placeholder: "City" },
+                  { name: "state", placeholder: "State" },
+                  { name: "pincode", placeholder: "Pincode" }
+                ].map((field) => (
+                  <input
+                    key={field.name}
+                    name={field.name}
+                    value={shippingInfo[field.name]}
+                    onChange={handleChange}
+                    placeholder={field.placeholder}
+                    className={`${
+                      field.full ? "col-span-full" : ""
+                    } px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-teal-500 outline-none`}
+                  />
+                ))}
               </div>
 
-             {['reseller', 'distributor'].includes(userRole) && (
-                <div className="mt-6 space-y-4">
-                  <h3 className="text-lg font-semibold text-cyan-200">Business & Delivery</h3>
+              {/* Business Section */}
+              {['reseller', 'distributor'].includes(userRole) && (
+                <div className="mt-8 space-y-5">
+                  <h3 className="text-lg font-semibold text-gray-700">
+                    Business & Delivery
+                  </h3>
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input name="businessName" value={shippingInfo.businessName} onChange={handleChange} placeholder="Business Name" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
-                    <input name="panNumber" value={shippingInfo.panNumber} onChange={handleChange} placeholder="PAN Number" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
-                    <input name="companyAddress" value={shippingInfo.companyAddress} onChange={handleChange} placeholder="Company Address" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
+                    <input name="businessName" value={shippingInfo.businessName} onChange={handleChange} placeholder="Business Name" className="inputField" />
+                    <input name="panNumber" value={shippingInfo.panNumber} onChange={handleChange} placeholder="PAN Number" className="inputField" />
+                    <input name="companyAddress" value={shippingInfo.companyAddress} onChange={handleChange} placeholder="Company Address" className="inputField col-span-full" />
                   </div>
-                  <div className="flex gap-4">
+
+                  {/* Delivery Method */}
+                  <div className="flex flex-wrap gap-4 text-gray-700">
                     {['courier', 'bus', 'transport'].map((method) => (
-                      <label key={method} className="text-white">
-                        <input type="radio" name="deliveryMethod" value={method} checked={shippingInfo.deliveryMethod === method} onChange={handleChange} className="mr-2" />
-                        {method.charAt(0).toUpperCase() + method.slice(1)}
+                      <label key={method} className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="deliveryMethod"
+                          value={method}
+                          checked={shippingInfo.deliveryMethod === method}
+                          onChange={handleChange}
+                        />
+                        {method}
                       </label>
                     ))}
                   </div>
+
+                  {/* Courier */}
                   {shippingInfo.deliveryMethod === 'courier' && (
                     <div className="flex flex-wrap gap-4">
-                      {['DTDC', 'FedEx', 'India Post', 'Ecom Express', 'Other'].map((option) => (
-                        <label key={option} className="text-white">
-                          <input type="radio" name="courierOption" value={option} checked={shippingInfo.courierOption === option} onChange={handleChange} className="mr-2" />
-                          {option}
+                      {['DTDC', 'FedEx', 'India Post', 'Ecom Express', 'Other'].map((opt) => (
+                        <label key={opt} className="flex items-center gap-2 text-gray-700">
+                          <input
+                            type="radio"
+                            name="courierOption"
+                            value={opt}
+                            checked={shippingInfo.courierOption === opt}
+                            onChange={handleChange}
+                          />
+                          {opt}
                         </label>
                       ))}
+
                       {shippingInfo.courierOption === 'Other' && (
-                        <input name="customCourier" value={shippingInfo.customCourier} onChange={handleChange} placeholder="Courier Name" className="input mt-2 w-full" />
+                        <input
+                          name="customCourier"
+                          value={shippingInfo.customCourier}
+                          onChange={handleChange}
+                          placeholder="Courier Name"
+                          className="inputField w-full"
+                        />
                       )}
                     </div>
                   )}
+
+                  {/* Transport */}
                   {(shippingInfo.deliveryMethod === 'bus' || shippingInfo.deliveryMethod === 'transport') && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <input name="busName" value={shippingInfo.busName} onChange={handleChange} placeholder="Bus/Transport Name" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
-                      <input name="busNumber" value={shippingInfo.busNumber} onChange={handleChange} placeholder="Bus Number" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
-                      <input name="contactNumber" value={shippingInfo.contactNumber} onChange={handleChange} placeholder="Transport Contact" className="input h-[40px] text-center font-xl shadow-amber-50 border-2 bg-black  rounded-2xl" />
+                      <input name="busName" value={shippingInfo.busName} onChange={handleChange} placeholder="Transport Name" className="inputField" />
+                      <input name="busNumber" value={shippingInfo.busNumber} onChange={handleChange} placeholder="Number" className="inputField" />
+                      <input name="contactNumber" value={shippingInfo.contactNumber} onChange={handleChange} placeholder="Contact" className="inputField" />
                     </div>
                   )}
                 </div>
               )}
             </div>
-            <div className="bg-[#151518] p-6 rounded-lg shadow-xl flex flex-col justify-between">
-              <h2 className="text-xl font-bold text-cyan-300 mb-4">Order Summary</h2>
-              <div className="space-y-3 max-h-64 overflow-y-auto pr-2">
+
+            {/* RIGHT: SUMMARY */}
+            <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col">
+              <h2 className="text-xl font-semibold text-gray-800 mb-6 border-l-4 border-teal-500 pl-3">
+                Order Summary
+              </h2>
+
+              <div className="space-y-4 max-h-72 overflow-y-auto pr-2">
                 {cart.items.map(item => (
-                  <div key={item._id} className="flex justify-between bg-[#23232a] rounded px-3 py-2 items-center">
-                    <div className="flex flex-col max-w-[140px]">
-                      <span className="truncate">{item.product?.name || 'Unknown Product'}</span>
-                      <span className="text-xs text-gray-400">x {item.quantity || 1}</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="font-semibold text-cyan-400">
-                        ₹ {(item.price && item.quantity) ? (item.price * item.quantity).toFixed(2) : '0.00'}
+                  <div key={item._id} className="flex justify-between items-center bg-gray-50 rounded-lg px-4 py-3">
+                    <div>
+                      <p className="text-gray-800 font-medium truncate max-w-[180px]">
+                        {item.product?.name || 'Product'}
+                      </p>
+                      <span className="text-xs text-gray-500">
+                        Qty: {item.quantity || 1}
                       </span>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <span className="text-teal-600 font-semibold">
+                        ₹ {(item.price * item.quantity).toFixed(2)}
+                      </span>
+
                       <button
                         onClick={() => handleRemoveItem(item._id)}
-                        className="text-red-400 hover:text-red-600 text-lg font-bold"
-                        title="Remove item"
-                      >✖</button>
+                        className="text-red-500 hover:text-red-600"
+                      >
+                        ✖
+                      </button>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="border-t border-gray-700 my-4"></div>
-              <div className="flex justify-between text-lg font-semibold">
+
+              {/* Total */}
+              <div className="border-t mt-6 pt-4 flex justify-between text-lg font-semibold">
                 <span>Total</span>
-                <span className="text-cyan-400">₹ {cart.totalAmount ? cart.totalAmount.toFixed(2) : '0.00'}</span>
+                <span className="text-teal-600">
+                  ₹ {cart.totalAmount?.toFixed(2) || '0.00'}
+                </span>
               </div>
+
+              {/* CTA */}
               <button
                 onClick={handleContinueToPayment}
-                className="mt-6 bg-cyan-600 hover:bg-cyan-500 text-white py-3 rounded-lg text-lg font-semibold transition"
-              >Continue to Payment</button>
+                className="mt-6 w-full py-3 rounded-lg bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold shadow hover:scale-[1.02] transition"
+              >
+                Continue to Payment →
+              </button>
             </div>
+
           </div>
         )}
       </div>
-    </NavLayout>
-  );
+    </div>
+  </NavLayout>
+);
+  
 };
 
 export default CheckoutPage;

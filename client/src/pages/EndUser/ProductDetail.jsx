@@ -11,9 +11,9 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState("");
-  const [isZoomOpen, setIsZoomOpen] = useState(false);
   const [selectedQty, setSelectedQty] = useState("");
   const [activeSlabIndex, setActiveSlabIndex] = useState(null);
+  const [zoomStyle, setZoomStyle] = useState({});
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -21,7 +21,7 @@ const ProductDetail = () => {
     const fetchProduct = async () => {
       try {
         const { data } = await axiosInstance.get(
-          `${BASE_URL}${API_PATH.PRODUCTS.GET_ONE(id)}`,
+          `${BASE_URL}${API_PATH.PRODUCTS.GET_ONE(id)}`
         );
         setProduct(data);
         setActiveImage(data.images?.[0] || "");
@@ -36,15 +36,61 @@ const ProductDetail = () => {
     fetchProduct();
   }, [id]);
 
+  // ===== ZOOM HANDLERS =====
+
+  // Desktop
+  const handleMouseMove = (e) => {
+    const { left, top, width, height } =
+      e.currentTarget.getBoundingClientRect();
+
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+
+    setZoomStyle({
+      transformOrigin: `${x}% ${y}%`,
+      transform: "scale(2)",
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setZoomStyle({
+      transformOrigin: "center",
+      transform: "scale(1)",
+    });
+  };
+
+  // Mobile
+  const handleTouchMove = (e) => {
+    const touch = e.touches[0];
+
+    const { left, top, width, height } =
+      e.currentTarget.getBoundingClientRect();
+
+    const x = ((touch.clientX - left) / width) * 100;
+    const y = ((touch.clientY - top) / height) * 100;
+
+    setZoomStyle({
+      transformOrigin: `${x}% ${y}%`,
+      transform: "scale(2)",
+    });
+  };
+
+  const handleTouchEnd = () => {
+    setZoomStyle({
+      transformOrigin: "center",
+      transform: "scale(1)",
+    });
+  };
+
+  // ===== LOGIC =====
+
   const handleQuantityChange = (value) => {
-    // Allow empty input (for backspace)
     if (value === "") {
       setSelectedQty("");
       setActiveSlabIndex(null);
       return;
     }
 
-    // Allow only numbers
     if (!/^\d+$/.test(value)) return;
 
     let qty = Number(value);
@@ -70,79 +116,40 @@ const ProductDetail = () => {
     const slabs = productData.quantityBasedPrices || [];
     const index = slabs.findIndex(
       (slab) =>
-        quantity >= slab.minQty && (!slab.maxQty || quantity <= slab.maxQty),
+        quantity >= slab.minQty &&
+        (!slab.maxQty || quantity <= slab.maxQty)
     );
     setActiveSlabIndex(index !== -1 ? index : null);
   };
 
-  // const handleAddToCart = async () => {
-  //   if (product.stock <= 0) return toast.error("Out of stock");
-  //   if (selectedQty > product.stock)
-  //     return toast.error("Quantity exceeds available stock");
-
-  //    if (!selectedQty || Number(selectedQty) < 1) {
-  //   return toast.error("Please enter quantity");
-  // }
-
-  // if (Number(selectedQty) > product.stock) {
-  //   return toast.error("Quantity exceeds available stock");
-  // }
-  //   try {
-  //     const response = await axiosInstance.post(
-  //       `${BASE_URL}${API_PATH.CART.ADD}`,
-  //       {
-  //         productId: product._id,
-  //         quantity: selectedQty,
-  //       },
-  //     );
-  //     if (response.status === 200) toast.success("Added to cart");
-  //   } catch (err) {
-  //     toast.error(err.response?.data?.message || "Failed to add to cart");
-  //   }
-  // };
-
-
   const handleAddToCart = async () => {
-  if (product.stock <= 0) {
-    return toast.error("Out of stock");
-  }
+    if (product.stock <= 0) return toast.error("Out of stock");
+    if (!selectedQty || Number(selectedQty) < 1)
+      return toast.error("Enter quantity");
 
-  if (!selectedQty || Number(selectedQty) < 1) {
-    return toast.error("Please enter quantity");
-  }
-
-  if (Number(selectedQty) > product.stock) {
-    return toast.error("Quantity exceeds available stock");
-  }
-
-  try {
-    const response = await axiosInstance.post(
-      `${BASE_URL}${API_PATH.CART.ADD}`,
-      {
-        productId: product._id,
-        quantity: Number(selectedQty),
-      }
-    );
-
-    if (response.status === 200) {
-      toast.success("Added to cart");
+    try {
+      const res = await axiosInstance.post(
+        `${BASE_URL}${API_PATH.CART.ADD}`,
+        {
+          productId: product._id,
+          quantity: Number(selectedQty),
+        }
+      );
+      if (res.status === 200) toast.success("Added to cart");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to add");
     }
-  } catch (err) {
-    toast.error(err.response?.data?.message || "Failed to add to cart");
-  }
-};
+  };
 
   const handleAddToWishlist = async () => {
     try {
-      const response = await axiosInstance.post(
+      const res = await axiosInstance.post(
         `${BASE_URL}${API_PATH.WISHLIST.ADD}`,
-        {
-          productId: product._id,
-        },
+        { productId: product._id }
       );
-      if (response.status === 200) toast.success("Added to wishlist");
+      if (res.status === 200) toast.success("Added to wishlist");
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to add to wishlist");
+      toast.error(err.response?.data?.message || "Failed");
     }
   };
 
@@ -151,206 +158,101 @@ const ProductDetail = () => {
       try {
         await navigator.share({
           title: product.name,
-          text: `Check out this product: ${product.name}`,
           url: window.location.href,
         });
       } catch {
-        toast.error("Sharing cancelled or failed");
+        toast.error("Share failed");
       }
     } else {
-      try {
-        const dummyElement = document.createElement("textarea");
-        document.body.appendChild(dummyElement);
-        dummyElement.value = window.location.href;
-        dummyElement.select();
-        document.execCommand("copy");
-        document.body.removeChild(dummyElement);
-        toast.success("Link copied to clipboard");
-      } catch {
-        toast.error("Failed to copy link");
-      }
+      navigator.clipboard.writeText(window.location.href);
+      toast.success("Link copied");
     }
   };
 
   const basePrice = getBasePrice();
-  const selectedSlab = product?.quantityBasedPrices?.[activeSlabIndex] || null;
+  const selectedSlab = product?.quantityBasedPrices?.[activeSlabIndex];
   const finalPrice = selectedSlab?.price || basePrice;
 
-  if (loading)
-    return <div className="text-center mt-10 text-white">Loading...</div>;
-  if (!product)
-    return (
-      <div className="text-center mt-10 text-red-500">Product not found.</div>
-    );
+  if (loading) return <div className="text-center mt-10">Loading...</div>;
+  if (!product) return <div>Product not found</div>;
 
   return (
     <NavLayout>
-      <div className="container mx-auto px-4 py-12 text-white">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-          {/* Product Images */}
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto p-6 grid md:grid-cols-2 gap-10">
+
+          {/* LEFT: IMAGE */}
           <div>
             <div
-              className="cursor-zoom-in border border-gray-700 bg-white rounded-xl overflow-hidden md:w-[90%] w-full h-80 shadow-xl mb-4"
-              onClick={() => setIsZoomOpen(true)}
+              className="relative h-96 bg-white rounded-xl overflow-hidden border"
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
             >
               <img
                 src={activeImage}
-                alt="Product"
-                className="w-full h-full object-contain"
+                alt=""
+                className="w-full h-full object-contain transition-transform duration-300"
+                style={{
+                  ...zoomStyle,
+                  transform: zoomStyle.transform || "scale(1)",
+                }}
               />
             </div>
-            <div className="flex gap-3">
-              {product.images?.slice(0, 4).map((img, i) => (
+
+            {/* Thumbnails */}
+            <div className="flex gap-3 mt-4 flex-wrap">
+              {product.images?.map((img, i) => (
                 <img
                   key={i}
                   src={img}
-                  alt={`Thumb-${i}`}
                   onClick={() => setActiveImage(img)}
-                  className={`h-20 w-20 object-cover rounded-md cursor-pointer border-2 transition-all duration-300 shadow-md ${
-                    activeImage === img
-                      ? "border-cyan-500 scale-110"
-                      : "border-gray-600"
+                  className={`h-20 w-20 object-cover cursor-pointer border rounded ${
+                    activeImage === img ? "border-cyan-500" : ""
                   }`}
                 />
               ))}
             </div>
           </div>
 
-          {/* Product Info */}
-          <div className="space-y-6">
-            <h1 className="text-4xl font-bold text-cyan-300">{product.name}</h1>
+          {/* RIGHT: INFO */}
+          <div className="bg-white p-6 rounded-xl shadow space-y-4">
+            <h1 className="text-2xl font-bold">{product.name}</h1>
 
-            {/* Product  Info */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-200">
-              {product.modelNo && (
-                <div>
-                  <span className="font-bold text-cyan-400">MODEL NO:</span>{" "}
-                  {product.modelNo}
-                </div>
-              )}
-              {product.brand && (
-                <div>
-                  <span className="font-bold text-cyan-400">BRAND:</span>{" "}
-                  {product.brand}
-                </div>
-              )}
-              {product.category && (
-                <div>
-                  <span className="font-bold text-cyan-400">CATEGORY:</span>{" "}
-                  {product.category}
-                </div>
-              )}
-            </div>
+            <p className="text-cyan-600 text-2xl font-bold">
+              ₹{finalPrice}
+            </p>
 
-            {/* Stock + Price */}
-            <div className="text-sm font-medium text-yellow-300">
-              {product.stock > 0 ? (
-                `IN STOCK: ${product.stock}`
-              ) : (
-                <span className="text-red-500 font-semibold">OUT OF STOCK</span>
-              )}
-            </div>
+            <input
+              type="number"
+              value={selectedQty}
+              onChange={(e) => handleQuantityChange(e.target.value)}
+              placeholder="qty"
+              className="border p-2 w-24 text-xl font-medum "
+            />
 
-            <div className="text-3xl font-extrabold">
-              Price:{" "}
-              <span className="text-lime-400">
-                ₹{finalPrice.toLocaleString()}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <label className="font-semibold">Qty:</label>
-              <input
-                type="text"
-                inputMode="numeric"
-                value={selectedQty}
-                onChange={(e) => handleQuantityChange(e.target.value)}
-                className="w-24 sm:w-20 text-white bg-gray-900 rounded px-3 py-2 border border-gray-400 shadow-sm
-             focus:outline-none focus:ring-2 focus:ring-cyan-500 text-lg"
-              />
-            </div>
-
-            {/* Discount Slabs */}
-            {product.quantityBasedPrices?.length > 0 && (
-              <div className="space-y-2">
-                <label className="font-semibold text-sm text-cyan-200">
-                  DISCOUNT SLABS:
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  {product.quantityBasedPrices.map((slab, i) => (
-                    <button
-                      key={i}
-                      onClick={() => {
-                        setActiveSlabIndex(i);
-                        setSelectedQty(slab.minQty);
-                      }}
-                      className={`px-4 py-1 border rounded-full text-sm font-medium transition ${
-                        activeSlabIndex === i
-                          ? "bg-cyan-600 text-white shadow-lg"
-                          : "bg-gray-800 text-gray-200 border-gray-600 hover:bg-cyan-700"
-                      }`}
-                    >
-                      {slab.minQty} - {slab.maxQty || "∞"} pcs @ ₹{slab.price}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mt-6">
+            <div className="flex gap-3 items-center">
               <button
                 onClick={handleAddToCart}
-                disabled={product.stock <= 0}
-                className={`flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition ${
-                  product.stock <= 0
-                    ? "bg-gray-500 cursor-not-allowed"
-                    : "bg-cyan-600 hover:bg-cyan-700"
-                } shadow-lg`}
+                className="bg-cyan-500 text-white px-4 py-2 rounded flex items-center gap-2"
               >
-                <ShoppingCart size={18} /> Add to Cart
+                <ShoppingCart size={16} /> Add to cart
               </button>
-              <button
-                onClick={handleAddToWishlist}
-                className="flex items-center justify-center gap-2 px-6 py-3 bg-cyan-700 hover:bg-cyan-800 rounded-lg font-semibold transition shadow-lg"
-              >
-                <Heart size={18} /> Wishlist
+
+              <button onClick={handleAddToWishlist}>
+                <Heart />
               </button>
-              <button
-                onClick={handleShare}
-                className="flex items-center justify-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg font-semibold transition shadow-lg"
-              >
-                <Share2 size={18} /> Share
+
+              <button onClick={handleShare}>
+                <Share2 />
               </button>
             </div>
 
-            {product.description && (
-              <div className="pt-6 border-t border-gray-700 mt-6">
-                <h2 className="text-lg font-bold text-cyan-300 mb-2 ">
-                  PRODUCT DESCRIPTION
-                </h2>
-                <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">
-                  {product.description}
-                </p>
-              </div>
-            )}
+            <p>{product.description}</p>
           </div>
         </div>
       </div>
-
-      {/* Zoomed Image Modal */}
-      {isZoomOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4"
-          onClick={() => setIsZoomOpen(false)}
-        >
-          <img
-            src={activeImage}
-            alt="Zoomed"
-            className="max-w-4xl max-h-[90vh] object-contain rounded-lg shadow-xl"
-          />
-        </div>
-      )}
     </NavLayout>
   );
 };

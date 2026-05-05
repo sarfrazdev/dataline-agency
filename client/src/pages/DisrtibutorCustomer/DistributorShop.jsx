@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const fallbackBrands = [
-   'Prodot', 'HP', 'Dell', 'Lenovo', 'ASUS', 'Canon', 'Brother', 'Epson', 'TVSE', 'Samsung',
+  'Prodot', 'HP', 'Dell', 'Lenovo', 'ASUS', 'Canon', 'Brother', 'Epson', 'TVSE', 'Samsung',
   'LG', 'TCL', 'Mantra', 'Morpho', 'Startek', 'Ricoh', 'Xerox', 'Pantum',
   'Logitech', 'Seagate', 'Toshiba', 'WD', 'SanDisk', 'Antivirus', 'Accounting Software',
   'Printer Adjustment Software', 'CP Plus', 'Hikvision', 'Sony', 'Nikon', 'Zebronics',
@@ -25,23 +25,33 @@ fallbackBrands.push(
 );
 
 
+
 const fallbackCategories = [
   'Laptop', 'Desktop', 'Printer', 'TV', 'Monitor', 'Biometrics', 'Cartridge', 'Ink Bottle',
   'Keyboard', 'Mouse', 'Internal HDD', 'External HDD', 'Pen Drive', 'Software', 'CCTV Camera',
-  'Router', 'DVR','NVR', 'POE Switch', 'Tablets', 'Refurbished', 'Accessories', 'Networking',
-  'Surveillance', 'Scanner'
-];
-fallbackCategories.push(
+  'Router', 'DVR', 'NVR', 'POE Switch', 'Tablets', 'Refurbished', 'Accessories', 'Networking',
+  'Surveillance', 'Scanner',
   'SSD', 'Motherboard', 'UPS', 'SMPS', 'Cabinet', 'Laminator', 'Projector',
   'Toner Cartridge', 'Hub', 'Headphones', 'USB Hub', 'Ethernet Switch',
   'Laser Toner Powder', 'Photo Paper', 'Keyboard & Mouse Combo',
   'Web Camera', 'Barcode Scanner', 'Power Strip', 'CPU Fan', 'Mouse Pad',
   'RJ45 Splitter', 'Cleaning Kit', 'SSD Casing', 'Online UPS',
   'Cat 6 Cable', 'Rack', 'Media Converter', 'HDMI Extender',
-  'HDMI Splitter', 'Power Adapter', '3 +1 Cable'
-);
+  'HDMI Splitter', 'Power Adapter', '3 +1 Cable',
+  "WiFi Adapter", "Cooling Pad", "UPS Battery", "Speaker",
+  "Zero Client", "Graphics Card", "Gaming Cabinet",
+  "Laptop Stand", "CCTV SMPS", "RAM", "Processor",
+  "WiFi Camera", "CCTV Connector", "Adapter",
+  "HDMI Cable", "Junction Box", "Gaming Chair",
+  "4G Camera", "Barebone", "Micro SD Card",
+  "Power Cable", "VGA Cable", "CAT6 Patch Cord",
+  "Laptop Accessories", "Desktop Switch", "Splitter",
+  "Wall Mount", "Printer Cable", "Laptop Adapter",
+  "Earbuds", "DVD Writer", "Blower", "Networking Tools",
+  "DMP Refills", "Dot Matrix Ribbon", "Surge Protector", "OPC Drum"
+];
 
-const itemsPerPage = 51;
+const itemsPerPage = 52;
 
 const DistributorShop = () => {
   const [products, setProducts] = useState([]);
@@ -124,17 +134,17 @@ const DistributorShop = () => {
 
   const filteredProducts = products
 
-   .filter((p) => {
-  const q = searchQuery.toLowerCase();
-  return (
-    p?.name?.toLowerCase().includes(q) ||
-    p?.brand?.toLowerCase().includes(q) ||
-    p?.category?.toLowerCase().includes(q) ||
-    p?.modelNo?.toLowerCase().includes(q)
-  );
-})
+    .filter((p) => {
+      const q = searchQuery.toLowerCase();
+      return (
+        p?.name?.toLowerCase().includes(q) ||
+        p?.brand?.toLowerCase().includes(q) ||
+        p?.category?.toLowerCase().includes(q) ||
+        p?.modelNo?.toLowerCase().includes(q)
+      );
+    })
 
- 
+
     .sort((a, b) => {
       const aPrice = a.prices?.[role] || 0;
       const bPrice = b.prices?.[role] || 0;
@@ -152,6 +162,20 @@ const DistributorShop = () => {
     setCurrentPage(1);
     navigate({ search: '' });
   };
+  useEffect(() => {
+    const savedPage = sessionStorage.getItem("currentPage");
+    const savedScroll = sessionStorage.getItem("scrollPosition");
+
+    if (savedPage) {
+      setCurrentPage(Number(savedPage));
+    }
+
+    if (savedScroll) {
+      setTimeout(() => {
+        window.scrollTo(0, parseInt(savedScroll));
+      }, 100);
+    }
+  }, []);
 
   const handleAddToWishlist = async (productId) => {
     try {
@@ -181,109 +205,182 @@ const DistributorShop = () => {
 
   return (
     <NavLayout>
-      <div className="bg-[#2a2a2a] min-h-screen text-white">
-        <div className="container mx-auto py-8 px-4 text-white">
-          <h1 className="text-3xl font-bold text-center mb-8">Shop Our IT Accessories</h1>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-cyan-50 text-gray-800">
 
-          {/* Filters */}
-          <div className="flex flex-col md:flex-row gap-4 mb-8">
-            <select value={selectedCategory} onChange={handleCategoryChange} className="w-full md:w-1/3 p-2 rounded bg-gray-800 text-white">
-              <option value="">All Categories</option>
-              {fallbackCategories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-            </select>
+        <div className="max-w-7xl mx-auto px-4 py-10">
 
-            <select value={selectedBrand} onChange={handleBrandChange} className="w-full md:w-1/3 p-2 rounded bg-gray-800 text-white">
-              <option value="">All Brands</option>
-              {fallbackBrands.map(brand => <option key={brand} value={brand}>{brand}</option>)}
-            </select>
+          {/* Title */}
+          <h1 className="text-4xl font-bold text-center mb-10 bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
+            Shop Our IT Accessories
+          </h1>
 
-            <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} className="w-full md:w-1/3 p-2 rounded bg-gray-800 text-white">
-              <option value="lowToHigh">Price: Low to High</option>
-              <option value="highToLow">Price: High to Low</option>
-            </select>
-          </div>
+          {/* Sticky Filter Bar */}
+          <div className="sticky top-16 z-10 bg-white/80 backdrop-blur-xl border border-gray-200 rounded-2xl p-4 mb-10 shadow-md">
 
-          {/* Search */}
-          <div className="mb-6 flex justify-center">
-            <input
-              value={searchQuery}
-              onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-              placeholder="Search products..."
-              className="w-full md:w-1/2 p-2 rounded border bg-gray-800 text-white placeholder-gray-400"
-            />
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+              <select
+                value={selectedCategory}
+                onChange={handleCategoryChange}
+                className="px-4 py-2 rounded-lg bg-white border border-gray-200 focus:ring-2 focus:ring-cyan-400 outline-none"
+              >
+                <option value="">All Categories</option>
+                {[...new Set(fallbackCategories)].map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+
+              <select
+                value={selectedBrand}
+                onChange={handleBrandChange}
+                className="px-4 py-2 rounded-lg bg-white border border-gray-200 focus:ring-2 focus:ring-cyan-400 outline-none"
+              >
+                <option value="">All Brands</option>
+                {[...new Set(fallbackBrands)].map(brand => (
+                  <option key={brand} value={brand}>{brand}</option>
+                ))}
+              </select>
+
+              <select
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+                className="px-4 py-2 rounded-lg bg-white border border-gray-200 focus:ring-2 focus:ring-cyan-400 outline-none"
+              >
+                <option value="lowToHigh">Low → High</option>
+                <option value="highToLow">High → Low</option>
+              </select>
+
+              <button
+                onClick={resetFilters}
+                className="bg-red-500 hover:bg-red-600 text-white rounded-lg px-4 py-2 transition"
+              >
+                Reset
+              </button>
+            </div>
+
+            {/* Search */}
+            <div className="mt-4">
+              <input
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setCurrentPage(1);
+                }}
+                placeholder="Search products..."
+                className="w-full px-5 py-3 rounded-xl bg-white border border-gray-200 shadow-sm focus:ring-2 focus:ring-cyan-400 outline-none placeholder-gray-400"
+              />
+            </div>
           </div>
 
           {/* Product Grid */}
-        
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {displayedProducts.map(product => (
-                    
-                      <div
-                        key={product._id}
-                        className="bg-gray-900 text-white rounded-2xl shadow-lg p-4 transition-transform transform hover:scale-[1.02] hover:shadow-2xl"
-                      >
-            <div className="w-full h-64 flex items-center justify-center bg-white rounded-xl mb-4 cursor-pointer">
-              <img
-                src={product.images?.[0] || "/fallback.jpg"}
-                alt={product.name}
-                className="max-h-full max-w-full object-contain"
-                onClick={() => navigate(`/product/${product._id}`)}
-              />
-              {product.stock === 0 && (
-                <span className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded">
-                  Out of Stock
-                </span>
-              )}
-            </div>
-          
-            <div className="space-y-1">
-              <h2 className="text-lg font-semibold text-white">{product.name}</h2>
-              <p className="text-sm text-gray-400">Brand: <span className="text-gray-200">{product.brand || 'N/A'}</span></p>
-              <p className="text-sm text-gray-400">Model: <span className="text-gray-200">{product. modelNo || 'N/A'}</span></p>
-            </div>
-          
-            <div className="flex justify-between items-center mt-4">
-              <span className="font-bold text-blue-400 text-lg">₹{product.prices?.[role] || 'N/A'}</span>
-              <div className="flex space-x-2">
-                <button onClick={() => handleAddToWishlist(product._id)} className="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition cursor-pointer">
-                  <Heart className={`w-4 h-4 ${wishlist.includes(product._id) ? 'fill-red-500 text-red-500' : 'text-red-400'}`} />
-                </button>
-                <button
-                  onClick={() => handleAddToCart(product._id)}
-                  disabled={product.stock === 0}
-                  className={`p-2 rounded-full ${
-                    product.stock === 0
-                      ? 'bg-gray-500 cursor-not-allowed'
-                      : 'bg-blue-600 hover:bg-blue-700 text-white'
-                  } transition`}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {displayedProducts.map(product => (
+              <div
+                key={product._id}
+                className="group bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+              >
+
+                {/* Image */}
+                <div
+                  className="relative h-56 bg-gray-100 flex items-center justify-center cursor-pointer overflow-hidden"
+                  // onClick={() => navigate(`/product/${product._id}`)}
+                  onClick={() => {
+                    sessionStorage.setItem("scrollPosition", window.scrollY);
+                    sessionStorage.setItem("currentPage", currentPage);
+                    navigate(`/product/${product._id}`);
+                  }}
                 >
-                  <ShoppingCart className="w-4 h-4 cursor-pointer"  />
-                </button>
-              </div>
-            </div>
-          </div>
-          
-                    ))}
+                  <img
+                    src={product.images?.[0] || "/fallback.jpg"}
+                    alt={product.name}
+                    className="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-110"
+                  />
+
+                  {product.stock === 0 && (
+                    <span className="absolute top-3 right-3 bg-red-500 text-white text-xs px-3 py-1 rounded-full">
+                      Out of Stock
+                    </span>
+                  )}
+                </div>
+
+                {/* Info */}
+                <div className="p-4 space-y-2">
+
+                  <h2 className="text-sm font-semibold text-gray-900 line-clamp-2">
+                    {product.name}
+                  </h2>
+
+                  <p className="text-xs text-gray-500">
+                    {product.brand || 'N/A'} • {product.modelNo || 'N/A'}
+                  </p>
+
+                  {/* Bottom */}
+                  <div className="flex justify-between items-center pt-2">
+
+                    <span className="text-lg font-bold text-cyan-600">
+                      ₹{product.prices?.[role] || 'N/A'}
+                    </span>
+
+                    <div className="flex gap-2">
+
+                      <button
+                        onClick={() => handleAddToWishlist(product._id)}
+                        className="p-2 rounded-full bg-gray-100 hover:bg-red-100 transition"
+                      >
+                        <Heart
+                          className={`w-4 h-4 ${wishlist.includes(product._id)
+                              ? 'fill-red-500 text-red-500'
+                              : 'text-gray-500'
+                            }`}
+                        />
+                      </button>
+
+                      <button
+                        onClick={() => handleAddToCart(product._id)}
+                        disabled={product.stock === 0}
+                        className={`p-2 rounded-full transition ${product.stock === 0
+                            ? 'bg-gray-300 cursor-not-allowed'
+                            : 'bg-cyan-500 hover:bg-cyan-600 text-white shadow-md'
+                          }`}
+                      >
+                        <ShoppingCart className="w-4 h-4" />
+                      </button>
+
+                    </div>
                   </div>
 
+                </div>
+              </div>
+            ))}
+          </div>
+
           {/* Pagination */}
-          <div className="flex justify-center items-center space-x-2 mt-8">
-            <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} className="px-4 py-2 bg-gray-700 rounded disabled:opacity-50">
-              Previous
+          <div className="flex justify-center items-center gap-4 mt-12">
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-5 py-2 rounded-full bg-white border border-gray-200 shadow-sm hover:bg-gray-100 disabled:opacity-40"
+            >
+              Prev
             </button>
-            <span>{currentPage} / {totalPages}</span>
-            <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} className="px-4 py-2 bg-gray-700 rounded disabled:opacity-50">
+
+            <span className="text-gray-600">
+              {currentPage} / {totalPages}
+            </span>
+
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="px-5 py-2 rounded-full bg-white border border-gray-200 shadow-sm hover:bg-gray-100 disabled:opacity-40"
+            >
               Next
             </button>
           </div>
 
-          {/* Reset Button */}
-          <div className="flex justify-center mt-6">
-            <button onClick={resetFilters} className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded">Clear Filters</button>
-          </div>
         </div>
       </div>
     </NavLayout>
+
   );
 };
 

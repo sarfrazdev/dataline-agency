@@ -184,7 +184,39 @@ const handleExcelUpload = async (e) => {
   );
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-  const displayedProducts = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  // const displayedProducts = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  
+ const safePage = Math.min(currentPage, totalPages || 1);
+
+const displayedProducts = filteredProducts.slice(
+  (safePage - 1) * itemsPerPage,
+  safePage * itemsPerPage
+);
+  const getPages = () => {
+  const pages = [];
+  const delta = 2;
+
+  const start = Math.max(2, currentPage - delta);
+  const end = Math.min(totalPages - 1, currentPage + delta);
+
+  pages.push(1);
+
+  if (start > 2) pages.push("...");
+
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
+
+  if (end < totalPages - 1) pages.push("...");
+
+  if (totalPages > 1) pages.push(totalPages);
+
+  return pages;
+};
+
+useEffect(() => {
+  setCurrentPage(1);
+}, [searchQuery, products]);
 
   return (
     <NavLayout>
@@ -212,7 +244,6 @@ const handleExcelUpload = async (e) => {
           <input placeholder="Price (End User)" type="number" value={formData.prices.enduser} onChange={(e) => setFormData({ ...formData, prices: { ...formData.prices, enduser: e.target.value } })} className="border p-2 rounded" required />
           <input placeholder="Price (Reseller)" type="number" value={formData.prices.reseller} onChange={(e) => setFormData({ ...formData, prices: { ...formData.prices, reseller: e.target.value } })} className="border p-2 rounded" required />
           <input placeholder="Price (Distributor)" type="number" value={formData.prices.distributor} onChange={(e) => setFormData({ ...formData, prices: { ...formData.prices, distributor: e.target.value } })} className="border p-2 rounded" required />
-          {/* <input placeholder="Description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} className="border p-2 rounded col-span-full" required /> */}
           <textarea
             placeholder="Description"
             value={formData.description}
@@ -316,17 +347,46 @@ const handleExcelUpload = async (e) => {
           </div>
         )}
 
-        {filteredProducts.length > itemsPerPage && (
-          <div className="flex justify-center items-center space-x-2 mt-4 text-white">
-            <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1} className="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 transition disabled:opacity-50">Previous</button>
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button key={i + 1} onClick={() => setCurrentPage(i + 1)} className={`px-4 py-2 rounded ${currentPage === i + 1 ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'} transition`}>
-                {i + 1}
-              </button>
-            ))}
-            <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages} className="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 transition disabled:opacity-50">Next</button>
-          </div>
-        )}
+{filteredProducts.length > itemsPerPage && (
+  <div className="flex justify-center items-center space-x-2 mt-4 text-white flex-wrap">
+    
+    {/* Previous */}
+    <button
+      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+      disabled={safePage === 1}
+      className="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 transition disabled:opacity-50"
+    >
+      Previous
+    </button>
+
+    {/* Pages */}
+    {getPages().map((page, index) => (
+      <button
+        key={index}
+        onClick={() => typeof page === "number" && setCurrentPage(page)}
+        disabled={page === "..."}
+        className={`px-4 py-2 rounded ${
+          safePage === page
+            ? "bg-blue-600"
+            : "bg-gray-700 hover:bg-gray-600"
+        } ${page === "..." ? "cursor-default opacity-50" : ""}`}
+      >
+        {page}
+      </button>
+    ))}
+
+    {/* Next */}
+    <button
+      onClick={() =>
+        setCurrentPage(prev => Math.min(prev + 1, totalPages))
+      }
+      disabled={safePage === totalPages}
+      className="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 transition disabled:opacity-50"
+    >
+      Next
+    </button>
+  </div>
+)}
       </div>
     </NavLayout>
   );
