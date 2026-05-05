@@ -29,34 +29,54 @@ const TopCategoriesSection = () => {
   };
 
   return (
-    <section className="py-10">
-      <h2 className="text-center text-3xl sm:text-4xl font-bold text-cyan-400 mb-10 tracking-tight">
-        ✨ Shop by Top Categories
-      </h2>
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-4 px-2">
-        {categories.map((category) => (
-          <div
-            key={category.name}
-            onClick={() => handleClick(category.name)}
-            className="group flex flex-col items-center justify-center cursor-pointer transition-transform duration-200 hover:scale-[1.06]"
-          >
-            <div className="relative h-16 w-16 sm:h-20 sm:w-20 rounded-full p-[3px] bg-gradient-to-tr from-white/30 to-cyan-300 group-hover:from-cyan-400 group-hover:to-cyan-200 shadow-md transition-all duration-300">
-              <div className="absolute inset-0 rounded-full animate-pulse scale-105 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 ring-2 ring-cyan-300"></div>
-              <div className="bg-white rounded-full h-full w-full flex items-center justify-center overflow-hidden">
-                <img
-                  src={category.logo}
-                  alt={category.name}
-                  className="h-full w-full object-contain rounded-full"
-                />
-              </div>
-            </div>
-            <span className="mt-2 text-sm sm:text-[15px] font-medium text-white group-hover:text-cyan-300 text-center transition-colors duration-300">
-              {category.name}
-            </span>
+   <section className="py-20 px-4 md:px-16">
+
+ 
+  <h2 className="text-center text-3xl md:text-4xl font-bold text-gray-900 mb-16 tracking-tight">
+    ✨ Shop by Top Categories
+  </h2>
+
+ 
+  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8">
+
+    {categories.map((category, i) => (
+      <div
+        key={i}
+        onClick={() => handleClick(category.name)}
+        className="group relative cursor-pointer"
+      >
+
+     
+        <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-cyan-200/30 to-blue-200/30 blur-lg opacity-0 group-hover:opacity-100 transition duration-500" />
+
+        
+        <div className="relative h-[160px] bg-white rounded-3xl border border-gray-100 flex flex-col items-center justify-center shadow-sm hover:shadow-xl transition duration-300 overflow-hidden group-hover:-translate-y-2">
+
+         
+          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-500" />
+
+         
+          <div className="h-16 w-16 flex items-center justify-center transition duration-300 group-hover:scale-110">
+            <img
+              src={category.logo}
+              alt={category.name}
+              className="h-full w-full object-contain shadow-lg"
+            />
           </div>
-        ))}
+
+         
+          <span className="mt-3 text-sm font-semibold text-gray-800 text-center">
+            {category.name}
+          </span>
+
+          <div className="absolute bottom-0 left-0 h-[3px] w-0 bg-gradient-to-r from-cyan-500 to-blue-500 group-hover:w-full transition-all duration-300" />
+        </div>
+
       </div>
-    </section>
+    ))}
+
+  </div>
+</section>
   );
 };
 

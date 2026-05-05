@@ -59,6 +59,7 @@ const CartPage = () => {
   };
 
   const inStockItems = cart.items.filter((item) => item.product?.stock > 0);
+
   const computedTotal = inStockItems.reduce((sum, item) => {
     const unitPrice = item.price || 0;
     return sum + unitPrice * item.quantity;
@@ -66,23 +67,26 @@ const CartPage = () => {
 
   return (
     <NavLayout>
-      <div className="min-h-screen bg-[#1e1e1e] text-white px-4 py-10">
+      <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-cyan-50 text-gray-800 px-4 py-10">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl font-bold text-center text-teal-400 mb-10">🛒 Your Cart</h1>
+
+          <h1 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-teal-500 to-cyan-500 bg-clip-text text-transparent">
+            🛒 Your Cart
+          </h1>
 
           {loading ? (
             <div className="text-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto"></div>
-              <p className="mt-4 text-gray-400">Loading your cart...</p>
+              <div className="animate-spin h-12 w-12 border-2 border-teal-500 border-t-transparent rounded-full mx-auto"></div>
+              <p className="mt-4 text-gray-500">Loading your cart...</p>
             </div>
           ) : inStockItems.length === 0 ? (
-            <div className="text-center py-16">
-              <p className="text-2xl font-medium text-gray-300 mb-4">
-                Your cart is empty or all items are out of stock 😕
+            <div className="text-center py-20">
+              <p className="text-2xl text-gray-600 mb-6">
+                Your cart is empty 😕
               </p>
               <button
                 onClick={() => navigate('/shop')}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition"
+                className="px-8 py-3 rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold shadow hover:scale-105 transition"
               >
                 Browse Products
               </button>
@@ -96,107 +100,123 @@ const CartPage = () => {
                   const product = item.product;
 
                   const activeSlabIndex = product?.quantityBasedPrices?.findIndex(
-                    (slab) => item.quantity >= slab.minQty && (!slab.maxQty || item.quantity <= slab.maxQty)
+                    (slab) =>
+                      item.quantity >= slab.minQty &&
+                      (!slab.maxQty || item.quantity <= slab.maxQty)
                   );
 
                   return (
                     <div
                       key={item._id}
-                      className="flex flex-col sm:flex-row items-center justify-between bg-[#2a2a2a] rounded-lg shadow hover:shadow-lg transition duration-300 p-5"
+                      className="group flex flex-col md:flex-row items-center justify-between gap-6 p-6 rounded-2xl bg-white shadow-sm hover:shadow-xl transition duration-300"
                     >
-                      <div className="flex items-center gap-4 w-full sm:w-auto">
+                      {/* Left */}
+                      <div className="flex items-center gap-5 w-full md:w-auto">
                         <img
                           src={product.images?.[0] || '/placeholder.jpg'}
                           alt={product.name}
-                          className="h-32 w-32 object-cover rounded-md cursor-pointer"
-                            onClick={() => navigate(`/product/${product._id}`)}
+                          className="h-28 w-28 object-cover rounded-xl cursor-pointer hover:scale-105 transition"
+                          onClick={() => navigate(`/product/${product._id}`)}
                         />
+
                         <div>
-                          <h2 className="text-lg font-semibold text-white">{product?.name}</h2>
-                          <p className="text-sm text-gray-400">{product?.brand || 'No Brand'}</p>
-                          <p className="text-sm text-yellow-400 mt-1">Available: {product?.stock || 0}</p>
-                          <p className="text-sm text-gray-300 mt-1">Price: {formatCurrency(unitPrice)}</p>
+                          <h2 className="text-lg font-semibold text-gray-900">
+                            {product?.name}
+                          </h2>
+                          <p className="text-sm text-gray-500">
+                            {product?.brand || 'No Brand'}
+                          </p>
+
+                          {/* ❌ STOCK REMOVED */}
+
+                          <p className="text-sm text-gray-700 mt-1">
+                            {formatCurrency(unitPrice)}
+                          </p>
 
                           {product?.quantityBasedPrices?.length > 0 && (
-                            <div className="mt-2">
-                              <p className="text-xs text-gray-400 mb-1">Discount Slabs:</p>
-                              <div className="flex flex-wrap gap-2">
-                                {product.quantityBasedPrices.map((slab, idx) => {
-                                  const isActive = idx === activeSlabIndex;
-                                  const label = slab.maxQty
-                                    ? `${slab.minQty}-${slab.maxQty} pcs`
-                                    : `${slab.minQty}+ pcs`;
+                            <div className="flex flex-wrap gap-2 mt-2">
+                              {product.quantityBasedPrices.map((slab, idx) => {
+                                const isActive = idx === activeSlabIndex;
+                                const label = slab.maxQty
+                                  ? `${slab.minQty}-${slab.maxQty}`
+                                  : `${slab.minQty}+`;
 
-                                  return (
-                                    <span
-                                      key={idx}
-                                      className={`px-3 py-1 text-xs rounded-full border ${
-                                        isActive
-                                          ? 'bg-teal-600 text-white'
-                                          : 'bg-gray-800 text-gray-300 border-gray-600'
-                                      }`}
-                                    >
-                                      {label} @ ₹{slab.price}
-                                    </span>
-                                  );
-                                })}
-                              </div>
+                                return (
+                                  <span
+                                    key={idx}
+                                    className={`px-3 py-1 text-xs rounded-full ${
+                                      isActive
+                                        ? 'bg-teal-500 text-white'
+                                        : 'bg-gray-100 text-gray-600'
+                                    }`}
+                                  >
+                                    {label} @ ₹{slab.price}
+                                  </span>
+                                );
+                              })}
                             </div>
                           )}
                         </div>
                       </div>
 
-                      <div className="flex flex-col sm:flex-row items-center gap-4 mt-4 sm:mt-0 w-full sm:w-auto justify-between">
-                        <div className="flex items-center bg-gray-800 rounded overflow-hidden border border-gray-600">
+                      {/* Right */}
+                      <div className="flex flex-col md:flex-row items-center gap-5 w-full md:w-auto">
+
+                        <div className="flex items-center rounded-full bg-gray-100 px-2 py-1">
                           <button
-                            onClick={() => handleQuantityChange(item._id, item.quantity - 1)}
-                            className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-lg font-bold"
-                          >−</button>
-                          <span className="px-6 py-2 bg-gray-900 text-white text-lg font-semibold text-center min-w-[40px]">
+                            onClick={() =>
+                              handleQuantityChange(item._id, item.quantity - 1)
+                            }
+                            className="px-3 py-1 text-lg text-gray-600 hover:text-teal-500"
+                          >
+                            −
+                          </button>
+
+                          <span className="px-4 text-lg font-semibold text-gray-800">
                             {item.quantity}
                           </span>
-                          <button
-                            onClick={() => handleQuantityChange(item._id, item.quantity + 1)}
-                            className={`px-4 py-2 ${
-                              item.quantity >= product.stock
-                                ? 'bg-gray-700 cursor-not-allowed'
-                                : 'bg-gray-700 hover:bg-gray-600'
-                            } text-white text-lg font-bold`}
-                            disabled={item.quantity >= product.stock}
-                          >+</button>
-                        </div>
 
-                        <div className="flex items-center justify-between gap-4">
-                          <span className="font-bold text-teal-400 text-lg">{formatCurrency(subtotal)}</span>
                           <button
-                            onClick={() => handleRemoveItem(item._id)}
-                            className="text-red-500 hover:text-red-400 text-sm font-medium"
+                            onClick={() =>
+                              handleQuantityChange(item._id, item.quantity + 1)
+                            }
+                            disabled={item.quantity >= product.stock}
+                            className="px-3 py-1 text-lg text-gray-600 hover:text-teal-500 disabled:opacity-40"
                           >
-                            Remove
+                            +
                           </button>
                         </div>
+
+                        <div className="text-lg font-bold text-teal-600">
+                          {formatCurrency(subtotal)}
+                        </div>
+
+                        <button
+                          onClick={() => handleRemoveItem(item._id)}
+                          className="text-sm text-red-500 hover:text-red-600 transition"
+                        >
+                          Remove
+                        </button>
                       </div>
                     </div>
                   );
                 })}
               </div>
 
-              <div className="mt-10 border-t border-gray-700 pt-6">
+              <div className="mt-12 bg-white rounded-2xl p-8 shadow-lg">
                 <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-2xl font-bold text-white">Total</h3>
-                  <p className="text-2xl font-bold text-teal-400">{formatCurrency(computedTotal)}</p>
+                  <h3 className="text-2xl font-semibold text-gray-800">Total</h3>
+                  <p className="text-3xl font-bold text-teal-600">
+                    {formatCurrency(computedTotal)}
+                  </p>
                 </div>
 
-                {inStockItems.length === 0 ? (
-                  <p className="text-red-400 text-center text-lg">No items available for checkout.</p>
-                ) : (
-                  <button
-                    onClick={() => navigate('/checkout')}
-                    className="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-4 rounded-lg text-lg transition"
-                  >
-                    Proceed to Checkout
-                  </button>
-                )}
+                <button
+                  onClick={() => navigate('/checkout')}
+                  className="w-full py-4 rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 text-white text-lg font-semibold hover:scale-[1.02] transition shadow-md"
+                >
+                  Proceed to Checkout →
+                </button>
               </div>
             </>
           )}

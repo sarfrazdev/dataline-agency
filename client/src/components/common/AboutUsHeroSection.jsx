@@ -1,21 +1,35 @@
-import React from 'react';
+import React from "react";
 
 const AboutUsHeroSection = () => {
-  // Import Font Awesome icons
-
   return (
-    <section className="relative text-white py-20 md:py-28 overflow-hidden font-sans">
-      <div className="absolute -top-10 -left-10 w-72 h-72 bg-cyan-400 opacity-20 rounded-full blur-3xl "></div>
-      <div className="absolute -bottom-16 -right-10 w-72 h-72 bg-teal-400 opacity-20 rounded-full blur-3xl "></div>
+    <section className="relative py-24 md:py-32 overflow-hidden bg-gradient-to-b from-white via-gray-50 to-gray-100">
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight mb-6 drop-shadow-lg font-serif">
-          Welcome to Dataline
+
+      <div className="absolute -top-20 -left-20 w-96 h-96 bg-blue-200/40 rounded-full blur-3xl"></div>
+      <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-purple-200/40 rounded-full blur-3xl"></div>
+
+
+      <div className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)] bg-[size:40px_40px]" />
+
+      <div className="relative max-w-5xl mx-auto px-4 text-center">
+
+      
+
+        {/* Main heading */}
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-6">
+          Welcome to{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500">
+            Dataline
+          </span>
         </h1>
-        {/* <p className="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-10 leading-relaxed drop-shadow-sm">
-          Wholesales hub of IT Peripheral & SERVEILLANCE & NETWORKING WITH 
-PHOTO  
-        </p> */}
+
+    
+
+        {/* Accent divider */}
+        <div className="mt-8 flex justify-center">
+          <div className="h-[3px] w-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
+        </div>
+
       </div>
     </section>
   );

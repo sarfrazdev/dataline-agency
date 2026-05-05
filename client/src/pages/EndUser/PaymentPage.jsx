@@ -88,75 +88,103 @@ const PaymentPage = () => {
   if (!shippingInfo) return null;
 
   return (
-    <NavLayout>
-      <div className="max-w-xl mx-auto mt-12 bg-[#151518] p-6 rounded-lg shadow-lg text-white">
-        <h1 className="text-2xl font-bold text-cyan-400 mb-4">Complete Payment</h1>
+  <NavLayout>
+  <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-cyan-50 px-4 py-12">
+    <div className="max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-lg">
 
-        {/*  Razorpay + Manual for Enduser */}
-        {userRole === 'enduser' && (
-          <>
-            {/* <button
-              onClick={handleRazorpayPayment}
-              className="bg-cyan-600 hover:bg-cyan-500 text-white px-6 py-3 rounded-lg mb-6"
-            >
-              Pay with Razorpay
-            </button> */}
+      {/* Heading */}
+      <h1 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-teal-500 to-cyan-500 bg-clip-text text-transparent">
+        Complete Payment
+      </h1>
 
-            <div className="border border-gray-600 p-4 rounded">
-              <h2 className="text-lg font-semibold text-cyan-300 mb-2">Bank Transfer Option </h2>
-              <ul className="text-sm mb-4 space-y-1">
-                <li><strong>A/C Holder:</strong> Dataline Agencies</li>
-                <li><strong>Bank:</strong> ICICI BANK</li>
-                <li><strong>Acc No:</strong> 625905052227</li>
-                <li><strong>IFSC:</strong> ICIC0006259</li>
-                <li><strong>Branch:</strong> EXHIBITION ROAD</li>
-              </ul>
-              <label className="block mb-2 text-sm">Upload Payment Proof (jpg/png/pdf)</label>
+      {/* ENDUSER */}
+      {userRole === 'enduser' && (
+        <div className="space-y-6">
+
+          {/* Bank Card */}
+          <div className="bg-gray-50 border rounded-xl p-5">
+            <h2 className="text-lg font-semibold text-gray-800 mb-3 border-l-4 border-teal-500 pl-2">
+              Bank Transfer
+            </h2>
+
+            <ul className="text-sm text-gray-700 space-y-1 mb-4">
+              <li><strong>A/C Holder:</strong> Dataline Agencies</li>
+              <li><strong>Bank:</strong> ICICI BANK</li>
+              <li><strong>Account No:</strong> 625905052227</li>
+              <li><strong>IFSC:</strong> ICIC0006259</li>
+              <li><strong>Branch:</strong> Exhibition Road</li>
+            </ul>
+
+            {/* Upload */}
+            <div className="space-y-2">
+              <label className="text-sm text-gray-600">
+                Upload Payment Proof (jpg/png/pdf)
+              </label>
+
               <input
                 type="file"
                 accept=".jpg,.jpeg,.png,.pdf"
                 onChange={(e) => setProofFile(e.target.files[0])}
-                className="bg-[#1e1e24] border border-gray-600 rounded px-4 py-2 w-full text-white"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:ring-2 focus:ring-teal-500 outline-none"
               />
-              <button
-                onClick={submitManualOrder}
-                className="mt-4 bg-cyan-600 hover:bg-cyan-500 text-white px-6 py-2 rounded"
-              >
-                Submit Bank Transfer
-              </button>
             </div>
-          </>
-        )}
 
-        {/*  Only Bank Transfer for Reseller/Distributor */}
-        {['reseller', 'distributor'].includes(userRole) && (
-          <div>
-            <h2 className="text-lg font-semibold text-cyan-300 mb-2">Bank Details</h2>
-            <ul className="text-sm mb-4 space-y-1">
-              <li><strong>A/C Holder:</strong> Dataline Agencies</li>
-              <li><strong>Bank:</strong> ICICI BANK</li>
-              <li><strong>Acc No:</strong> 625905052227</li>
-              <li><strong>IFSC:</strong> ICIC0006259</li>
-              <li><strong>Branch:</strong> EXHIBITION ROAD</li>
-            </ul>
-
-            <label className="block mb-2 text-sm">Upload Payment Proof (jpg/png/pdf)</label>
-            <input
-              type="file"
-              accept=".jpg,.jpeg,.png,.pdf"
-              onChange={(e) => setProofFile(e.target.files[0])}
-              className="bg-[#1e1e24] border border-gray-600 rounded px-4 py-2 w-full text-white"
-            />
+            {/* CTA */}
             <button
               onClick={submitManualOrder}
-              className="mt-4 bg-cyan-600 hover:bg-cyan-500 text-white px-6 py-2 rounded"
+              className="w-full mt-4 py-3 rounded-lg bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold shadow hover:scale-[1.02] transition"
+            >
+              Submit Bank Transfer
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* RESELLER / DISTRIBUTOR */}
+      {['reseller', 'distributor'].includes(userRole) && (
+        <div className="space-y-6">
+
+          <div className="bg-gray-50 border rounded-xl p-5">
+            <h2 className="text-lg font-semibold text-gray-800 mb-3 border-l-4 border-teal-500 pl-2">
+              Bank Details
+            </h2>
+
+            <ul className="text-sm text-gray-700 space-y-1 mb-4">
+              <li><strong>A/C Holder:</strong> Dataline Agencies</li>
+              <li><strong>Bank:</strong> ICICI BANK</li>
+              <li><strong>Account No:</strong> 625905052227</li>
+              <li><strong>IFSC:</strong> ICIC0006259</li>
+              <li><strong>Branch:</strong> Exhibition Road</li>
+            </ul>
+
+            {/* Upload */}
+            <div className="space-y-2">
+              <label className="text-sm text-gray-600">
+                Upload Payment Proof (jpg/png/pdf)
+              </label>
+
+              <input
+                type="file"
+                accept=".jpg,.jpeg,.png,.pdf"
+                onChange={(e) => setProofFile(e.target.files[0])}
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:ring-2 focus:ring-teal-500 outline-none"
+              />
+            </div>
+
+            {/* CTA */}
+            <button
+              onClick={submitManualOrder}
+              className="w-full mt-4 py-3 rounded-lg bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold shadow hover:scale-[1.02] transition"
             >
               Submit Order
             </button>
           </div>
-        )}
-      </div>
-    </NavLayout>
+        </div>
+      )}
+
+    </div>
+  </div>
+</NavLayout>
   );
 };
 

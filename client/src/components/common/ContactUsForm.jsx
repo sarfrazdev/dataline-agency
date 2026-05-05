@@ -36,124 +36,150 @@ const ContactUsForm = () => {
   };
 
   return (
-    <section className="relative bg-gradient-to-br from-cyan-50 via-white to-cyan-50 py-16 sm:py-24 rounded-t-3xl shadow-inner overflow-hidden">
-      {/* Decorative blobs */}
-      <div className="absolute -top-10 -left-10 w-72 h-72 bg-cyan-200 opacity-20 rounded-full blur-3xl"></div>
-      <div className="absolute -bottom-10 -right-10 w-72 h-72 bg-teal-200 opacity-20 rounded-full blur-3xl"></div>
+    <section className="relative py-20 sm:py-28  overflow-hidden">
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid md:grid-cols-2 gap-12 items-start">
+  <div className="absolute inset-0 pointer-events-none">
+    <div className="absolute top-10 left-1/2 w-[500px] h-[500px] bg-blue-200/30 rounded-full blur-3xl -translate-x-1/2"></div>
+    <div className="absolute bottom-0 right-0 w-72 h-72 bg-purple-200/30 rounded-full blur-2xl"></div>
+  </div>
 
-          {/* Contact Form */}
-          <div className="bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-            <h2 className="text-3xl font-extrabold text-gray-800 mb-6 border-l-4 border-teal-500 pl-3">
+  <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div className="grid md:grid-cols-2 gap-12 items-start">
+
+      
+      <div className="group relative rounded-3xl p-[1px] bg-gradient-to-br from-blue-200/40 to-purple-200/40">
+        <div className="bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-md hover:shadow-2xl transition duration-500">
+
+          <h2 className="text-3xl font-extrabold text-gray-900 mb-6">
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               Send Us a Message
-            </h2>
+            </span>
+          </h2>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
-                <label htmlFor="name" className="block text-gray-700 font-medium mb-1">Full Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Your Name"
-                  className="w-full px-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 transition shadow-sm"
-                />
-              </div>
+          <form onSubmit={handleSubmit} className="space-y-5">
 
-              <div>
-                <label htmlFor="email" className="block text-gray-700 font-medium mb-1">Email Address</label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="you@example.com"
-                  className="w-full px-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 transition shadow-sm"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="subject" className="block text-gray-700 font-medium mb-1">mobile</label>
-                <input
-                  type="tel"
-                  name="subject"
-                  id="subject"
-                  required
-                  value={formData.subject}
-                  onChange={handleChange}
-                  placeholder="+91-XXXXXXXXXX"
-                  className="w-full px-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 transition shadow-sm"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-gray-700 font-medium mb-1">Message</label>
-                <textarea
-                  name="message"
-                  id="message"
-                  rows="5"
-                  required
-                  value={formData.message}
-                  onChange={handleChange}
-                  placeholder="How can we help you?"
-                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 transition shadow-sm resize-none"
-                ></textarea>
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-full transition font-semibold shadow hover:shadow-md"
-              >
-                {isSubmitting ? 'Sending...' : (
-                  <>
-                    <Send size={18} /> Send Message
-                  </>
-                )}
-              </button>
-            </form>
-          </div>
-
-          {/* Contact Info + Map */}
-          <div className="space-y-8">
-            <div className="bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-              <h3 className="text-2xl font-semibold text-gray-800 mb-4 border-l-4 border-teal-500 pl-3">
-                Contact Information
-              </h3>
-              <div className="space-y-3 text-gray-700">
-                <p className="flex items-start">
-                  <MapPin className="w-5 h-5 mr-3 mt-1 text-teal-500 flex-shrink-0" />
-                  01 Ground Floor, Balajee Residency, J P Das Lane, New Dak Bunglow Road, Patna, Bihar – 800001; OPP Prema Honda services Centre 
-                </p>
-                <p className="flex items-center">
-                  <Mail className="w-5 h-5 mr-3 text-teal-500" />
-                  info@dataline.co.in
-                </p>
-                <p className="flex items-center">
-                  <Phone className="w-5 h-5 mr-3 text-teal-500" />
-                  Phone/WhatsApp: +91-9334064100
-                </p>
-              </div>
+       
+            <div>
+              <label className="text-sm text-gray-600 mb-1 block">Full Name</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                placeholder="Your Name"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white/70 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+              />
             </div>
 
-            <div className="rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 h-80 md:h-96">
-              <img
-                src="./contac.jpg"
-                alt="Map showing TechEase office location"
-                className="w-full h-full object-cover"
+       
+            <div>
+              <label className="text-sm text-gray-600 mb-1 block">Email Address</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                placeholder="you@example.com"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white/70 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
               />
+            </div>
+
+
+            <div>
+              <label className="text-sm text-gray-600 mb-1 block">Mobile</label>
+              <input
+                type="tel"
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+                required
+                placeholder="+91-XXXXXXXXXX"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white/70 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+              />
+            </div>
+
+       
+            <div>
+              <label className="text-sm text-gray-600 mb-1 block">Requirement</label>
+              <textarea
+                name="message"
+                rows="5"
+                value={formData.message}
+                onChange={handleChange}
+                required
+                placeholder="How can we help you?"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white/70 focus:ring-2 focus:ring-blue-500 focus:outline-none transition resize-none"
+              />
+            </div>
+
+            {/* Button */}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:scale-[1.02] hover:shadow-lg transition duration-300 flex items-center justify-center gap-2"
+            >
+              {isSubmitting ? 'Sending...' : (
+                <>
+                  <Send size={18} /> Send Message
+                </>
+              )}
+            </button>
+
+          </form>
+        </div>
+      </div>
+
+     
+      <div className="space-y-8">
+
+     
+        <div className="relative rounded-3xl p-[1px] bg-gradient-to-br from-blue-200/40 to-purple-200/40">
+          <div className="bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-md hover:shadow-2xl transition duration-500">
+
+            <h3 className="text-2xl font-semibold text-gray-900 mb-5">
+              Contact Information
+            </h3>
+
+            <div className="space-y-4 text-gray-600 text-sm leading-relaxed">
+
+              <p className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-blue-500 mt-1" />
+                01 Ground Floor, Balajee Residency, J P Das Lane, New Dak Bunglow Road, Patna, Bihar – 800001; OPP Prema Honda services Centre 
+              </p>
+
+              <p className="flex items-center gap-3">
+                <Mail className="w-5 h-5 text-blue-500" />
+                info@dataline.co.in
+              </p>
+
+              <p className="flex items-center gap-3">
+                <Phone className="w-5 h-5 text-blue-500" />
+                Phone/WhatsApp: +91-9334064100
+              </p>
+
             </div>
           </div>
         </div>
+
+        {/* Image */}
+        <div className="relative rounded-3xl overflow-hidden group">
+          <img
+            src="./contac.jpg"
+            alt="Map showing TechEase office location"
+            className="w-full h-80 md:h-96 object-cover transition duration-500 group-hover:scale-105"
+          />
+
+        
+
+        </div>
+
       </div>
-    </section>
+
+    </div>
+  </div>
+</section>
   );
 };
 

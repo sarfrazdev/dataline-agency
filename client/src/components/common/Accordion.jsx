@@ -97,7 +97,7 @@ const SupportPage = () => {
 
         {/* End User FAQs */}
         <div>
-          <h2 className="flex items-center text-3xl font-extrabold text-white mb-6">
+          <h2 className="flex items-center text-3xl font-extrabold text-blue-500 mb-6">
             <HelpCircle className="w-8 h-8 mr-3 text-blue-400" /> End USER FAQs
           </h2>
           <div className="bg-white rounded-2xl shadow-2xl hover:shadow-blue-300/30 transition-shadow">
@@ -124,10 +124,10 @@ const SupportPage = () => {
 
         {/* B2B FAQs */}
         <div>
-          <h2 className="flex items-center text-3xl font-extrabold text-white mb-6">
+          <h2 className="flex items-center text-3xl font-extrabold text-yellow-400 mb-6">
             <FileText className="w-8 h-8 mr-3 text-yellow-400" /> B2B FAQs
           </h2>
-          <div className="bg-white rounded-2xl shadow-2xl hover:shadow-yellow-300/30 transition-shadow">
+          <div className=" rounded-2xl shadow-2xl hover:shadow-yellow-300/30 transition-shadow">
             {b2bFaqs.map((faq, index) => (
               <div key={index} className="border-b last:border-0">
                 <button
