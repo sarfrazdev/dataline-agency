@@ -2,9 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import React from 'react';
 
 const brands = [
-  { name: 'Prodot', logo: './brand/prodot.jpg' },
+  { name: 'Prodot', logo: './brand/prodot.png' },
   { name: 'HP', logo: './brand/hp.jpg' },
-  { name: 'Canon', logo: './brand/canon.jpg' },
+  { name: 'Canon', logo: './brand/canon1.png' },
   { name: 'Dell', logo: './brand/dell.jpg' },
   { name: 'Brother', logo: './brand/brother.jpg' },
   { name: 'Consistent', logo: '/consistent.png' },
@@ -12,13 +12,18 @@ const brands = [
   { name: 'Nova', logo: '/nova.png' },
   { name: 'Seagate', logo: './brand/segate.jpg' },
   { name: 'Asus', logo: '/asus.png' },
-  { name: 'Lenovo', logo: '/lenovo.png' },
+  { name: 'Lenovo', logo: './brand/lenovo.png' },
   { name: 'Acer', logo: '/acer.png' },
   { name: 'Epson', logo: './brand/epson.jpg' },
   { name: 'TP-Link', logo: './brand/tplink.jpg' },
   { name: 'Logitech', logo: './brand/logitech.jpg' },
   { name: 'Zebronics', logo: './brand/zebronics.jpg' },
   { name: 'Cp plus', logo: './cpplus.png' },
+  {name:'Geonix',logo:'./geonix.png'},
+  {name:"Sandisk",logo:'./brand/sanddisk.png'},
+  {name:"Quick Heal ",logo:'./brand/quickheal.png'},
+  {name:"Mantra ",logo:'./brand/mantra.png'},
+
 ];
 
 const BrandSection = () => {

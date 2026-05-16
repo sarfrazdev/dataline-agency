@@ -21,7 +21,7 @@ fallbackBrands.push(
   'Intex', 'Kingston', 'Lapcare', 'Lipi', 'Microtek',
   'NP', 'Numeric', 'People Link', 'Tenda', 'Cyber Power',
   'N Computing', 'Micron', 'Gigabyte', 'Microsoft',
-  'Secure Eye', 'EVM', 'Cyber X', 'Fingers'
+  'Secure Eye', 'EVM', 'Cyber X', 'Fingers','Indiprint','Foxin','NEXIVUE'
 );
 
 

@@ -21,7 +21,7 @@ fallbackBrands.push(
   'Intex', 'Kingston', 'Lapcare', 'Lipi', 'Microtek',
   'NP', 'Numeric', 'People Link', 'Tenda', 'Cyber Power',
   'N Computing', 'Micron', 'Gigabyte', 'Microsoft',
-  'Secure Eye', 'EVM', 'Cyber X', 'Fingers'
+  'Secure Eye', 'EVM', 'Cyber X', 'Fingers','Indiprint','Foxin','NEXIVUE'
 );
 
 
@@ -48,7 +48,7 @@ const fallbackCategories = [
   "Laptop Accessories", "Desktop Switch", "Splitter",
   "Wall Mount", "Printer Cable", "Laptop Adapter",
   "Earbuds", "DVD Writer", "Blower", "Networking Tools",
-  "DMP Refills", "Dot Matrix Ribbon", "Surge Protector", "OPC Drum"
+  "DMP Refills", "Dot Matrix Ribbon", "Surge Protector", "OPC Drum",
 ];
 
 const itemsPerPage = 52;

@@ -6,6 +6,7 @@ import Choose from '../components/common/Choose'
 import BrandSection from '../components/common/BrandSection'
 import ImageSection from '../components/common/Imagesection'
 import TopCategoriesSection from '../components/common/TopCategoriesSection'
+import OfficialPartner from '../components/common/OfficialPartner'
 
 
 
@@ -18,7 +19,9 @@ const Home = () => {
              <ImageSection/>
              <BrandSection/>
             <TopCategoriesSection/>
+             <OfficialPartner/>
             <Slider/>
+           
             <Choose/>
         </NavLayout>
         

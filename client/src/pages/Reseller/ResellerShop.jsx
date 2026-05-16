@@ -14,7 +14,7 @@ const fallbackBrands = [
   'LG', 'TCL', 'Mantra', 'Morpho', 'Startek', 'Ricoh', 'Xerox', 'Pantum',
   'Logitech', 'Seagate', 'Toshiba', 'WD', 'SanDisk', 'Antivirus', 'Accounting Software',
   'Printer Adjustment Software', 'CP Plus', 'Hikvision', 'Sony', 'Nikon', 'Zebronics',
-  'TP-Link', 'D-Link'
+  'TP-Link', 'D-Link',
 ];
 fallbackBrands.push(
   'Geonix', 'Consistent', 'Electroline', 'Frontech', 'Acer',
@@ -23,7 +23,7 @@ fallbackBrands.push(
   'Intex', 'Kingston', 'Lapcare', 'Lipi', 'Microtek',
   'NP', 'Numeric', 'People Link', 'Tenda', 'Cyber Power',
   'N Computing', 'Micron', 'Gigabyte', 'Microsoft',
-  'Secure Eye', 'EVM', 'Cyber X', 'Fingers'
+  'Secure Eye', 'EVM', 'Cyber X', 'Fingers','Indiprint','Foxin','NEXIVUE'
 );
 
 
