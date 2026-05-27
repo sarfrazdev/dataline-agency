@@ -12,13 +12,8 @@ import NavLayout from '../../components/auth/NavLayout';
 const fallbackBrands = [
   'Prodot', 'HP', 'Dell', 'Lenovo', 'ASUS', 'Canon', 'Brother', 'Epson', 'TVSE', 'Samsung',
   'LG', 'TCL', 'Mantra', 'Morpho', 'Startek', 'Ricoh', 'Xerox', 'Pantum',
-<<<<<<< HEAD:src/pages/Reseller/ResellerShop.jsx
   'Logitech', 'Seagate', 'Toshiba', 'WD', 'SanDisk', 
  'CP Plus', 'Hikvision', 'Sony', 'Nikon', 'Zebronics',
-=======
-  'Logitech', 'Seagate', 'Toshiba', 'WD', 'SanDisk', 'Antivirus', 'Accounting Software',
-  'Printer Adjustment Software', 'CP Plus', 'Hikvision', 'Sony', 'Nikon', 'Zebronics',
->>>>>>> aede84af6d94aa633054b42c00a6923d5e265234:client/src/pages/Reseller/ResellerShop.jsx
   'TP-Link', 'D-Link',
 ];
 fallbackBrands.push(
@@ -28,11 +23,7 @@ fallbackBrands.push(
   'Intex', 'Kingston', 'Lapcare', 'Lipi', 'Microtek',
   'NP', 'Numeric', 'People Link', 'Tenda', 'Cyber Power',
   'N Computing', 'Micron', 'Gigabyte', 'Microsoft',
-<<<<<<< HEAD:src/pages/Reseller/ResellerShop.jsx
   'Secure Eye', 'EVM', 'Cyber X', 'Fingers','Indiprint','Foxin','Nexivue'
-=======
-  'Secure Eye', 'EVM', 'Cyber X', 'Fingers','Indiprint','Foxin','NEXIVUE'
->>>>>>> aede84af6d94aa633054b42c00a6923d5e265234:client/src/pages/Reseller/ResellerShop.jsx
 );
 
 

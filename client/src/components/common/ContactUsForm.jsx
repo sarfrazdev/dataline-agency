@@ -179,6 +179,20 @@ const ContactUsForm = () => {
 
     </div>
   </div>
+
+
+  <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-8 relative z-10">
+    <div className="rounded-2xl overflow-hidden shadow-lg">
+      <iframe
+        title="Dataline Location"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.8349447754276!2d85.13823377409796!3d25.610400377447277!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ed598b3fe99459%3A0x1ce86e9f65e4c515!2sDataline%20Imaging%20Technologies%20Pvt%20Ltd!5e0!3m2!1sen!2sin!4v1779871068965!5m2!1sen!2sin"
+        className="w-full h-72 md:h-96 border-0"
+        loading="lazy"
+        allowFullScreen
+        referrerPolicy="no-referrer-when-downgrade"
+      />
+    </div>
+  </div>
 </section>
   );
 };

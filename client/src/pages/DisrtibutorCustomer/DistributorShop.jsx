@@ -21,11 +21,7 @@ fallbackBrands.push(
   'Intex', 'Kingston', 'Lapcare', 'Lipi', 'Microtek',
   'NP', 'Numeric', 'People Link', 'Tenda', 'Cyber Power',
   'N Computing', 'Micron', 'Gigabyte', 'Microsoft',
-<<<<<<< HEAD:src/pages/DisrtibutorCustomer/DistributorShop.jsx
   'Secure Eye', 'EVM', 'Cyber X', 'Fingers','Indiprint','Foxin','Nexivue'
-=======
-  'Secure Eye', 'EVM', 'Cyber X', 'Fingers','Indiprint','Foxin','NEXIVUE'
->>>>>>> aede84af6d94aa633054b42c00a6923d5e265234:client/src/pages/DisrtibutorCustomer/DistributorShop.jsx
 );
 
 
@@ -51,11 +47,7 @@ const fallbackCategories = [
   "Laptop Accessories", "Desktop Switch", "Splitter",
   "Wall Mount", "Printer Cable", "Laptop Adapter",
   "Earbuds", "DVD Writer", "Blower", "Networking Tools",
-<<<<<<< HEAD:src/pages/DisrtibutorCustomer/DistributorShop.jsx
   "DMP Refills", "Dot Matrix Ribbon", "Surge Protector", "OPC Drum","Antivirus","Extension cable" 
-=======
-  "DMP Refills", "Dot Matrix Ribbon", "Surge Protector", "OPC Drum",
->>>>>>> aede84af6d94aa633054b42c00a6923d5e265234:client/src/pages/DisrtibutorCustomer/DistributorShop.jsx
 ];
 
 const itemsPerPage = 52;
