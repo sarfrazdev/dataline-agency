@@ -89,7 +89,7 @@ const Footer = () => {
             </p>
             <p className="text-sm text-gray-600">Email: info@dataline.co.in</p>
             <p className="text-sm text-gray-600">
-              Phone/WhatsApp: +91-9334064100
+              Phone/WhatsApp: +91-9334064100  / +91-8102928470
             </p>
           </div>
 

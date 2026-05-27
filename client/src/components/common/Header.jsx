@@ -29,7 +29,7 @@ const Header = () => {
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="bg-white backdrop-blur-md px-3 py-1 rounded-full">
+            <div className="bg-white border-2 border-gray-500 shadow-lg  backdrop-blur-md px-3 py-1 rounded-full">
               <img
                 src="/logo.jpg"
                 alt="Dataline logo"
@@ -43,7 +43,7 @@ const Header = () => {
             <h1
               className="text-4xl font-extrabold tracking-widest
     bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-400
-    bg-clip-text text-transparent drop-shadow-lg"
+    bg-clip-text text-transparent drop-shadow-lg font-serif"
             >
               WELCOME TO DATALINE
             </h1>

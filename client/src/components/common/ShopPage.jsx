@@ -9,8 +9,8 @@ import axios from 'axios';
 const fallbackBrands = [
   'Prodot', 'HP', 'Dell', 'Lenovo', 'ASUS', 'Canon', 'Brother', 'Epson', 'TVSE', 'Samsung',
   'LG', 'TCL', 'Mantra', 'Morpho', 'Startek', 'Ricoh', 'Xerox', 'Pantum',
-  'Logitech', 'Seagate', 'Toshiba', 'WD', 'SanDisk', 'Antivirus', 'Accounting Software',
-  'Printer Adjustment Software', 'CP Plus', 'Hikvision', 'Sony', 'Nikon', 'Zebronics',
+  'Logitech', 'Seagate', 'Toshiba', 'WD', 'SanDisk',
+   'CP Plus', 'Hikvision', 'Sony', 'Nikon', 'Zebronics',
   'TP-Link', 'D-Link'
 ];
 
@@ -21,15 +21,14 @@ fallbackBrands.push(
   'Intex', 'Kingston', 'Lapcare', 'Lipi', 'Microtek',
   'NP', 'Numeric', 'People Link', 'Tenda', 'Cyber Power',
   'N Computing', 'Micron', 'Gigabyte', 'Microsoft',
-  'Secure Eye', 'EVM', 'Cyber X', 'Fingers','Indiprint','Foxin','NEXIVUE'
+  'Secure Eye', 'EVM', 'Cyber X', 'Fingers','Indiprint','Foxin','Nexivue'
 );
 
 
 const fallbackCategories = [
   'Laptop', 'Desktop', 'Printer', 'TV', 'Monitor', 'Biometrics', 'Cartridge', 'Ink Bottle',
   'Keyboard', 'Mouse', 'Internal HDD', 'External HDD', 'Pen Drive', 'Software', 'CCTV Camera',
-  'Router', 'DVR', 'NVR', 'POE Switch', 'Tablets', 'Refurbished', 'Accessories', 'Networking',
-  'Surveillance', 'Scanner',
+  'Router', 'DVR', 'NVR', 'POE Switch', 'Tablets', 'Scanner',
   'SSD', 'Motherboard', 'UPS', 'SMPS', 'Cabinet', 'Laminator', 'Projector',
   'Toner Cartridge', 'Hub', 'Headphones', 'USB Hub', 'Ethernet Switch',
   'Laser Toner Powder', 'Photo Paper', 'Keyboard & Mouse Combo',
@@ -47,7 +46,7 @@ const fallbackCategories = [
   "Laptop Accessories", "Desktop Switch", "Splitter",
   "Wall Mount", "Printer Cable", "Laptop Adapter",
   "Earbuds", "DVD Writer", "Blower", "Networking Tools",
-  "DMP Refills", "Dot Matrix Ribbon", "Surge Protector", "OPC Drum"
+  "DMP Refills", "Dot Matrix Ribbon", "Surge Protector", "OPC Drum",'Antivirus','Extension cable'
 ];
 
 

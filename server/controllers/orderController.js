@@ -268,21 +268,8 @@ export const deleteBill = async (req, res) => {
   }
 };
 
-// export const notifyOrder = async (req, res) => {
-//   const { order } = req.body;
 
-//   if (!order || !order._id) {
-//     return res.status(400).json({ message: 'Invalid order data' });
-//   }
 
-//   try {
-//     await createOrderNotification(req, order);
-//     res.status(200).json({ message: 'Notification created successfully' });
-//   } catch (err) {
-//     console.error('Notification error:', err);
-//     res.status(500).json({ message: 'Failed to create notification' });
-//   }
-// };
 export const createOrderNotification = async (req, order) => {
   const roles = ['enduser', 'reseller', 'distributor'];
   for (const role of roles) {

@@ -13,7 +13,7 @@ const shipmentSchema = new mongoose.Schema({
     required: true
   },
   fullName: String,
-  email: { type: String, default: '' }, // Make email optional
+  email: { type: String, default: '' }, 
   phone: String,
   address: String,
   city: String,
