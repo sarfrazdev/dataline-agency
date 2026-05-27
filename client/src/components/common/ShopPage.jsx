@@ -21,7 +21,11 @@ fallbackBrands.push(
   'Intex', 'Kingston', 'Lapcare', 'Lipi', 'Microtek',
   'NP', 'Numeric', 'People Link', 'Tenda', 'Cyber Power',
   'N Computing', 'Micron', 'Gigabyte', 'Microsoft',
+<<<<<<< HEAD:src/components/common/ShopPage.jsx
   'Secure Eye', 'EVM', 'Cyber X', 'Fingers','Indiprint','Foxin','Nexivue'
+=======
+  'Secure Eye', 'EVM', 'Cyber X', 'Fingers','Indiprint','Foxin','NEXIVUE'
+>>>>>>> aede84af6d94aa633054b42c00a6923d5e265234:client/src/components/common/ShopPage.jsx
 );
 
 
