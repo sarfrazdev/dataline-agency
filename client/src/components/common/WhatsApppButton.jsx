@@ -75,7 +75,7 @@ const WhatsAppButton = () => {
 
           {/* CTA */}
           <a
-            href="https://wa.me/8102928470?text=Hi%20I%20want%20to%20know%20about%20your%20products"
+            href="https://wa.me/918102928470?text=Hi%20I%20want%20to%20know%20about%20your%20products"
             target="_blank"
             rel="noopener noreferrer"
             className="block mx-4 mb-4 text-center bg-green-500 text-white py-2 rounded-full font-medium"
