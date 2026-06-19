@@ -17,7 +17,8 @@
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.5.2",
     "react-modal": "^3.16.3",
-    "react-parallax-tilt": "^1.7.303"
+    "react-parallax-tilt": "^1.7.303",
+    "swiper": "^12.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",

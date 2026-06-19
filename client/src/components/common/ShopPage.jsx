@@ -26,30 +26,29 @@ fallbackBrands.push(
 
 
 const fallbackCategories = [
-  'Laptop', 'Desktop', 'Printer', 'TV', 'Monitor', 'Biometrics', 'Cartridge', 'Ink Bottle',
+  'Laptop', 'Desktop', 'Printer', 'TV', 'Monitor', 'Biometrics', 'Ink Bottle',
   'Keyboard', 'Mouse', 'Internal HDD', 'External HDD', 'Pen Drive', 'Software', 'CCTV Camera',
   'Router', 'DVR', 'NVR', 'POE Switch', 'Tablets', 'Scanner',
   'SSD', 'Motherboard', 'UPS', 'SMPS', 'Cabinet', 'Laminator', 'Projector',
   'Toner Cartridge', 'Hub', 'Headphones', 'USB Hub', 'Ethernet Switch',
   'Laser Toner Powder', 'Photo Paper', 'Keyboard & Mouse Combo',
-  'Web Camera', 'Barcode Scanner', 'Power Strip', 'CPU Fan', 'Mouse Pad',
+  'Web Camera',  'Power Strip', 'CPU Fan', 'Mouse Pad',
   'RJ45 Splitter', 'Cleaning Kit', 'SSD Casing', 'Online UPS',
   'Cat 6 Cable', 'Rack', 'Media Converter', 'HDMI Extender',
   'HDMI Splitter', 'Power Adapter', '3 +1 Cable',
   "WiFi Adapter", "Cooling Pad", "UPS Battery", "Speaker",
-  "Zero Client", "Graphics Card", "Gaming Cabinet",
+  "Zero Client", "Graphics Card", 
   "Laptop Stand", "CCTV SMPS", "RAM", "Processor",
   "WiFi Camera", "CCTV Connector", "Adapter",
-  "HDMI Cable", "Junction Box", "Gaming Chair",
+  "HDMI Cable", "Junction Box",
   "4G Camera", "Barebone", "Micro SD Card",
   "Power Cable", "VGA Cable", "CAT6 Patch Cord",
   "Laptop Accessories", "Desktop Switch", "Splitter",
-  "Wall Mount", "Printer Cable", "Laptop Adapter",
+   "Printer Cable", "Laptop Adapter",
   "Earbuds", "DVD Writer", "Blower", "Networking Tools",
   "DMP Refills", "Dot Matrix Ribbon", "Surge Protector", "OPC Drum",'Antivirus','Extension cable'
 ];
-
-
+fallbackCategories.push("Power supply","BNC cable","DC Cable","Led Tv","Gaming Product")
 const itemsPerPage = 52;
 
 const ShopPage = () => {

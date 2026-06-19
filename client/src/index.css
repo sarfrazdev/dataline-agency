@@ -45,3 +45,25 @@ body{
 .main-content {
   padding-top: 4rem; 
 }
+
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: scrollReviews 30s linear infinite;
+  will-change: transform;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes scrollReviews {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}

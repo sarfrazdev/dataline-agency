@@ -1,16 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ShoppingCart, Heart, User, LogOut } from "lucide-react";
-
+import logo from "/logo.jpeg"
+import { getCart } from "../../utils/cartApi";
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const navigate = useNavigate();
+  const [cartCount, setCartCount] = useState(0);
 
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   setIsLoggedIn(!!token);
+  // }, []);
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
-  }, []);
+  const token = localStorage.getItem("token");
+  setIsLoggedIn(!!token);
+
+  const loadCartCount = async () => {
+    try {
+      if (!token) return;
+
+      const data = await getCart();
+
+      const count = data.items.reduce(
+        (total, item) => total + item.quantity,
+        0
+      );
+
+      setCartCount(count);
+    } catch (error) {
+      console.error("Cart count error:", error);
+    }
+  };
+
+  loadCartCount();
+}, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -29,11 +54,11 @@ const Header = () => {
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="bg-white border-2 border-gray-500 shadow-lg  backdrop-blur-md px-3 py-1 rounded-full">
+            <div className="bg-white  border-2 border-gray-500 shadow-lg  backdrop-blur-md px-3 py-1  rounded-full">
               <img
-                src="/logo.jpg"
+                src={logo}
                 alt="Dataline logo"
-                className="h-15 w-auto transition-transform duration-300 group-hover:scale-105"
+                className="h-17 w-40 transition-transform duration-300 group-hover:scale-105 object-cover "
               />
             </div>
           </Link>
@@ -60,13 +85,42 @@ const Header = () => {
               <Heart size={22} />
             </Link>
 
-            <Link
+            {/* <Link
               to="/cart"
               className="text-black-300 hover:text-blue-600 transition duration-300 hover:scale-110"
             >
               <ShoppingCart size={22} />
-            </Link>
+            </Link> */}
+              <div className="relative">
+  <Link
+    to="/cart"
+    className="text-black-300 hover:text-blue-600 transition duration-300 hover:scale-110"
+  >
+    <ShoppingCart size={22} />
+  </Link>
 
+  {cartCount > 0 && (
+    <span
+      className="
+        absolute
+        -top-2
+        -right-2
+        bg-red-500
+        text-white
+        text-[10px]
+        font-bold
+        rounded-full
+        min-w-[18px]
+        h-[18px]
+        flex
+        items-center
+        justify-center
+      "
+    >
+      {cartCount}
+    </span>
+  )}
+</div>
             {!isLoggedIn ? (
               <Link to="/login">
                 <button

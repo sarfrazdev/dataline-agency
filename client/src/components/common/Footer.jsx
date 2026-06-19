@@ -18,7 +18,7 @@ const Footer = () => {
         <div className="flex flex-col items-center text-center mb-20">
 
           <img
-            src="/footerlogo.png"
+            src="/logo.jpeg"
             alt="logo"
             className="h-28 w-28 object-contain rounded-full shadow-xl border border-gray-200 mb-4"
           />
