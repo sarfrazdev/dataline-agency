@@ -92,7 +92,7 @@ const Review = () => {
                   "
                 </div>
 
-                <p className="text-gray-600 leading-7 text-[15px]">
+                <p className="text-gray-600 leading-7 text-[16px]">
                   {item.review}
                 </p>
               </div>

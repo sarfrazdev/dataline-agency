@@ -26,7 +26,6 @@ fallbackBrands.push(
 
 
 
-
 const fallbackCategories = [
   'Laptop', 'Desktop', 'Printer', 'TV', 'Monitor', 'Biometrics', 'Ink Bottle',
   'Keyboard', 'Mouse', 'Internal HDD', 'External HDD', 'Pen Drive', 'Software', 'CCTV Camera',
@@ -48,9 +47,14 @@ const fallbackCategories = [
   "Laptop Accessories", "Desktop Switch", "Splitter",
    "Printer Cable", "Laptop Adapter",
   "Earbuds", "DVD Writer", "Blower", "Networking Tools",
-  "DMP Refills", "Dot Matrix Ribbon", "Surge Protector", "OPC Drum",'Antivirus','Extension cable'
+
+  "DMP Refills", "Dot Matrix Ribbon", "Surge Protector", "OPC Drum",'Antivirus','Extension cable',
+
+ "Dot Matrix Ribbon", "Surge Protector", "OPC Drum","Antivirus","Extension cable" 
+
 ];
 fallbackCategories.push("Power supply","BNC cable","DC Cable","Led Tv","Gaming Product")
+
 const itemsPerPage = 52;
 
 const DistributorShop = () => {
@@ -370,7 +374,7 @@ const DistributorShop = () => {
 
             <button
               onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages}
+              disabled={currentPage === totalPages}git
               className="px-5 py-2 rounded-full bg-white border border-gray-200 shadow-sm hover:bg-gray-100 disabled:opacity-40"
             >
               Next
